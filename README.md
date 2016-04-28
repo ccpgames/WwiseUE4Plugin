@@ -12,7 +12,7 @@ If you need any help, please refer to the [online documentation](https://www.aud
 Source releases
 ---------------
 
-This integration is compatible with Unreal Engine 4.11 and its patch releases, and is based on Wwise 2015.1.6. You can download the latest Wwise version [here](http://www.audiokinetic.com/downloads/).
+This branch is compatible with Unreal Engine 4.12 Preview, and is based on Wwise 2015.1.6. You can download the latest Wwise version [here](http://www.audiokinetic.com/downloads/).
 
 This repository only contains the source code for the plug-in. If you wish to download a pre-built version of the plug-in, please visit our [downloads page](http://www.audiokinetic.com/downloads/).
 
