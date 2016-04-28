@@ -384,9 +384,9 @@ void UAkComponent::Activate(bool bReset)
 	}
 }
 
-void UAkComponent::OnUpdateTransform(bool bSkipPhysicsMove, ETeleportType Teleport)
+void UAkComponent::OnUpdateTransform(EUpdateTransformFlags UpdateTransformFlags, ETeleportType Teleport)
 {
-	Super::OnUpdateTransform(bSkipPhysicsMove, Teleport);
+	Super::OnUpdateTransform(UpdateTransformFlags, Teleport);
 
 	UpdateGameObjectPosition();
 }
@@ -556,7 +556,7 @@ void UAkComponent::SetOcclusion(const float DeltaTime)
 	// Compute occlusion only when needed.
 	// Have to have "LastOcclutionRefresh == -1" because GetWorld() might return nullptr in UAkComponent's constructor,
 	// preventing us from initializing it to something smart.
-	if( (World->GetTimeSeconds() - LastOcclusionRefresh) < OcclusionRefreshInterval && LastOcclusionRefresh != -1 )
+	if( (GWorld->GetTimeSeconds() - LastOcclusionRefresh) < OcclusionRefreshInterval && LastOcclusionRefresh != -1 )
 	{
 		return;
 	}
@@ -592,7 +592,7 @@ void UAkComponent::CalculateOcclusionValues(bool CalledFromTick)
 			ListenerPosition = AkAudioDevice->GetListenerPosition(ListenerIdx);
 		}
 		FVector SourcePosition = GetComponentLocation();
-		APlayerController* PlayerController = World->GetFirstPlayerController();
+		APlayerController* PlayerController = GWorld->GetFirstPlayerController();
 		APawn* ActorToIgnore = NULL;
 		if( PlayerController != NULL )
 		{

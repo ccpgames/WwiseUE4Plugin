@@ -80,10 +80,6 @@ public class AkAudio : ModuleRules
             string VSVersion;
             switch (WindowsPlatform.Compiler)
             {
-                case WindowsCompiler.VisualStudio2012:
-                    VSVersion = "vc110";
-                    break;
-
                 case WindowsCompiler.VisualStudio2013:
                     VSVersion = "vc120";
                     break;

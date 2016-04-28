@@ -1313,7 +1313,7 @@ UAkComponent* FAkAudioDevice::GetAkComponent( class USceneComponent* AttachToCom
 	check( AttachToComponent );
 
 	UAkComponent* AkComponent = NULL;
-
+	FAttachmentTransformRules AttachRules = FAttachmentTransformRules::KeepRelativeTransform;
 	if( GEngine && AK::SoundEngine::IsInitialized())
 	{
 		AActor * Actor = AttachToComponent->GetOwner();
@@ -1338,7 +1338,7 @@ UAkComponent* FAkAudioDevice::GetAkComponent( class USceneComponent* AttachToCom
 					}
 
 					if ( AttachToComponent != pCompI->GetAttachParent() 
-						|| AttachPointName != pCompI->AttachSocketName )
+						|| AttachPointName != pCompI->GetAttachSocketName() )
 					{
 						continue;
 					}
@@ -1348,11 +1348,13 @@ UAkComponent* FAkAudioDevice::GetAkComponent( class USceneComponent* AttachToCom
 					{
 						if (LocationType == EAttachLocation::KeepWorldPosition)
 						{
+							AttachRules = FAttachmentTransformRules::KeepWorldTransform;
 							if ( !FVector::PointsAreSame(*Location, pCompI->GetComponentLocation()) )
 								continue;
 						}
 						else
 						{
+							AttachRules = FAttachmentTransformRules::KeepRelativeTransform;
 							if ( !FVector::PointsAreSame(*Location, pCompI->RelativeLocation) )
 								continue;
 						}
@@ -1366,9 +1368,10 @@ UAkComponent* FAkAudioDevice::GetAkComponent( class USceneComponent* AttachToCom
 		else
 		{
 			// Try to find if there is an AkComponent attached to AttachToComponent (will be the case if AttachToComponent has no owner)
-			for(int32 CompIdx = 0; CompIdx < AttachToComponent->AttachChildren.Num(); CompIdx++)
+			const TArray<USceneComponent*> AttachChildren = AttachToComponent->GetAttachChildren();
+			for(int32 CompIdx = 0; CompIdx < AttachChildren.Num(); CompIdx++)
 			{
-				UAkComponent* pCompI = Cast<UAkComponent>(AttachToComponent->AttachChildren[CompIdx]);
+				UAkComponent* pCompI = Cast<UAkComponent>(AttachChildren[CompIdx]);
 				if ( pCompI && pCompI->IsRegistered() )
 				{
 					// There is an associated AkComponent to AttachToComponent, no need to add another one.
@@ -1395,16 +1398,18 @@ UAkComponent* FAkAudioDevice::GetAkComponent( class USceneComponent* AttachToCom
 		{
 			if (LocationType == EAttachLocation::KeepWorldPosition)
 			{
+				AttachRules = FAttachmentTransformRules::KeepWorldTransform;
 				AkComponent->SetWorldLocation(*Location);
 			}
 			else
 			{
+				AttachRules = FAttachmentTransformRules::KeepRelativeTransform;
 				AkComponent->SetRelativeLocation(*Location);
 			}
 		}
 
 		AkComponent->RegisterComponentWithWorld(AttachToComponent->GetWorld());
-		AkComponent->AttachTo(AttachToComponent, AttachPointName, LocationType);
+		AkComponent->AttachToComponent(AttachToComponent, AttachRules, AttachPointName);
 	}
 
 	return( AkComponent );
