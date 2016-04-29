@@ -1,6 +1,11 @@
 Welcome to the Wwise Unreal Engine 4 plug-in!
 =================================================
 
+
+
+**NOTE: This branch is for Unreal Engine 4.12 preview. It is minimally tested. Use at your own risk!**
+
+
 This is the source code page for the Wwise plug-in for Unreal Engine 4.
 
 It is compitable with the Windows and Mac OS X editors, and and with Windows, Mac OS X, Linux, Playstation 4, Xbox One, Android, and iOS games.
