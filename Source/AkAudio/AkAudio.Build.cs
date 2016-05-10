@@ -39,7 +39,8 @@ public class AkAudio : ModuleRules
             {
                 "Core",
                 "CoreUObject",
-                "Engine"
+                "Engine",
+                "Voice"
             });
 
         PrivateDependencyModuleNames.AddRange(
