@@ -86,39 +86,56 @@ void UAkComponent::PostAkEvent( class UAkAudioEvent * AkEvent, const FString& in
 	}
 }
 
+AkPlayingID UAkComponent::PostAkTrackedEventByName(const FString& in_EventName)
+{
+    UWorld* CurrentWorld = GetWorld();
+
+    if (in_EventName.IsEmpty())
+    {
+        UE_LOG(LogAkAudio, Warning, TEXT("AkComponent: Attempted to post an empty AkEvent name."));
+        return 0;
+    }
+
+    if (CurrentWorld->AllowAudioPlayback() && FAkAudioDevice::Get())
+    {
+#ifndef AK_SUPPORT_WCHAR
+        ANSICHAR* szEventName = TCHAR_TO_ANSI(*in_EventName);
+#else
+        const WIDECHAR * szEventName = *in_EventName;
+#endif
+        if (OcclusionRefreshInterval > 0.0f)
+        {
+            CalculateOcclusionValues(false);
+        }
+
+        if (bAutoDestroy)
+        {
+            NumActiveEvents.Increment();
+            return AK::SoundEngine::PostEvent(szEventName, (AkGameObjectID) this, AK_EndOfEvent, &AkComponentCallback, this);
+        }
+        else
+        {
+            return AK::SoundEngine::PostEvent(szEventName, (AkGameObjectID) this);
+        }
+    }
+    return 0;
+}
+
+AkPlayingID UAkComponent::PostAkTrackedEvent(class UAkAudioEvent * AkEvent)
+{
+    if (AkEvent)
+    {
+        return PostAkTrackedEventByName(AkEvent->GetName());
+    }
+    return 0;
+}
+
+
 void UAkComponent::PostAkEventByName( const FString& in_EventName )
 {
-	UWorld* CurrentWorld = GetWorld();
-
-	if (in_EventName.IsEmpty())
-	{
-		UE_LOG(LogAkAudio, Warning, TEXT("AkComponent: Attempted to post an empty AkEvent name."));
-		return;
-	}
-
-	if ( CurrentWorld->AllowAudioPlayback() && FAkAudioDevice::Get() )
-	{
-#ifndef AK_SUPPORT_WCHAR
-		ANSICHAR* szEventName = TCHAR_TO_ANSI(*in_EventName);
-#else
-		const WIDECHAR * szEventName = *in_EventName;
-#endif
-		if( OcclusionRefreshInterval > 0.0f )
-		{
-			CalculateOcclusionValues(false);
-		}
-
-		if( bAutoDestroy )
-		{
-			NumActiveEvents.Increment();
-			AK::SoundEngine::PostEvent( szEventName, (AkGameObjectID) this, AK_EndOfEvent, &AkComponentCallback, this);
-		}
-		else
-		{
-			AK::SoundEngine::PostEvent( szEventName, (AkGameObjectID) this );
-		}
-	}
+    PostAkTrackedEventByName(in_EventName);
 }
+
 
 void UAkComponent::Stop()
 {

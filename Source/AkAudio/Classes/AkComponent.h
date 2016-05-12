@@ -6,6 +6,7 @@
 
 #pragma once
 
+#include "AK/SoundEngine/Common/AkTypes.h"
 #include "AkComponent.generated.h"
 
 /*------------------------------------------------------------------------------------
@@ -29,7 +30,17 @@ public:
 	UFUNCTION(BlueprintCallable, Category="Audiokinetic|AkComponent")
 	void PostAssociatedAkEvent();
 	
-	/**
+
+    AkPlayingID PostAkTrackedEventByName(const FString& in_EventName);
+
+    /**
+    * Posts an event to Wwise, using this component as the game object source
+    *
+    * @param AkEvent		The event to post
+    */
+    AkPlayingID PostAkTrackedEvent(class UAkAudioEvent * AkEvent);
+
+    /**
 	 * Posts an event to Wwise, using this component as the game object source
 	 *
 	 * @param AkEvent		The event to post
