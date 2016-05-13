@@ -161,6 +161,10 @@ class AKAUDIO_API UAkGameplayStatics : public UBlueprintFunctionLibrary
 	UFUNCTION(BlueprintCallable, Category="Audiokinetic|SoundBanks")
 	static void ClearBanks();
 
+    UFUNCTION(BlueprintCallable, Category = "Audiokinetic|SoundBanks")
+    static bool IsBankLoaded(class UAkAudioBank* Bank);
+
+
 	/* 
 	 * Loads a bank.
 	 * @param Bank - The bank to load.
@@ -168,6 +172,16 @@ class AKAUDIO_API UAkGameplayStatics : public UBlueprintFunctionLibrary
 	 */
 	UFUNCTION(BlueprintCallable, Category="Audiokinetic|SoundBanks", meta=(AdvancedDisplay="1"))
 	static void LoadBank(class UAkAudioBank* Bank, const FString& BankName);
+
+
+    /*
+    * Loads a bank asynchronously .
+    * @param Bank - The bank to load.
+    *
+    */
+    UFUNCTION(BlueprintCallable, Category = "Audiokinetic|SoundBanks", meta = (AdvancedDisplay = "1"))
+    static void LoadBankAsync(class UAkAudioBank* Bank);
+
 
 	/* 
 	 * Loads a bank by its name.

@@ -315,6 +315,20 @@ void UAkGameplayStatics::ClearBanks()
 	}
 }
 
+bool UAkGameplayStatics::IsBankLoaded(class UAkAudioBank* Bank)
+{
+    FAkAudioDevice * AudioDevice = FAkAudioDevice::Get();
+    if (AudioDevice)
+    {
+        FAkBankManager* BankManager = AudioDevice->GetAkBankManager();
+        if (BankManager)
+        {
+            return BankManager->IsBankLoaded(Bank);
+        }
+    }
+    return false;
+}
+
 void UAkGameplayStatics::LoadBank(UAkAudioBank * bank, const FString& BankName)
 {
 	if ( bank )
@@ -326,6 +340,16 @@ void UAkGameplayStatics::LoadBank(UAkAudioBank * bank, const FString& BankName)
 		LoadBankByName(BankName);
 	}
 }
+
+
+void UAkGameplayStatics::LoadBankAsync(UAkAudioBank * bank)
+{
+    if (bank)
+    {
+        bank->LoadAsync(nullptr, nullptr);
+    }
+}
+
 
 void UAkGameplayStatics::LoadBankByName(const FString& BankName)
 {

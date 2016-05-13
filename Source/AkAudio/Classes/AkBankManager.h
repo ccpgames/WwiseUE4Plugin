@@ -84,6 +84,11 @@ public:
 		return &m_LoadedBanks;
 	}
 
+    bool IsBankLoaded(UAkAudioBank* Bank)
+    {
+        return m_LoadedBanks.Contains(Bank);
+    }
+
 	FCriticalSection m_BankManagerCriticalSection;
 
 private:
