@@ -169,7 +169,7 @@ public:
 
 	// Begin USceneComponent Interface
 	virtual void Activate(bool bReset=false) override;
-	virtual void OnUpdateTransform(bool bSkipPhysicsMove, ETeleportType Teleport = ETeleportType::None) override;
+	virtual void OnUpdateTransform(EUpdateTransformFlags UpdateTransformFlags, ETeleportType Teleport = ETeleportType::None) override;
 	// End USceneComponent Interface
 
 	/** Gets all AkReverbVolumes at the AkComponent's current location, and puts them in a list
