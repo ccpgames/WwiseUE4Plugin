@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WwiseDocument Type="WorkUnit" ID="{7FE6457A-8D14-4D77-895C-AE53602C6B10}" SchemaVersion="70">
+	<Effects>
+		<WorkUnit Name="Factory Wii Effects" ID="{7FE6457A-8D14-4D77-895C-AE53602C6B10}" PersistMode="Standalone">
+			<ChildrenList>
+				<Folder Name="Wii Standard Reverb" ID="{7A49DFFA-220E-4CAB-80C5-8EF10716DE7E}" ShortID="460035358">
+					<ChildrenList>
+						<Effect Name="Garage" ID="{F88BE6D4-6202-4443-B1CA-A94BE5C0E6C2}" PluginName="Wii Standard Reverb" CompanyID="0" PluginID="112" PluginType="3">
+							<ExcludedPlatformList>
+								<Platform>VitaSW</Platform>
+								<Platform>Windows</Platform>
+								<Platform>WiiUSW</Platform>
+								<Platform>Xbox360</Platform>
+								<Platform>3DS</Platform>
+								<Platform>PS3</Platform>
+								<Platform>iOS</Platform>
+								<Platform>PS4</Platform>
+								<Platform>Mac</Platform>
+								<Platform>Android</Platform>
+								<Platform>VitaHW</Platform>
+							</ExcludedPlatformList>
+							<PropertyList>
+								<Property Name="Coloration" Type="Real32" Value="0.75"/>
+								<Property Name="Damping" Type="Real32" Value="0.25"/>
+								<Property Name="PreDelay" Type="Real32" Value="0.05"/>
+								<Property Name="ReverbTime" Type="Real32" Value="5"/>
+							</PropertyList>
+						</Effect>
+					</ChildrenList>
+				</Folder>
+			</ChildrenList>
+		</WorkUnit>
+	</Effects>
+</WwiseDocument>

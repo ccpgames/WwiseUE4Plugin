@@ -1,0 +1,359 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|ORBIS">
+      <Configuration>Debug</Configuration>
+      <Platform>ORBIS</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Profile|ORBIS">
+      <Configuration>Profile</Configuration>
+      <Platform>ORBIS</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Profile_EnableAsserts|ORBIS">
+      <Configuration>Profile_EnableAsserts</Configuration>
+      <Platform>ORBIS</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|ORBIS">
+      <Configuration>Release</Configuration>
+      <Platform>ORBIS</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{9017E9C8-311A-B793-9304-2198E33B04B7}</ProjectGuid>
+    <RootNamespace>IntegrationDemo</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectName>IntegrationDemo</ProjectName>
+    <VCTargetsPath Condition="'$(VCTargetsPath11)' != '' and '$(VSVersion)' == '' and $(VisualStudioVersion) == ''">$(VCTargetsPath11)</VCTargetsPath>
+    <DefaultLanguage>en-US</DefaultLanguage>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ORBIS'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v110</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Profile|ORBIS'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v110</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Profile_EnableAsserts|ORBIS'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v110</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ORBIS'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v110</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ORBIS'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Profile|ORBIS'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Profile_EnableAsserts|ORBIS'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|ORBIS'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ORBIS'">
+    <OutDir>..\..\..\PS4\Debug\bin\</OutDir>
+    <IntDir>..\..\..\PS4\Debug\obj\$(ProjectName)\</IntDir>
+    <TargetName>IntegrationDemo</TargetName>
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Profile|ORBIS'">
+    <OutDir>..\..\..\PS4\Profile\bin\</OutDir>
+    <IntDir>..\..\..\PS4\Profile\obj\$(ProjectName)\</IntDir>
+    <TargetName>IntegrationDemo</TargetName>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Profile_EnableAsserts|ORBIS'">
+    <OutDir>..\..\..\PS4\Profile_EnableAsserts\bin\</OutDir>
+    <IntDir>..\..\..\PS4\Profile_EnableAsserts\obj\$(ProjectName)\</IntDir>
+    <TargetName>IntegrationDemo</TargetName>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ORBIS'">
+    <OutDir>..\..\..\PS4\Release\bin\</OutDir>
+    <IntDir>..\..\..\PS4\Release\obj\$(ProjectName)\</IntDir>
+    <TargetName>IntegrationDemo</TargetName>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ORBIS'">
+    <ClCompile>
+      <AdditionalOptions>-Wno-invalid-offsetof -Wno-switch  -Wno-unused-variable -Wno-missing-braces %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalIncludeDirectories>$(SCE_ORBIS_SDK_DIR)\target\include;$(SCE_ORBIS_SDK_DIR)\target\include_common;$(SCE_ORBIS_SDK_DIR)\host_tools\lib\clang\3.1\include;..\..\..\include;..\..\SoundEngine\Common;..\..\SoundEngine\PS4;.;..\Common;..\MenuSystem;..\DemoPages;..\3rdParty\PS4SampleUtil\include;..\3rdParty\PS4SampleUtil\source\sampleutil;$(SCE_ORBIS_SAMPLE_DIR);$(SCE_ORBIS_SAMPLE_DIR)\sample_code\common\include;$(SCE_ORBIS_SAMPLE_DIR)\sample_code\common\source\sampleutil;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>SN_TARGET_ORBIS;__SCE__;AUDIOKINETIC;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
+    <ExceptionHandling>Sync</ExceptionHandling>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>SN_TARGET_ORBIS;__SCE__;AUDIOKINETIC;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SCE_ORBIS_SDK_DIR)\target\include;$(SCE_ORBIS_SDK_DIR)\target\include_common;$(SCE_ORBIS_SDK_DIR)\host_tools\lib\clang\3.1\include;..\..\..\include;..\..\SoundEngine\Common;..\..\SoundEngine\PS4;.;..\Common;..\MenuSystem;..\DemoPages;..\3rdParty\PS4SampleUtil\include;..\3rdParty\PS4SampleUtil\source\sampleutil;$(SCE_ORBIS_SAMPLE_DIR);$(SCE_ORBIS_SAMPLE_DIR)\sample_code\common\include;$(SCE_ORBIS_SAMPLE_DIR)\sample_code\common\source\sampleutil;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>-lAkConvolutionReverbFX;-liZTrashMultibandDistortionFX;-lAkTremoloFX;-lAkMemoryMgr;-lAuroHeadphoneFX;-lIOSONOProximityMixer;-lSceAudio3dEngine;-lAkMotionGenerator;-lAkSynthOne;-lAkSoundSeedWind;-lAkStereoDelayFX;-lAkGuitarDistortionFX;-lAkRumble;-lAkSoundEngine;-lAkSilenceSource;-liZTrashBoxModelerFX;-lAkSoundSeedImpactFX;-lAkRoomVerbFX;-liZTrashDelayFX;-lMcDSPFutzBoxFX;-lAkParametricEQFX;-lAkDelayFX;-lAuroPannerMixer;-lAkCompressorFX;-lMcDSPLimiterFX;-lAkAudioInputSource;-lAkMusicEngine;-lCrankcaseAudioREVModelPlayerFX;-lAkSoundSeedWoosh;-liZHybridReverbFX;-lAkPitchShifterFX;-liZTrashDynamicsFX;-liZTrashDistortionFX;-lAkFlangerFX;-lAkToneSource;-lAkGainFX;-lAkVorbisDecoder;-lAkSineSource;-lAkMeterFX;-liZTrashFiltersFX;-lAkMatrixReverbFX;-lAkPeakLimiterFX;-lAkStreamMgr;-lAkHarmonizerFX;-lAkTimeStretchFX;-lAkExpanderFX;-lSceAudioOut_stub_weak;-lSceAudio3d_stub_weak;-lSceGnmx;-lSceGnm;-lSceGpuAddress;-lSceShaderBinary;-lScePad_stub_weak;-lSceFios2_stub_weak;-lSceNet_stub_weak;-lSceNetCtl_stub_weak;-lSceGnf;-lSceSampleUtil;-lSceAjm_stub_weak;-lScePosix_stub_weak;-lCommunicationCentral;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(OutDir)IntegrationDemo.elf</OutputFile>
+      <AdditionalLibraryDirectories>..\..\..\PS4\$(Configuration)\lib;$(SCE_ORBIS_SDK_DIR)\target\lib;..\3rdParty\PS4SampleUtil\source\sampleutil\ORBIS_Debug;$(SCE_ORBIS_SAMPLE_DIR)\sample_code\common\source\sampleutil\ORBIS_Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Profile|ORBIS'">
+    <ClCompile>
+      <AdditionalOptions>-Wno-invalid-offsetof -Wno-switch  -Wno-unused-variable -Wno-missing-braces %(AdditionalOptions)</AdditionalOptions>
+      <Optimization>MaxSpeed</Optimization>
+      <AdditionalIncludeDirectories>$(SCE_ORBIS_SDK_DIR)\target\include;$(SCE_ORBIS_SDK_DIR)\target\include_common;$(SCE_ORBIS_SDK_DIR)\host_tools\lib\clang\3.1\include;..\..\..\include;..\..\SoundEngine\Common;..\..\SoundEngine\PS4;.;..\Common;..\MenuSystem;..\DemoPages;..\3rdParty\PS4SampleUtil\include;..\3rdParty\PS4SampleUtil\source\sampleutil;$(SCE_ORBIS_SAMPLE_DIR);$(SCE_ORBIS_SAMPLE_DIR)\sample_code\common\include;$(SCE_ORBIS_SAMPLE_DIR)\sample_code\common\source\sampleutil;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>SN_TARGET_ORBIS;__SCE__;AUDIOKINETIC;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <OptimizationLevel>Level3</OptimizationLevel>
+      <FastMath>true</FastMath>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
+    <ExceptionHandling>Sync</ExceptionHandling>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>SN_TARGET_ORBIS;__SCE__;AUDIOKINETIC;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SCE_ORBIS_SDK_DIR)\target\include;$(SCE_ORBIS_SDK_DIR)\target\include_common;$(SCE_ORBIS_SDK_DIR)\host_tools\lib\clang\3.1\include;..\..\..\include;..\..\SoundEngine\Common;..\..\SoundEngine\PS4;.;..\Common;..\MenuSystem;..\DemoPages;..\3rdParty\PS4SampleUtil\include;..\3rdParty\PS4SampleUtil\source\sampleutil;$(SCE_ORBIS_SAMPLE_DIR);$(SCE_ORBIS_SAMPLE_DIR)\sample_code\common\include;$(SCE_ORBIS_SAMPLE_DIR)\sample_code\common\source\sampleutil;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>-lAkConvolutionReverbFX;-liZTrashMultibandDistortionFX;-lAkTremoloFX;-lAkMemoryMgr;-lAuroHeadphoneFX;-lIOSONOProximityMixer;-lSceAudio3dEngine;-lAkMotionGenerator;-lAkSynthOne;-lAkSoundSeedWind;-lAkStereoDelayFX;-lAkGuitarDistortionFX;-lAkRumble;-lAkSoundEngine;-lAkSilenceSource;-liZTrashBoxModelerFX;-lAkSoundSeedImpactFX;-lAkRoomVerbFX;-liZTrashDelayFX;-lMcDSPFutzBoxFX;-lAkParametricEQFX;-lAkDelayFX;-lAuroPannerMixer;-lAkCompressorFX;-lMcDSPLimiterFX;-lAkAudioInputSource;-lAkMusicEngine;-lCrankcaseAudioREVModelPlayerFX;-lAkSoundSeedWoosh;-liZHybridReverbFX;-lAkPitchShifterFX;-liZTrashDynamicsFX;-liZTrashDistortionFX;-lAkFlangerFX;-lAkToneSource;-lAkGainFX;-lAkVorbisDecoder;-lAkSineSource;-lAkMeterFX;-liZTrashFiltersFX;-lAkMatrixReverbFX;-lAkPeakLimiterFX;-lAkStreamMgr;-lAkHarmonizerFX;-lAkTimeStretchFX;-lAkExpanderFX;-lSceAudioOut_stub_weak;-lSceAudio3d_stub_weak;-lSceGnmx;-lSceGnm;-lSceGpuAddress;-lSceShaderBinary;-lScePad_stub_weak;-lSceFios2_stub_weak;-lSceNet_stub_weak;-lSceNetCtl_stub_weak;-lSceGnf;-lSceSampleUtil;-lSceAjm_stub_weak;-lScePosix_stub_weak;-lCommunicationCentral;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(OutDir)IntegrationDemo.elf</OutputFile>
+      <AdditionalLibraryDirectories>..\..\..\PS4\$(Configuration)\lib;$(SCE_ORBIS_SDK_DIR)\target\lib;..\3rdParty\PS4SampleUtil\source\sampleutil\ORBIS_Release;$(SCE_ORBIS_SAMPLE_DIR)\sample_code\common\source\sampleutil\ORBIS_Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Profile_EnableAsserts|ORBIS'">
+    <ClCompile>
+      <AdditionalOptions>-Wno-invalid-offsetof -Wno-switch  -Wno-unused-variable -Wno-missing-braces %(AdditionalOptions)</AdditionalOptions>
+      <Optimization>MaxSpeed</Optimization>
+      <AdditionalIncludeDirectories>$(SCE_ORBIS_SDK_DIR)\target\include;$(SCE_ORBIS_SDK_DIR)\target\include_common;$(SCE_ORBIS_SDK_DIR)\host_tools\lib\clang\3.1\include;..\..\..\include;..\..\SoundEngine\Common;..\..\SoundEngine\PS4;.;..\Common;..\MenuSystem;..\DemoPages;..\3rdParty\PS4SampleUtil\include;..\3rdParty\PS4SampleUtil\source\sampleutil;$(SCE_ORBIS_SAMPLE_DIR);$(SCE_ORBIS_SAMPLE_DIR)\sample_code\common\include;$(SCE_ORBIS_SAMPLE_DIR)\sample_code\common\source\sampleutil;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>SN_TARGET_ORBIS;__SCE__;AUDIOKINETIC;NDEBUG;AK_ENABLE_ASSERTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <OptimizationLevel>Level3</OptimizationLevel>
+      <FastMath>true</FastMath>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
+    <ExceptionHandling>Sync</ExceptionHandling>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>SN_TARGET_ORBIS;__SCE__;AUDIOKINETIC;NDEBUG;AK_ENABLE_ASSERTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SCE_ORBIS_SDK_DIR)\target\include;$(SCE_ORBIS_SDK_DIR)\target\include_common;$(SCE_ORBIS_SDK_DIR)\host_tools\lib\clang\3.1\include;..\..\..\include;..\..\SoundEngine\Common;..\..\SoundEngine\PS4;.;..\Common;..\MenuSystem;..\DemoPages;..\3rdParty\PS4SampleUtil\include;..\3rdParty\PS4SampleUtil\source\sampleutil;$(SCE_ORBIS_SAMPLE_DIR);$(SCE_ORBIS_SAMPLE_DIR)\sample_code\common\include;$(SCE_ORBIS_SAMPLE_DIR)\sample_code\common\source\sampleutil;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>-lAkConvolutionReverbFX;-liZTrashMultibandDistortionFX;-lAkTremoloFX;-lAkMemoryMgr;-lAuroHeadphoneFX;-lIOSONOProximityMixer;-lSceAudio3dEngine;-lAkMotionGenerator;-lAkSynthOne;-lAkSoundSeedWind;-lAkStereoDelayFX;-lAkGuitarDistortionFX;-lAkRumble;-lAkSoundEngine;-lAkSilenceSource;-liZTrashBoxModelerFX;-lAkSoundSeedImpactFX;-lAkRoomVerbFX;-liZTrashDelayFX;-lMcDSPFutzBoxFX;-lAkParametricEQFX;-lAkDelayFX;-lAuroPannerMixer;-lAkCompressorFX;-lMcDSPLimiterFX;-lAkAudioInputSource;-lAkMusicEngine;-lCrankcaseAudioREVModelPlayerFX;-lAkSoundSeedWoosh;-liZHybridReverbFX;-lAkPitchShifterFX;-liZTrashDynamicsFX;-liZTrashDistortionFX;-lAkFlangerFX;-lAkToneSource;-lAkGainFX;-lAkVorbisDecoder;-lAkSineSource;-lAkMeterFX;-liZTrashFiltersFX;-lAkMatrixReverbFX;-lAkPeakLimiterFX;-lAkStreamMgr;-lAkHarmonizerFX;-lAkTimeStretchFX;-lAkExpanderFX;-lSceAudioOut_stub_weak;-lSceAudio3d_stub_weak;-lSceGnmx;-lSceGnm;-lSceGpuAddress;-lSceShaderBinary;-lScePad_stub_weak;-lSceFios2_stub_weak;-lSceNet_stub_weak;-lSceNetCtl_stub_weak;-lSceGnf;-lSceSampleUtil;-lSceAjm_stub_weak;-lScePosix_stub_weak;-lCommunicationCentral;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(OutDir)IntegrationDemo.elf</OutputFile>
+      <AdditionalLibraryDirectories>..\..\..\PS4\$(Configuration)\lib;$(SCE_ORBIS_SDK_DIR)\target\lib;..\3rdParty\PS4SampleUtil\source\sampleutil\ORBIS_Release;$(SCE_ORBIS_SAMPLE_DIR)\sample_code\common\source\sampleutil\ORBIS_Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ORBIS'">
+    <ClCompile>
+      <AdditionalOptions>-Wno-invalid-offsetof -Wno-switch  -Wno-unused-variable -Wno-missing-braces %(AdditionalOptions)</AdditionalOptions>
+      <Optimization>MaxSpeed</Optimization>
+      <AdditionalIncludeDirectories>$(SCE_ORBIS_SDK_DIR)\target\include;$(SCE_ORBIS_SDK_DIR)\target\include_common;$(SCE_ORBIS_SDK_DIR)\host_tools\lib\clang\3.1\include;..\..\..\include;..\..\SoundEngine\Common;..\..\SoundEngine\PS4;.;..\Common;..\MenuSystem;..\DemoPages;..\3rdParty\PS4SampleUtil\include;..\3rdParty\PS4SampleUtil\source\sampleutil;$(SCE_ORBIS_SAMPLE_DIR);$(SCE_ORBIS_SAMPLE_DIR)\sample_code\common\include;$(SCE_ORBIS_SAMPLE_DIR)\sample_code\common\source\sampleutil;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>SN_TARGET_ORBIS;__SCE__;AUDIOKINETIC;NDEBUG;AK_OPTIMIZED;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <OptimizationLevel>Level3</OptimizationLevel>
+      <FastMath>true</FastMath>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
+    <ExceptionHandling>Sync</ExceptionHandling>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>SN_TARGET_ORBIS;__SCE__;AUDIOKINETIC;NDEBUG;AK_OPTIMIZED;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SCE_ORBIS_SDK_DIR)\target\include;$(SCE_ORBIS_SDK_DIR)\target\include_common;$(SCE_ORBIS_SDK_DIR)\host_tools\lib\clang\3.1\include;..\..\..\include;..\..\SoundEngine\Common;..\..\SoundEngine\PS4;.;..\Common;..\MenuSystem;..\DemoPages;..\3rdParty\PS4SampleUtil\include;..\3rdParty\PS4SampleUtil\source\sampleutil;$(SCE_ORBIS_SAMPLE_DIR);$(SCE_ORBIS_SAMPLE_DIR)\sample_code\common\include;$(SCE_ORBIS_SAMPLE_DIR)\sample_code\common\source\sampleutil;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>-lAkConvolutionReverbFX;-liZTrashMultibandDistortionFX;-lAkTremoloFX;-lAkMemoryMgr;-lAuroHeadphoneFX;-lIOSONOProximityMixer;-lSceAudio3dEngine;-lAkMotionGenerator;-lAkSynthOne;-lAkSoundSeedWind;-lAkStereoDelayFX;-lAkGuitarDistortionFX;-lAkRumble;-lAkSoundEngine;-lAkSilenceSource;-liZTrashBoxModelerFX;-lAkSoundSeedImpactFX;-lAkRoomVerbFX;-liZTrashDelayFX;-lMcDSPFutzBoxFX;-lAkParametricEQFX;-lAkDelayFX;-lAuroPannerMixer;-lAkCompressorFX;-lMcDSPLimiterFX;-lAkAudioInputSource;-lAkMusicEngine;-lCrankcaseAudioREVModelPlayerFX;-lAkSoundSeedWoosh;-liZHybridReverbFX;-lAkPitchShifterFX;-liZTrashDynamicsFX;-liZTrashDistortionFX;-lAkFlangerFX;-lAkToneSource;-lAkGainFX;-lAkVorbisDecoder;-lAkSineSource;-lAkMeterFX;-liZTrashFiltersFX;-lAkMatrixReverbFX;-lAkPeakLimiterFX;-lAkStreamMgr;-lAkHarmonizerFX;-lAkTimeStretchFX;-lAkExpanderFX;-lSceAudioOut_stub_weak;-lSceAudio3d_stub_weak;-lSceGnmx;-lSceGnm;-lSceGpuAddress;-lSceShaderBinary;-lScePad_stub_weak;-lSceFios2_stub_weak;-lSceNet_stub_weak;-lSceNetCtl_stub_weak;-lSceGnf;-lSceSampleUtil;-lSceAjm_stub_weak;-lScePosix_stub_weak;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(OutDir)IntegrationDemo.elf</OutputFile>
+      <AdditionalLibraryDirectories>..\..\..\PS4\$(Configuration)\lib;$(SCE_ORBIS_SDK_DIR)\target\lib;..\3rdParty\PS4SampleUtil\source\sampleutil\ORBIS_Release;$(SCE_ORBIS_SAMPLE_DIR)\sample_code\common\source\sampleutil\ORBIS_Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="..\Common\Helpers.h" />
+    <ClInclude Include="..\Common\IntegrationDemo.h" />
+    <ClInclude Include="..\Common\SoundInputBase.h" />
+    <ClInclude Include="..\Common\SoundInputMgrBase.h" />
+    <ClInclude Include="..\DemoPages\BaseMenuPage.h" />
+    <ClInclude Include="..\DemoPages\DemoBGM.h" />
+    <ClInclude Include="..\DemoPages\DemoDialogueMenu.h" />
+    <ClInclude Include="..\DemoPages\DemoDynamicDialogue.h" />
+    <ClInclude Include="..\DemoPages\DemoExternalSources.h" />
+    <ClInclude Include="..\DemoPages\DemoFootstepsManyVariables.h" />
+    <ClInclude Include="..\DemoPages\DemoInteractiveMusic.h" />
+    <ClInclude Include="..\DemoPages\DemoLocalization.h" />
+    <ClInclude Include="..\DemoPages\DemoMarkers.h" />
+    <ClInclude Include="..\DemoPages\DemoMicrophone.h" />
+    <ClInclude Include="..\DemoPages\DemoMotion.h" />
+    <ClInclude Include="..\DemoPages\DemoMusicCallbacks.h" />
+    <ClInclude Include="..\DemoPages\DemoPositioning.h" />
+    <ClInclude Include="..\DemoPages\DemoRTPCCarEngine.h" />
+    <ClInclude Include="..\DemoPages\MenuPages.h" />
+    <ClInclude Include="..\MenuSystem\ButtonControl.h" />
+    <ClInclude Include="..\MenuSystem\Control.h" />
+    <ClInclude Include="..\MenuSystem\Drawing.h" />
+    <ClInclude Include="..\MenuSystem\Menu.h" />
+    <ClInclude Include="..\MenuSystem\MenuControls.h" />
+    <ClInclude Include="..\MenuSystem\MessagePage.h" />
+    <ClInclude Include="..\MenuSystem\MovableChip.h" />
+    <ClInclude Include="..\MenuSystem\MultiplayerPage.h" />
+    <ClInclude Include="..\MenuSystem\NumericControl.h" />
+    <ClInclude Include="..\MenuSystem\Page.h" />
+    <ClInclude Include="..\MenuSystem\ToggleControl.h" />
+    <ClInclude Include="..\MenuSystem\UniversalInput.h" />
+    <ClInclude Include="..\..\SoundEngine\PS4\AkDefaultIOHookBlocking.h" />
+    <ClInclude Include="..\..\SoundEngine\Common\AkFilePackage.h" />
+    <ClInclude Include="..\..\SoundEngine\Common\AkFileLocationBase.h" />
+    <ClInclude Include="..\..\SoundEngine\Common\AkFilePackageLUT.h" />
+    <ClInclude Include="InputMgr.h" />
+    <ClInclude Include="Platform.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="SampleApplication.h" />
+    <ClInclude Include="SoundInput.h" />
+    <ClInclude Include="SoundInputMgr.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|ORBIS'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Profile|ORBIS'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Profile_EnableAsserts|ORBIS'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|ORBIS'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\Common\Helpers.cpp">
+    </ClCompile>
+    <ClCompile Include="..\Common\IntegrationDemo.cpp">
+    </ClCompile>
+    <ClCompile Include="..\Common\SoundInputBase.cpp">
+    </ClCompile>
+    <ClCompile Include="..\Common\SoundInputMgrBase.cpp">
+    </ClCompile>
+    <ClCompile Include="..\Common\stdafx.cpp">
+    </ClCompile>
+    <ClCompile Include="..\DemoPages\BaseMenuPage.cpp">
+    </ClCompile>
+    <ClCompile Include="..\DemoPages\DemoBGM.cpp">
+    </ClCompile>
+    <ClCompile Include="..\DemoPages\DemoDialogueMenu.cpp">
+    </ClCompile>
+    <ClCompile Include="..\DemoPages\DemoDynamicDialogue.cpp">
+    </ClCompile>
+    <ClCompile Include="..\DemoPages\DemoExternalSources.cpp">
+    </ClCompile>
+    <ClCompile Include="..\DemoPages\DemoFootstepsManyVariables.cpp">
+    </ClCompile>
+    <ClCompile Include="..\DemoPages\DemoInteractiveMusic.cpp">
+    </ClCompile>
+    <ClCompile Include="..\DemoPages\DemoLocalization.cpp">
+    </ClCompile>
+    <ClCompile Include="..\DemoPages\DemoMarkers.cpp">
+    </ClCompile>
+    <ClCompile Include="..\DemoPages\DemoMicrophone.cpp">
+    </ClCompile>
+    <ClCompile Include="..\DemoPages\DemoMotion.cpp">
+    </ClCompile>
+    <ClCompile Include="..\DemoPages\DemoMusicCallbacks.cpp">
+    </ClCompile>
+    <ClCompile Include="..\DemoPages\DemoPositioning.cpp">
+    </ClCompile>
+    <ClCompile Include="..\DemoPages\DemoRTPCCarEngine.cpp">
+    </ClCompile>
+    <ClCompile Include="..\MenuSystem\ButtonControl.cpp">
+    </ClCompile>
+    <ClCompile Include="..\MenuSystem\Control.cpp">
+    </ClCompile>
+    <ClCompile Include="..\MenuSystem\Menu.cpp">
+    </ClCompile>
+    <ClCompile Include="..\MenuSystem\MessagePage.cpp">
+    </ClCompile>
+    <ClCompile Include="..\MenuSystem\MovableChip.cpp">
+    </ClCompile>
+    <ClCompile Include="..\MenuSystem\MultiplayerPage.cpp">
+    </ClCompile>
+    <ClCompile Include="..\MenuSystem\NumericControl.cpp">
+    </ClCompile>
+    <ClCompile Include="..\MenuSystem\Page.cpp">
+    </ClCompile>
+    <ClCompile Include="..\MenuSystem\ToggleControl.cpp">
+    </ClCompile>
+    <ClCompile Include="..\MenuSystem\UniversalInput.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\SoundEngine\PS4\AkDefaultIOHookBlocking.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\SoundEngine\Common\AkFilePackage.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\SoundEngine\Common\AkFileLocationBase.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\SoundEngine\Common\AkFilePackageLUT.cpp">
+    </ClCompile>
+    <ClCompile Include="Drawing.cpp">
+    </ClCompile>
+    <ClCompile Include="InputMgr.cpp">
+    </ClCompile>
+    <ClCompile Include="Main.cpp">
+    </ClCompile>
+    <ClCompile Include="Platform.cpp">
+    </ClCompile>
+    <ClCompile Include="SampleApplication.cpp">
+    </ClCompile>
+    <ClCompile Include="SoundInput.cpp">
+    </ClCompile>
+    <ClCompile Include="SoundInputMgr.cpp">
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="sample_utilities\graphics\sampleutil_ascii.tga">
+      <Command>if not exist "$(IntDir)" md "$(IntDir)"
+copy "%(FullPath)" "$(IntDir)%(Filename).tga"
+pushd "$(IntDir)"
+"$(SCE_ORBIS_SDK_DIR)\host_tools\bin\orbis-objcopy.exe"  -I binary -O elf64-x86-64  -B i386 "%(Filename).tga" "%(Filename).obj"
+popd
+      </Command>
+      <Outputs>$(IntDir)%(Filename).obj;%(Outputs)</Outputs>
+    </CustomBuild>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

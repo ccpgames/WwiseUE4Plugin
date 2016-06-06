@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright (C) 2006 Audiokinetic Inc. -->
+<PluginModule>
+  <SinkPlugin Name="AK Sink Plugin" CompanyID="0" PluginID="152">
+    <PluginInfo CanUnlink="true">
+      <PlatformSupport>
+        <Platform Name="Windows"></Platform>
+      </PlatformSupport>
+    </PluginInfo>
+  </SinkPlugin>
+</PluginModule>

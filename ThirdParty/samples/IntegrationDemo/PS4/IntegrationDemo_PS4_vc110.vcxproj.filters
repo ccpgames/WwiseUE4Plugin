@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Common">
+      <UniqueIdentifier>{6EB6A928-31F0-564C-AAFE-95106D5437BA}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DemoPages">
+      <UniqueIdentifier>{A625F400-8B82-474C-AD5B-90CC34B08B09}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MenuSystem">
+      <UniqueIdentifier>{4ED27217-60C4-334E-9950-7BE3211F73E1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SoundEngine">
+      <UniqueIdentifier>{8A46264E-55FB-C74A-8ECE-60FFB207ACFB}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SoundEngine\PS4">
+      <UniqueIdentifier>{26E3A56C-9179-AA43-878B-55D6C2C65E7A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SoundEngine\Common">
+      <UniqueIdentifier>{E0EB9069-3CC0-CC4B-8145-E49956BB9ECB}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sample_utilities">
+      <UniqueIdentifier>{02133DF5-E806-2047-B585-15C31228A53C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sample_utilities\graphics">
+      <UniqueIdentifier>{206E6102-9CCE-484B-920E-EE7C0D9CC15E}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="..\Common\Helpers.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\IntegrationDemo.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\SoundInputBase.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\SoundInputMgrBase.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\DemoPages\BaseMenuPage.h">
+      <Filter>DemoPages</Filter>
+    </ClInclude>
+    <ClInclude Include="..\DemoPages\DemoBGM.h">
+      <Filter>DemoPages</Filter>
+    </ClInclude>
+    <ClInclude Include="..\DemoPages\DemoDialogueMenu.h">
+      <Filter>DemoPages</Filter>
+    </ClInclude>
+    <ClInclude Include="..\DemoPages\DemoDynamicDialogue.h">
+      <Filter>DemoPages</Filter>
+    </ClInclude>
+    <ClInclude Include="..\DemoPages\DemoExternalSources.h">
+      <Filter>DemoPages</Filter>
+    </ClInclude>
+    <ClInclude Include="..\DemoPages\DemoFootstepsManyVariables.h">
+      <Filter>DemoPages</Filter>
+    </ClInclude>
+    <ClInclude Include="..\DemoPages\DemoInteractiveMusic.h">
+      <Filter>DemoPages</Filter>
+    </ClInclude>
+    <ClInclude Include="..\DemoPages\DemoLocalization.h">
+      <Filter>DemoPages</Filter>
+    </ClInclude>
+    <ClInclude Include="..\DemoPages\DemoMarkers.h">
+      <Filter>DemoPages</Filter>
+    </ClInclude>
+    <ClInclude Include="..\DemoPages\DemoMicrophone.h">
+      <Filter>DemoPages</Filter>
+    </ClInclude>
+    <ClInclude Include="..\DemoPages\DemoMotion.h">
+      <Filter>DemoPages</Filter>
+    </ClInclude>
+    <ClInclude Include="..\DemoPages\DemoMusicCallbacks.h">
+      <Filter>DemoPages</Filter>
+    </ClInclude>
+    <ClInclude Include="..\DemoPages\DemoPositioning.h">
+      <Filter>DemoPages</Filter>
+    </ClInclude>
+    <ClInclude Include="..\DemoPages\DemoRTPCCarEngine.h">
+      <Filter>DemoPages</Filter>
+    </ClInclude>
+    <ClInclude Include="..\DemoPages\MenuPages.h">
+      <Filter>DemoPages</Filter>
+    </ClInclude>
+    <ClInclude Include="..\MenuSystem\ButtonControl.h">
+      <Filter>MenuSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\MenuSystem\Control.h">
+      <Filter>MenuSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\MenuSystem\Drawing.h">
+      <Filter>MenuSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\MenuSystem\Menu.h">
+      <Filter>MenuSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\MenuSystem\MenuControls.h">
+      <Filter>MenuSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\MenuSystem\MessagePage.h">
+      <Filter>MenuSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\MenuSystem\MovableChip.h">
+      <Filter>MenuSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\MenuSystem\MultiplayerPage.h">
+      <Filter>MenuSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\MenuSystem\NumericControl.h">
+      <Filter>MenuSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\MenuSystem\Page.h">
+      <Filter>MenuSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\MenuSystem\ToggleControl.h">
+      <Filter>MenuSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\MenuSystem\UniversalInput.h">
+      <Filter>MenuSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\SoundEngine\PS4\AkDefaultIOHookBlocking.h">
+      <Filter>SoundEngine\PS4</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\SoundEngine\Common\AkFilePackage.h">
+      <Filter>SoundEngine\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\SoundEngine\Common\AkFileLocationBase.h">
+      <Filter>SoundEngine\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\SoundEngine\Common\AkFilePackageLUT.h">
+      <Filter>SoundEngine\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="InputMgr.h" />
+    <ClInclude Include="Platform.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="SampleApplication.h" />
+    <ClInclude Include="SoundInput.h" />
+    <ClInclude Include="SoundInputMgr.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="..\Common\Helpers.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\IntegrationDemo.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\SoundInputBase.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\SoundInputMgrBase.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\stdafx.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DemoPages\BaseMenuPage.cpp">
+      <Filter>DemoPages</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DemoPages\DemoBGM.cpp">
+      <Filter>DemoPages</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DemoPages\DemoDialogueMenu.cpp">
+      <Filter>DemoPages</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DemoPages\DemoDynamicDialogue.cpp">
+      <Filter>DemoPages</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DemoPages\DemoExternalSources.cpp">
+      <Filter>DemoPages</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DemoPages\DemoFootstepsManyVariables.cpp">
+      <Filter>DemoPages</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DemoPages\DemoInteractiveMusic.cpp">
+      <Filter>DemoPages</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DemoPages\DemoLocalization.cpp">
+      <Filter>DemoPages</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DemoPages\DemoMarkers.cpp">
+      <Filter>DemoPages</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DemoPages\DemoMicrophone.cpp">
+      <Filter>DemoPages</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DemoPages\DemoMotion.cpp">
+      <Filter>DemoPages</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DemoPages\DemoMusicCallbacks.cpp">
+      <Filter>DemoPages</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DemoPages\DemoPositioning.cpp">
+      <Filter>DemoPages</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DemoPages\DemoRTPCCarEngine.cpp">
+      <Filter>DemoPages</Filter>
+    </ClCompile>
+    <ClCompile Include="..\MenuSystem\ButtonControl.cpp">
+      <Filter>MenuSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\MenuSystem\Control.cpp">
+      <Filter>MenuSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\MenuSystem\Menu.cpp">
+      <Filter>MenuSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\MenuSystem\MessagePage.cpp">
+      <Filter>MenuSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\MenuSystem\MovableChip.cpp">
+      <Filter>MenuSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\MenuSystem\MultiplayerPage.cpp">
+      <Filter>MenuSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\MenuSystem\NumericControl.cpp">
+      <Filter>MenuSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\MenuSystem\Page.cpp">
+      <Filter>MenuSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\MenuSystem\ToggleControl.cpp">
+      <Filter>MenuSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\MenuSystem\UniversalInput.cpp">
+      <Filter>MenuSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\SoundEngine\PS4\AkDefaultIOHookBlocking.cpp">
+      <Filter>SoundEngine\PS4</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\SoundEngine\Common\AkFilePackage.cpp">
+      <Filter>SoundEngine\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\SoundEngine\Common\AkFileLocationBase.cpp">
+      <Filter>SoundEngine\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\SoundEngine\Common\AkFilePackageLUT.cpp">
+      <Filter>SoundEngine\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Drawing.cpp" />
+    <ClCompile Include="InputMgr.cpp" />
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Platform.cpp" />
+    <ClCompile Include="SampleApplication.cpp" />
+    <ClCompile Include="SoundInput.cpp" />
+    <ClCompile Include="SoundInputMgr.cpp" />
+  </ItemGroup>
+</Project>
