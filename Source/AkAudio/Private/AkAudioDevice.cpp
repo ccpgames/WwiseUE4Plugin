@@ -1339,7 +1339,7 @@ UAkComponent* FAkAudioDevice::GetAkComponent( class USceneComponent* AttachToCom
 					}
 
 					if ( AttachToComponent != pCompI->GetAttachParent() 
-						|| AttachPointName != pCompI->AttachSocketName )
+						|| AttachPointName != pCompI->GetAttachSocketName() )
 					{
 						continue;
 					}
@@ -1367,9 +1367,11 @@ UAkComponent* FAkAudioDevice::GetAkComponent( class USceneComponent* AttachToCom
 		else
 		{
 			// Try to find if there is an AkComponent attached to AttachToComponent (will be the case if AttachToComponent has no owner)
-			for(int32 CompIdx = 0; CompIdx < AttachToComponent->AttachChildren.Num(); CompIdx++)
+			const TArray<USceneComponent*>& Children = AttachToComponent->GetAttachChildren();
+			for(auto& Child : Children)
 			{
-				UAkComponent* pCompI = Cast<UAkComponent>(AttachToComponent->AttachChildren[CompIdx]);
+				UAkComponent* pCompI = Cast<UAkComponent>(Child);
+
 				if ( pCompI && pCompI->IsRegistered() )
 				{
 					// There is an associated AkComponent to AttachToComponent, no need to add another one.
@@ -1405,7 +1407,10 @@ UAkComponent* FAkAudioDevice::GetAkComponent( class USceneComponent* AttachToCom
 		}
 
 		AkComponent->RegisterComponentWithWorld(AttachToComponent->GetWorld());
-		AkComponent->AttachTo(AttachToComponent, AttachPointName, LocationType);
+		
+		FAttachmentTransformRules AttachmentRules(EAttachmentRule::KeepRelative, false);
+		USceneComponent::ConvertAttachLocation(LocationType, AttachmentRules.LocationRule, AttachmentRules.RotationRule, AttachmentRules.ScaleRule);
+		AkComponent->AttachToComponent(AttachToComponent, AttachmentRules,  AttachPointName);
 	}
 
 	return( AkComponent );
