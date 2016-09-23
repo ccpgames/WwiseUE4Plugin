@@ -690,6 +690,10 @@ private:
 
 	void SetBankDirectory();
 
+#pragma region Oculus Wwise integration
+	void RegisterSpatialiserPlugins();
+#pragma endregion Oculus Wwise integration
+
 	void* AllocatePermanentMemory( int32 Size, /*OUT*/ bool& AllocatedInPool );
 	
 	AkPlayingID PostEventInternal(

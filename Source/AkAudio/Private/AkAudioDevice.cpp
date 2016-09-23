@@ -20,6 +20,10 @@
 
 #include <AK/Plugin/AllPluginsRegistrationHelpers.h>
 
+#pragma region Oculus Wwise integration
+#include "OculusSpatializer.h"
+#pragma endregion Oculus Wwise integration
+
 #if PLATFORM_XBOXONE
 	#include <apu.h>
 #endif
@@ -1694,6 +1698,10 @@ bool FAkAudioDevice::EnsureInitialized()
 	// AK::SoundEngine::RegisteriZotopePlugins();
 	// AK::SoundEngine::RegisterCrankcaseAudioPlugins();
 
+#pragma region Oculus Wwise integration
+	RegisterSpatialiserPlugins();
+#pragma endregion Oculus Wwise integration
+
 	//
 	// Setup banks path
 	//
@@ -1782,6 +1790,67 @@ void FAkAudioDevice::SetBankDirectory()
 
 	AK::StreamMgr::SetCurrentLanguage( AKTEXT("English(US)") );
 }
+
+#pragma region Oculus Wwise integration
+void FAkAudioDevice::RegisterSpatialiserPlugins()
+{
+	// Load Oculus Spatializer dll plug-in
+	HMODULE OculusSpatializerLibrary = LoadLibrary(L"OculusSpatializer.dll");
+
+	// Successful?
+	if (OculusSpatializerLibrary)
+	{
+		typedef bool(__stdcall *AkGetSoundEngineCallbacksType)
+			(unsigned short in_usCompanyID,
+				unsigned short in_usPluginID,
+				AkCreatePluginCallback& out_funcEffect,
+				AkCreateParamCallback&  out_funcParam);
+
+		AkGetSoundEngineCallbacksType AkGetSoundEngineCallbacks =
+			(AkGetSoundEngineCallbacksType)(void*)GetProcAddress(OculusSpatializerLibrary, "AkGetSoundEngineCallbacks");
+
+		if (AkGetSoundEngineCallbacks)
+		{
+			AkCreatePluginCallback CreateOculusFX;
+			AkCreateParamCallback  CreateOculusFXParams;
+
+			// Register plugin effect
+			if (AkGetSoundEngineCallbacks(AKEFFECTID_OCULUS, AKEFFECTID_OCULUS_SPATIALIZER, CreateOculusFX, CreateOculusFXParams))
+			{
+				if (AK::SoundEngine::RegisterPlugin(AkPluginTypeMixer, AKEFFECTID_OCULUS, AKEFFECTID_OCULUS_SPATIALIZER, CreateOculusFX, CreateOculusFXParams) != AK_Success)
+				{
+					printf("Failed to register OculusSpatializer plugin.");
+				}
+			}
+			else
+			{
+				printf("Failed call to AkGetSoundEngineCallbacks in OculusSpatializer.dll");
+			}
+
+			// Register plugin attachment (for data attachment on individual sounds, like frequency hints etc.)
+			if (AkGetSoundEngineCallbacks(AKEFFECTID_OCULUS, AKEFFECTID_OCULUS_SPATIALIZER_ATTACHMENT, CreateOculusFX, CreateOculusFXParams))
+			{
+				if (AK::SoundEngine::RegisterPlugin(AkPluginTypeEffect, AKEFFECTID_OCULUS, AKEFFECTID_OCULUS_SPATIALIZER_ATTACHMENT, NULL, CreateOculusFXParams) != AK_Success)
+				{
+					printf("Failed to register OculusSpatializer attachment.");
+				}
+			}
+			else
+			{
+				printf("Failed call to AkGetSoundEngineCallbacks in OculusSpatializer.dll");
+			}
+		}
+		else
+		{
+			printf("Failed to load functions AkGetSoundEngineCallbacks in OculusSpatializer.dll");
+		}
+	}
+	else
+	{
+		printf("Failed to load OculusSpatializer.dll");
+	}
+}
+#pragma endregion Oculus Wwise integration
 
 /**
  * Allocates memory from permanent pool. This memory will NEVER be freed.
