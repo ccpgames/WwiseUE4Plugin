@@ -1794,6 +1794,7 @@ void FAkAudioDevice::SetBankDirectory()
 #pragma region Oculus Wwise integration
 void FAkAudioDevice::RegisterSpatialiserPlugins()
 {
+#if PLATFORM_WINDOWS
 	// Load Oculus Spatializer dll plug-in
 	HMODULE OculusSpatializerLibrary = LoadLibrary(L"OculusSpatializer.dll");
 
@@ -1849,6 +1850,7 @@ void FAkAudioDevice::RegisterSpatialiserPlugins()
 	{
 		printf("Failed to load OculusSpatializer.dll");
 	}
+#endif // PLATFORM_WINDOWS
 }
 #pragma endregion Oculus Wwise integration
 
