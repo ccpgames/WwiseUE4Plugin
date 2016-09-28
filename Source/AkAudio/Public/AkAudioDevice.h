@@ -16,6 +16,10 @@
 #include "AkBankManager.h"
 #include "SoundDefinitions.h"
 
+// CCP BEGIN - Enabling access to Wwise input callbacks
+#include "AK/Plugin/AkAudioInputPlugin.h"
+// CCP END - Enabling access to Wwise input callbacks
+
 DECLARE_LOG_CATEGORY_EXTERN(LogAkAudio, Log, All);
 
 /*------------------------------------------------------------------------------------
@@ -52,6 +56,14 @@ public:
 	//}
 
 	virtual ~FAkAudioDevice() {}
+
+	// CCP BEGIN - Enabling access to Wwise input callbacks
+	static void SetAudioInputCallbacks(
+		AkAudioInputPluginExecuteCallbackFunc in_pfnExecCallback,
+		AkAudioInputPluginGetFormatCallbackFunc in_pfnGetFormatCallback = NULL, // Optional
+		AkAudioInputPluginGetGainCallbackFunc in_pfnGetGainCallback = NULL      // Optional
+		);
+	// CCP END - Enabling access to Wwise input callbacks
 
 	/**
 	 * Initializes the audio device and creates sources.

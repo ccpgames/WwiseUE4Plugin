@@ -162,6 +162,17 @@ static inline void AkVectorToFVector( const AkVector & in_vect, FVector & out_ve
 	Implementation
 ------------------------------------------------------------------------------------*/
 
+// CCP BEGIN - Enabling access to Wwise input callbacks
+void FAkAudioDevice::SetAudioInputCallbacks(
+	AkAudioInputPluginExecuteCallbackFunc in_pfnExecCallback,
+	AkAudioInputPluginGetFormatCallbackFunc in_pfnGetFormatCallback,
+	AkAudioInputPluginGetGainCallbackFunc in_pfnGetGainCallback
+)
+{
+	::SetAudioInputCallbacks(in_pfnExecCallback, in_pfnGetFormatCallback, in_pfnGetGainCallback);
+}
+// CCP END - Enabling access to Wwise input callbacks
+
 static inline void RegisterGameObj_WithName( AkGameObjectID in_gameObj, const TCHAR * in_tszName )
 {
 	if ( in_tszName )
