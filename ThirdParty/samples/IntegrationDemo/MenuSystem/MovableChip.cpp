@@ -7,9 +7,8 @@
 #include <float.h>
 #include <math.h>
 
-// balary todo use vstudio define
-#if defined AK_PS3 || defined AK_WII_FAMILY || defined AK_VITA || defined AK_PS4  || defined AK_3DS || defined AK_IOS || defined AK_MAC_OS_X || defined AK_ANDROID || defined AK_LINUX
-#define _copysign copysign
+#if defined(_MSC_VER) && (_MSC_VER < 1800)
+	#define copysign _copysign 
 #endif
 
 #define MARGIN 15
@@ -44,8 +43,8 @@ void MovableChip::Update( const UniversalGamepad& in_Gamepad )
 
 	if (m_bNonLinear)
 	{
-		float xSign = (float)_copysign(1.0f, xPos);
-		float ySign = (float)_copysign(1.0f, yPos);
+		float xSign = (float)copysign(1.0f, xPos);
+		float ySign = (float)copysign(1.0f, yPos);
 
 		xPos = (pow(20.0f, fabs(xPos)) - 1) / 19 * xSign;
 		yPos = (pow(20.0f, fabs(yPos)) - 1) / 19 * ySign;

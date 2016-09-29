@@ -11,12 +11,6 @@
 #include "AkFXSrcSineParams.h"
 #include <AK/Tools/Common/AkBankReadHelpers.h>
 
-// Plugin mechanism. Parameter node create function to be registered to the FX manager.
-AK::IAkPluginParam * CreateSineSourceParams( AK::IAkPluginMemAlloc * in_pAllocator )
-{
-	return AK_PLUGIN_NEW( in_pAllocator, CAkFxSrcSineParams() );
-}
-
 // Constructor.
 CAkFxSrcSineParams::CAkFxSrcSineParams()
 {

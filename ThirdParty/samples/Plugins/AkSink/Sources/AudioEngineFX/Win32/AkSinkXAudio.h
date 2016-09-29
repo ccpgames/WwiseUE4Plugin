@@ -26,6 +26,8 @@
 
 #define NUM_VOICE_BUFFERS	(3)
 
+class SinkPluginParams;
+
 class AkSinkXAudio
 	: public AK::IAkSinkPlugin
 	, public IXAudio2EngineCallback
@@ -41,6 +43,7 @@ public:
 	virtual AKRESULT Init( 
 		AK::IAkPluginMemAlloc *	in_pAllocator,				// Interface to memory allocator to be used by the effect.
 		AK::IAkSinkPluginContext *	in_pSinkPluginContext,	// Interface to sink plug-in's context.
+		AK::IAkPluginParam *		in_pParams,				// Interface to plug-in parameters.
 		AkAudioFormat &			in_rFormat					// Audio data format of the input signal. 
 		);
 	virtual AKRESULT Term( 
@@ -109,6 +112,7 @@ protected:
 	void SubmitPacketRB();
 
 	AK::IAkSinkPluginContext *	m_pSinkPluginContext;
+	SinkPluginParams *		m_pParams;
 	
 	AkChannelConfig			m_speakerConfig;
 

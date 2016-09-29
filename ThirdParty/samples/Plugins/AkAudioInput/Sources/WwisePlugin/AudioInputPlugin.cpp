@@ -43,14 +43,6 @@ void AudioInputPlugin::ExecuteCallbackFunc(
 	io_pBufferOut->uValidFrames = io_pBufferOut->MaxFrames();
 }
 
-// These IDs must be the same as those specified in the plug-in's XML definition file.
-// Note that there are restrictions on the values you can use for CompanyID, and PluginID
-// must be unique for the specified CompanyID. Furthermore, these IDs are persisted
-// in project files. NEVER CHANGE THEM or existing projects will not recognize this Plug-in.
-// Be sure to read the SDK documentation regarding Plug-ins XML definition files.
-const short AudioInputPlugin::CompanyID = AKCOMPANYID_AUDIOKINETIC;
-const short AudioInputPlugin::PluginID = AKSOURCEID_AUDIOINPUT;
-
 // Constructor
 AudioInputPlugin::AudioInputPlugin()
 	: m_pPSet( NULL )
@@ -111,22 +103,6 @@ bool AudioInputPlugin::GetBankParameters( const GUID & in_guidPlatform, AK::Wwis
 	in_pDataWriter->WriteReal32( varProp.fltVal );
 
 	return true;
-}
-
-
-// Allow Wwise to retrieve a user friendly name for that property (e.g. Undo etc.).
-bool AudioInputPlugin::DisplayNameForProp( LPCWSTR in_szPropertyName, LPWSTR out_szDisplayName, UINT in_unCharCount ) const
-{
-	// Get resource handle
-	HINSTANCE hInst = AfxGetStaticModuleState()->m_hCurrentResourceHandle;
-
-	if ( ! wcscmp( in_szPropertyName, szAudioInputGain ) )
-	{
-		::LoadString( hInst, IDS_AUDIOINPUT_GAIN, out_szDisplayName, in_unCharCount );
-		return true;	
-	}
-
-	return false;
 }
 
 // Implement online help when the user clicks on the "?" icon .

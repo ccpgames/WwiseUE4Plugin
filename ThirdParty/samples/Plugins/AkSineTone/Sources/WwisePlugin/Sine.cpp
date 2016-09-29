@@ -11,8 +11,8 @@
 #include "stdafx.h"
 #include "Sine.h"
 #include <AK/Wwise/Utilities.h>
-#include <AK/Plugin/AkSineSourceFactory.h>
 #include "SinePlugin.h"
+#include <AK/Plugin/AkSineSourceFactory.h>
 
 //
 //	Note!
@@ -62,6 +62,7 @@ CSineApp theApp;
 BOOL CSineApp::InitInstance()
 {
 	CWinApp::InitInstance();
+	AK::Wwise::RegisterWwisePlugin();
 
 	return TRUE;
 }
@@ -71,24 +72,9 @@ BOOL CSineApp::InitInstance()
 // Plugin creation
 AK::Wwise::IPluginBase* __stdcall AkCreatePlugin( unsigned short in_usCompanyID, unsigned short in_usPluginID )
 {
-	if ( in_usCompanyID == SinePlugin::CompanyID && in_usPluginID == SinePlugin::PluginID )
-		return new SinePlugin;
-
-	return NULL;
-}
-
-// Sound Engine callbacks
-bool __stdcall AkGetSoundEngineCallbacks( unsigned short in_usCompanyID, unsigned short in_usPluginID, AkCreatePluginCallback & out_funcEffect, AkCreateParamCallback & out_funcParam )
-{
-	if ( in_usCompanyID == SinePlugin::CompanyID && in_usPluginID == SinePlugin::PluginID )
-	{
-		out_funcEffect = CreateSineSource;
-		out_funcParam = CreateSineSourceParams;
-		return true;
-	}
-
-	return false;
+	return new SinePlugin;
 }
 
 /// Dummy assert hook for Wwise plug-ins using AKASSERT (cassert used by default).
 DEFINEDUMMYASSERTHOOK;
+DEFINE_PLUGIN_REGISTER_HOOK;

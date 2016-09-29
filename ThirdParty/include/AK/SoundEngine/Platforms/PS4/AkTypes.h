@@ -53,6 +53,10 @@
 #define AK_ALIGN_FASTDMA 						///< Platform-specific data alignment for faster DMA transfers
 #define AK_ALIGN_SIZE_FOR_DMA( __Size__ ) (__Size__) ///< Used to align sizes to next 16 byte boundary on platfroms that require it
 #define AK_BUFFER_ALIGNMENT AK_SIMD_ALIGNMENT
+#define AKSIMD_V4F32_SUPPORTED
+
+#define AK_DLLEXPORT __declspec(dllexport)
+#define AK_DLLIMPORT __declspec(dllimport)	
 
 typedef uint8_t			AkUInt8;				///< Unsigned 8-bit integer
 typedef uint16_t		AkUInt16;				///< Unsigned 16-bit integer

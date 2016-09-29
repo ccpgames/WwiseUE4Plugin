@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Copyright (C) 2006 Audiokinetic Inc. -->
 <PluginModule>
-	<EffectPlugin Name="Wwise Delay" CompanyID="0" PluginID="106" SupportsIsSendModeEffect="true">
+	<EffectPlugin Name="Wwise Delay" CompanyID="0" PluginID="106" SupportsIsSendModeEffect="true" >
 		<PluginInfo MenuPath="50-Wwise">
 			<PlatformSupport>
 				<Platform Name="Windows">
@@ -75,6 +75,11 @@
 					<CanBeInsertForFeedback>false</CanBeInsertForFeedback>
 				</Platform>
         <Platform Name="3DS">
+          <CanBeRendered>true</CanBeRendered>
+        </Platform>
+        <Platform Name="Emscripten">
+          <CanBeInsertOnBusses>true</CanBeInsertOnBusses>
+          <CanBeInsertOnAudioObjects>true</CanBeInsertOnAudioObjects>
           <CanBeRendered>true</CanBeRendered>
         </Platform>
       </PlatformSupport>

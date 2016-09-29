@@ -83,10 +83,10 @@ bool DlgConfiguration::OnInitDialog( HWND in_hWnd )
 	// Fill the combo box
 	HWND hCombo = ::GetDlgItem( in_hWnd, IDC_COMBO );
 
-	csText.LoadString( IDS_CONFIGURATION_COMBO_TEXT1 );
+	csText = _T("Combo item 1");
 	ComboBox_InsertString( hCombo, 0, csText );
 	
-	csText.LoadString( IDS_CONFIGURATION_COMBO_TEXT2 );
+	csText = _T("Combo item 2");
 	ComboBox_InsertString( hCombo, 1, csText );
 
 	ComboBox_SetCurSel( hCombo, 1 );
@@ -94,7 +94,7 @@ bool DlgConfiguration::OnInitDialog( HWND in_hWnd )
 	// Set the Caption text
 	HWND hCaption = ::GetDlgItem( in_hWnd, IDC_CAPTION );
 
-	csText.LoadString( IDS_CONFIGURATION_CAPTION_TEXT );
+	csText = _T("Caption text");
 	Edit_SetText( hCaption, csText ); 
 
 	return false;
@@ -107,8 +107,8 @@ bool DlgConfiguration::OnOK( HWND in_hWnd )
 	// Show a simple message box
 	CString csMessage;
 	CString csCaption;
-	csMessage.LoadString( IDS_CONFIGURATION_MESSAGEBOX_MESSAGE );
-	csCaption.LoadString( IDS_CONFIGURATION_MESSAGEBOX_CAPTION );
+	csMessage = _T("OK button pressed");
+	csCaption = _T("Configuration");
 
 	m_pSourceControlUtilities->MessageBox( in_hWnd, csMessage, csCaption, MB_OK );
 

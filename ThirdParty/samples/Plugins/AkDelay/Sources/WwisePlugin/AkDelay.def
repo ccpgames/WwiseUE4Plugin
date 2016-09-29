@@ -4,4 +4,3 @@ LIBRARY      "AkDelay"
 
 EXPORTS
 	AkCreatePlugin
-	AkGetSoundEngineCallbacks

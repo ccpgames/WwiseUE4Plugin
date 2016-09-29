@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Copyright (C) 2006 Audiokinetic Inc. -->
 <PluginModule>
-	<SourcePlugin Name="Wwise Tone Generator" CompanyID="0" PluginID="102">
+	<SourcePlugin Name="Wwise Tone Generator" CompanyID="0" PluginID="102" >
 		<PluginInfo CanUnlink="true">
 			<PlatformSupport>
 				<Platform Name="Windows"></Platform>
@@ -17,9 +17,10 @@
 				<Platform Name="Mac"></Platform>
 				<Platform Name="VitaSW"></Platform>
 				<Platform Name="VitaHW"></Platform>
-        			<Platform Name="PS4"></Platform>
+        <Platform Name="PS4"></Platform>
 				<Platform Name="3DS"></Platform>
 				<Platform Name="iOS"></Platform>
+        <Platform Name="Emscripten"></Platform>
 			</PlatformSupport>
 		</PluginInfo>
 		<Properties>

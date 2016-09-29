@@ -8,28 +8,29 @@
 #include "AkAudioClasses.h"
 #include "Net/UnrealNetwork.h"
 
-//static void AkComponentCallback( AkCallbackType in_eType, AkCallbackInfo* in_pCallbackInfo )
-//{
-//	UAkComponent * pObj = ( (UAkComponent *) in_pCallbackInfo->pCookie );
-//	if( pObj )
-//	{
-//		pObj->DestroyComponent();
-//	}
-//}
-
 /*------------------------------------------------------------------------------------
 	UAkComponent
 ------------------------------------------------------------------------------------*/
 
-static void AkComponentCallback( AkCallbackType in_eType, AkCallbackInfo* in_pCallbackInfo )
+void UAkComponent::AkComponentCallback( AkCallbackType in_eType, AkCallbackInfo* in_pCallbackInfo )
 {
-	UAkComponent * pObj = ( (UAkComponent *) in_pCallbackInfo->pCookie );
-	if( pObj )
+	AkComponentCallbackPackage* pPackage = ((AkComponentCallbackPackage *)in_pCallbackInfo->pCookie);
+	if (pPackage)
 	{
-		pObj->NumActiveEvents.Decrement();
-		if( pObj->NumActiveEvents.GetValue() == 0 )
+		if (pPackage->pfnUserCallback && (pPackage->uUserFlags & in_eType) != 0)
 		{
-			pObj->bFlaggedForDestroy = true;
+			in_pCallbackInfo->pCookie = pPackage->pUserCookie;
+			pPackage->pfnUserCallback(in_eType, in_pCallbackInfo);
+			in_pCallbackInfo->pCookie = pPackage;
+		}
+
+		if (in_eType == AK_EndOfEvent)
+		{
+			if (pPackage->pNumActiveEvents)
+			{
+				pPackage->pNumActiveEvents->Decrement();
+			}
+			delete pPackage;
 		}
 	}
 }
@@ -58,7 +59,7 @@ Super(ObjectInitializer)
 
 	AttenuationScalingFactor = 1.0f;
 	bAutoDestroy = false;
-	bFlaggedForDestroy = false;
+	bStarted = false;
 	NumActiveEvents.Reset();
 }
 
@@ -86,56 +87,93 @@ void UAkComponent::PostAkEvent( class UAkAudioEvent * AkEvent, const FString& in
 	}
 }
 
-AkPlayingID UAkComponent::PostAkTrackedEventByName(const FString& in_EventName)
+void UAkComponent::PostAkEventByName(const FString& in_EventName)
 {
-    UWorld* CurrentWorld = GetWorld();
+	UWorld* CurrentWorld = GetWorld();
+	AkPlayingID playingID = AK_INVALID_PLAYING_ID;
 
-    if (in_EventName.IsEmpty())
-    {
-        UE_LOG(LogAkAudio, Warning, TEXT("AkComponent: Attempted to post an empty AkEvent name."));
-        return 0;
-    }
+	if (in_EventName.IsEmpty())
+	{
+		UE_LOG(LogAkAudio, Warning, TEXT("AkComponent: Attempted to post an empty AkEvent name."));
+		return;
+	}
 
-    if (CurrentWorld->AllowAudioPlayback() && FAkAudioDevice::Get())
-    {
+	if ( CurrentWorld->AllowAudioPlayback() && FAkAudioDevice::Get() )
+	{
 #ifndef AK_SUPPORT_WCHAR
-        ANSICHAR* szEventName = TCHAR_TO_ANSI(*in_EventName);
+		ANSICHAR* szEventName = TCHAR_TO_ANSI(*in_EventName);
 #else
-        const WIDECHAR * szEventName = *in_EventName;
+		const WIDECHAR * szEventName = *in_EventName;
 #endif
-        if (OcclusionRefreshInterval > 0.0f)
-        {
-            CalculateOcclusionValues(false);
-        }
+		if( OcclusionRefreshInterval > 0.0f )
+		{
+			CalculateOcclusionValues(false);
+		}
 
-        if (bAutoDestroy)
-        {
-            NumActiveEvents.Increment();
-            return AK::SoundEngine::PostEvent(szEventName, (AkGameObjectID) this, AK_EndOfEvent, &AkComponentCallback, this);
-        }
-        else
-        {
-            return AK::SoundEngine::PostEvent(szEventName, (AkGameObjectID) this);
-        }
-    }
-    return 0;
+		AkComponentCallbackPackage* cbPackage = new AkComponentCallbackPackage(NULL, NULL, AK_EndOfEvent, &NumActiveEvents);
+		if (cbPackage)
+		{
+			playingID = AK::SoundEngine::PostEvent(szEventName, (AkGameObjectID) this, AK_EndOfEvent, &UAkComponent::AkComponentCallback, cbPackage);
+			if (playingID != AK_INVALID_PLAYING_ID)
+			{
+				NumActiveEvents.Increment();
+				bStarted = true;
+			}
+		}
+		else
+		{
+			playingID = AK::SoundEngine::PostEvent(szEventName, (AkGameObjectID) this);
+		}
+	}
+
+	return;
 }
 
-AkPlayingID UAkComponent::PostAkTrackedEvent(class UAkAudioEvent * AkEvent)
+AkPlayingID UAkComponent::PostAkEventByNameWithCallback(const FString& in_EventName, AkUInt32 in_uFlags /*= 0*/, AkCallbackFunc in_pfnUserCallback /*= NULL*/, void * in_pUserCookie /*= NULL*/)
 {
-    if (AkEvent)
-    {
-        return PostAkTrackedEventByName(AkEvent->GetName());
-    }
-    return 0;
+	UWorld* CurrentWorld = GetWorld();
+	AkPlayingID playingID = AK_INVALID_PLAYING_ID;
+	if (in_EventName.IsEmpty())
+	{
+		UE_LOG(LogAkAudio, Warning, TEXT("AkComponent: Attempted to post an empty AkEvent name."));
+		return playingID;
+	}
+
+	if (CurrentWorld->AllowAudioPlayback() && FAkAudioDevice::Get())
+	{
+#ifndef AK_SUPPORT_WCHAR
+		ANSICHAR* szEventName = TCHAR_TO_ANSI(*in_EventName);
+#else
+		const WIDECHAR * szEventName = *in_EventName;
+#endif
+		if (OcclusionRefreshInterval > 0.0f)
+		{
+			CalculateOcclusionValues(false);
+		}
+
+		AkComponentCallbackPackage* cbPackage = new AkComponentCallbackPackage(in_pfnUserCallback, in_pUserCookie, in_uFlags, &NumActiveEvents);
+		if (cbPackage)
+		{
+			playingID = AK::SoundEngine::PostEvent(szEventName, (AkGameObjectID) this, in_uFlags | AK_EndOfEvent, &UAkComponent::AkComponentCallback, cbPackage);
+			if (playingID != AK_INVALID_PLAYING_ID)
+			{
+				NumActiveEvents.Increment();
+				bStarted = true;
+			}
+			else
+			{
+				delete cbPackage;
+			}
+		}
+		else
+		{
+			// We weren't able to allocate our own callback cookie, so just call PostEvent with the User's callback directly.
+			playingID = AK::SoundEngine::PostEvent(szEventName, (AkGameObjectID) this, in_uFlags, in_pfnUserCallback, in_pUserCookie);
+		}
+	}
+
+	return playingID;
 }
-
-
-void UAkComponent::PostAkEventByName( const FString& in_EventName )
-{
-    PostAkTrackedEventByName(in_EventName);
-}
-
 
 void UAkComponent::Stop()
 {
@@ -214,6 +252,14 @@ float UAkComponent::GetAttenuationRadius() const
 	return 0.f;
 }
 
+void UAkComponent::SetOutputBusVolume(float BusVolume)
+{
+	FAkAudioDevice * AudioDevice = FAkAudioDevice::Get();
+	if (AudioDevice)
+	{
+		AudioDevice->SetGameObjectOutputBusVolume(this, BusVolume);
+	}
+}
 
 void UAkComponent::OnRegister()
 {
@@ -246,7 +292,8 @@ void UAkComponent::OnUnregister()
 	// called from AActor::ClearComponents when an actor gets destroyed which is not usually what we want for one-
 	// shot sounds.
 	AActor* Owner = GetOwner();
-	if( !Owner || StopWhenOwnerDestroyed )
+	UWorld* CurrentWorld = GetWorld();
+	if( !Owner || !CurrentWorld || StopWhenOwnerDestroyed || CurrentWorld->bIsTearingDown || (Owner->GetClass() == APlayerController::StaticClass() && CurrentWorld->WorldType == EWorldType::PIE))
 	{
 		Stop();
 	}
@@ -366,16 +413,9 @@ void UAkComponent::TickComponent(float DeltaTime, enum ELevelTick TickType, FAct
 			SetOcclusion(DeltaTime);
 		}
 
-		if( bAutoDestroy && bFlaggedForDestroy )
+		if( NumActiveEvents.GetValue() == 0 && bAutoDestroy && bStarted)
 		{
-			if( NumActiveEvents.GetValue() == 0 )
-			{
-				DestroyComponent();
-			}
-			else
-			{
-				bFlaggedForDestroy = false;
-			}
+			DestroyComponent();
 		}
 	}
 }
@@ -401,9 +441,26 @@ void UAkComponent::Activate(bool bReset)
 	}
 }
 
+void UAkComponent::SetAttenuationScalingFactor(float Value)
+{
+	AttenuationScalingFactor = Value;
+	FAkAudioDevice * AudioDevice = FAkAudioDevice::Get();
+	if (AudioDevice)
+	{
+		AudioDevice->SetAttenuationScalingFactor(this, AttenuationScalingFactor);
+	}
+}
+
+
+#if ENGINE_MAJOR_VERSION == 4 && ENGINE_MINOR_VERSION <= 11
+void UAkComponent::OnUpdateTransform(bool bSkipPhysicsMove, ETeleportType Teleport)
+{
+	Super::OnUpdateTransform(bSkipPhysicsMove, Teleport);
+#else
 void UAkComponent::OnUpdateTransform(EUpdateTransformFlags UpdateTransformFlags, ETeleportType Teleport)
 {
 	Super::OnUpdateTransform(UpdateTransformFlags, Teleport);
+#endif
 
 	UpdateGameObjectPosition();
 }
@@ -487,7 +544,7 @@ static int32 FindCurrentAkReverbVolumeInNewlist(TArray<AAkReverbVolume*> FoundVo
 	return FoundVolumes.IndexOfByPredicate( FAkCurrentReverbVolumeMatcher(AuxBusId) );
 }
 
-void FindAkReverbVolumesAtLocation(FVector Loc, TArray<AAkReverbVolume*>& FoundVolumes, const UWorld* World);
+void FindAkReverbVolumesAtLocation(FVector Loc, TArray<AAkReverbVolume*>& FoundVolumes, const UWorld* in_World);
 void UAkComponent::UpdateAkReverbVolumeList( FVector Loc )
 {
 	TArray<AAkReverbVolume*> FoundVolumes;
@@ -532,8 +589,8 @@ void UAkComponent::UpdateGameObjectPosition()
 	if ( bIsActive && AkAudioDevice )
 	{
 		AkSoundPosition soundpos;
-		FAkAudioDevice::FVectorToAKVector( ComponentToWorld.GetTranslation(), soundpos.Position );
-		FAkAudioDevice::FVectorToAKVector( ComponentToWorld.GetUnitAxis( EAxis::X ), soundpos.Orientation );
+		FAkAudioDevice::FVectorsToAKTransform(ComponentToWorld.GetTranslation(), ComponentToWorld.GetUnitAxis(EAxis::X), ComponentToWorld.GetUnitAxis(EAxis::Z), soundpos);
+
 		AK::SoundEngine::SetPosition( (AkGameObjectID) this, soundpos );
 
 		// Find and apply all AkReverbVolumes at this location
@@ -570,10 +627,11 @@ void UAkComponent::SetOcclusion(const float DeltaTime)
 		}
 	}
 
+	UWorld* CurrentWorld = GetWorld();
 	// Compute occlusion only when needed.
 	// Have to have "LastOcclutionRefresh == -1" because GetWorld() might return nullptr in UAkComponent's constructor,
 	// preventing us from initializing it to something smart.
-	if( (GetWorld()->GetTimeSeconds() - LastOcclusionRefresh) < OcclusionRefreshInterval && LastOcclusionRefresh != -1 )
+	if( !CurrentWorld || ((CurrentWorld->GetTimeSeconds() - LastOcclusionRefresh) < OcclusionRefreshInterval && LastOcclusionRefresh != -1) )
 	{
 		return;
 	}
@@ -609,14 +667,15 @@ void UAkComponent::CalculateOcclusionValues(bool CalledFromTick)
 			ListenerPosition = AkAudioDevice->GetListenerPosition(ListenerIdx);
 		}
 		FVector SourcePosition = GetComponentLocation();
-		APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
-		APawn* ActorToIgnore = NULL;
+		UWorld* CurrentWorld = GetWorld();
+		APlayerController* PlayerController = CurrentWorld ? CurrentWorld->GetFirstPlayerController() : NULL;
+		FCollisionQueryParams CollisionParams(NAME_SoundOcclusion, true, GetOwner());
 		if( PlayerController != NULL )
 		{
-			ActorToIgnore = PlayerController->GetPawn();
+			CollisionParams.AddIgnoredActor(PlayerController->GetPawn());
 		}
 
-		bool bNowOccluded = GetWorld()->LineTraceSingleByChannel(OutHit, SourcePosition, ListenerPosition, ECC_Visibility, FCollisionQueryParams(NAME_SoundOcclusion, true, ActorToIgnore));
+		bool bNowOccluded = GetWorld()->LineTraceSingleByChannel(OutHit, SourcePosition, ListenerPosition, ECC_Visibility, CollisionParams);
 		if( bNowOccluded )
 		{
 			FBox BoundingBox;
@@ -653,8 +712,8 @@ void UAkComponent::CalculateOcclusionValues(bool CalledFromTick)
 			for(int32 PointIdx = 0; PointIdx < Points.Num(); PointIdx++)
 			{
 				FHitResult TempHit;
-				bool bListenerToObstacle = GetWorld()->LineTraceSingleByChannel(TempHit, ListenerPosition, Points[PointIdx], ECC_Visibility, FCollisionQueryParams(NAME_SoundOcclusion, true, ActorToIgnore));
-				bool bSourceToObstacle = GetWorld()->LineTraceSingleByChannel(TempHit, SourcePosition, Points[PointIdx], ECC_Visibility, FCollisionQueryParams(NAME_SoundOcclusion, true, ActorToIgnore));
+				bool bListenerToObstacle = GetWorld()->LineTraceSingleByChannel(TempHit, ListenerPosition, Points[PointIdx], ECC_Visibility, CollisionParams);
+				bool bSourceToObstacle = GetWorld()->LineTraceSingleByChannel(TempHit, SourcePosition, Points[PointIdx], ECC_Visibility, CollisionParams);
 				if(bListenerToObstacle || bSourceToObstacle)
 				{
 					NumObstructedPaths++;

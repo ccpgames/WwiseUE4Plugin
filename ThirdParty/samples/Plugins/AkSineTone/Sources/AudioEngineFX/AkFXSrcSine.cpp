@@ -10,12 +10,22 @@
 
 #include "AkFXSrcSine.h"
 #include <AK/Tools/Common/AkAssert.h>
+#include <AK/AkWwiseSDKVersion.h>
 
 /// Plugin mechanism. Instanciation method that must be registered to the plug-in manager.
 AK::IAkPlugin* CreateSineSource( AK::IAkPluginMemAlloc * in_pAllocator )
 {
 	return AK_PLUGIN_NEW( in_pAllocator, CAkFXSrcSine() );
 }
+
+// Plugin mechanism. Parameter node create function to be registered to the FX manager.
+AK::IAkPluginParam * CreateSineSourceParams(AK::IAkPluginMemAlloc * in_pAllocator)
+{
+	return AK_PLUGIN_NEW(in_pAllocator, CAkFxSrcSineParams());
+}
+
+#include <AK/SoundEngine/Common/IAkPlugin.h>
+AK_IMPLEMENT_PLUGIN_FACTORY(SineSource, AkPluginTypeSource, 0, 100)
 
 /// Constructor.
 CAkFXSrcSine::CAkFXSrcSine() : m_pParams(NULL)
@@ -85,6 +95,7 @@ AKRESULT CAkFXSrcSine::GetPluginInfo( AkPluginInfo & out_rPluginInfo )
 #else
 	out_rPluginInfo.bIsAsynchronous = false; // Other platform only support synchronous processing
 #endif
+	out_rPluginInfo.uBuildVersion = AK_WWISESDK_VERSION_COMBINED;
     return AK_Success;
 }
 

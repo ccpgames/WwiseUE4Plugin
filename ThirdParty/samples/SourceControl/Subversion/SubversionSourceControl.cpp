@@ -35,12 +35,6 @@ using namespace Wwise;
 
 namespace
 {
-	struct ResourceIDPair
-	{
-		UINT uiIconID;
-		UINT uiToolTipID;
-	};
-
 	enum IconsIndexes
 	{
 		IconsIndexes_Normal = 0,
@@ -50,22 +44,26 @@ namespace
 		IconsIndexes_Count
 	};
 
-	const static ResourceIDPair k_iconsToolTipIDs[] = { { IDI_SUBVERSION_NORMAL,	IDS_ICONS_TOOLTIP_NORMAL },
-														{ IDI_SUBVERSION_MODIFIED,	IDS_ICONS_TOOLTIP_MODIFIED },
-														{ IDI_SUBVERSION_ADD,		IDS_ICONS_TOOLTIP_ADD } };
+	const static UINT k_tooltipIcons[] = { IDI_SUBVERSION_NORMAL,
+											IDI_SUBVERSION_MODIFIED,
+											IDI_SUBVERSION_ADD };
 
-	static const UINT s_operationNameIDs[SubversionSourceControl::OperationIDCount] = { IDS_OPERATIONS_UPDATE,
-																						IDS_OPERATIONS_COMMIT,
-																						IDS_OPERATIONS_GETLOCK,
-																						IDS_OPERATIONS_RELEASELOCK,
-																						IDS_OPERATIONS_ADD,
-																						IDS_OPERATIONS_DELETE,
-																						IDS_OPERATIONS_RENAME,
-																						IDS_OPERATIONS_MOVE,
-																						IDS_OPERATIONS_REVERT,
-																						IDS_OPERATIONS_RESOLVED,
-																						IDS_OPERATIONS_DIFF,
-																						IDS_OPERATIONS_SHOWLOG };
+	const static CString k_tooltipText[] = { _T("Normal"),
+											_T("Modified"),
+											_T("Added") };
+
+	static const CString s_operationNames[SubversionSourceControl::OperationIDCount] = { _T("Update"),
+																						_T("Commit"),
+																						_T("Get Lock"),
+																						_T("Release Lock"),
+																						_T("Add"),
+																						_T("Delete"),
+																						_T("Rename"),
+																						_T("Move"),
+																						_T("Revert"),
+																						_T("Resolved"),
+																						_T("Diff"),
+																						_T("Show Log") };
 
 	const static CString k_csRegFolder = L"Version 1\\";
 	const static CString k_csRegKeyNewFilesAdd = L"NewFilesAdd";
@@ -86,7 +84,7 @@ SubversionSourceControl::SubversionSourceControl()
 
 	for ( unsigned int i=0 ; i<IconsIndexes_Count ; ++i )
 	{
-		m_icons[i] = ::LoadIcon( AfxGetStaticModuleState()->m_hCurrentResourceHandle, MAKEINTRESOURCE( k_iconsToolTipIDs[i].uiIconID ) );
+		m_icons[i] = ::LoadIcon( AfxGetStaticModuleState()->m_hCurrentResourceHandle, MAKEINTRESOURCE( k_tooltipIcons[i] ) );
 	}
 }
 
@@ -101,7 +99,7 @@ void SubversionSourceControl::GetPluginInfo( PluginInfo& out_rPluginInfo )
 
 	// Plug-in name and version
 	CString csName;
-	csName.LoadString( IDS_SUBVERSION_NAME );
+	csName = _T("Subversion");
 
 	out_rPluginInfo.m_bstrName = csName.AllocSysString();
 	out_rPluginInfo.m_uiVersion = 1;
@@ -187,27 +185,22 @@ void SubversionSourceControl::Init( ISourceControlUtilities* in_pUtilities, bool
 	svn_auth_open( &m_pContext->auth_baton, pProviders, m_pGlobalPool );
 
 	// Load Subversion configuration
-	CRegKey regKey;
+	DWORD bEnabled = FALSE;
+	m_pUtilities->GetUserPreferenceDword( k_csRegFolder + k_csRegKeyNewFilesAdd, bEnabled );
+	m_bOnNewFilesAdd = bEnabled ? true : false;
 
-	if ( regKey.Create( HKEY_CURRENT_USER, m_pUtilities->GetRegistryPath() + k_csRegFolder ) == ERROR_SUCCESS )
-	{
-		DWORD bEnabled = FALSE;
+	TCHAR szValue[MAX_PATH] = { 0 };
+	ULONG size = MAX_PATH;
 
-		if ( regKey.QueryDWORDValue( k_csRegKeyNewFilesAdd, bEnabled ) == ERROR_SUCCESS )
-			m_bOnNewFilesAdd = bEnabled ? true : false;
+	const TCHAR chInvalid = (TCHAR)-1;
+	szValue[0] = chInvalid;
+	m_pUtilities->GetUserPreferenceString( k_csRegKeyDiffToolPath, szValue, size );
+	if( szValue[0] != chInvalid )
+		m_csDiffToolPath = szValue;
 
-		TCHAR szValue[MAX_PATH] = { 0 };
-		ULONG size = MAX_PATH;
-
-		if( regKey.QueryStringValue( k_csRegKeyDiffToolPath, szValue, &size ) == ERROR_SUCCESS )
-			m_csDiffToolPath = CString( szValue );
-
-		DWORD dwUseAKWavViewerToDiff = 1;
-		if ( regKey.QueryDWORDValue( k_csUseAKWaveViewerForDiff, dwUseAKWavViewerToDiff ) == ERROR_SUCCESS )
-			m_bUseAKWavViewerToDiff = dwUseAKWavViewerToDiff ? true : false;
-		
-		regKey.Close();
-	}
+	DWORD dwUseAKWavViewerToDiff = 1;
+	m_pUtilities->GetUserPreferenceDword( k_csRegFolder + k_csUseAKWaveViewerForDiff, dwUseAKWavViewerToDiff );
+	m_bUseAKWavViewerToDiff = dwUseAKWavViewerToDiff ? true : false;
 }
 
 svn_error_t* SubversionSourceControl::SslServerPromptCallback(svn_auth_cred_ssl_server_trust_t **cred_p, void *baton, const char *realm, apr_uint32_t failures, const svn_auth_ssl_server_cert_info_t *cert_info, svn_boolean_t may_save, apr_pool_t *pool)
@@ -223,14 +216,9 @@ svn_error_t* SubversionSourceControl::SslServerPromptCallback(svn_auth_cred_ssl_
 void SubversionSourceControl::Term()
 {
 	// Save Subversion configuration
-	CRegKey regKey;
-
-	regKey.Create( HKEY_CURRENT_USER, m_pUtilities->GetRegistryPath() + k_csRegFolder );
-	regKey.SetDWORDValue( k_csRegKeyNewFilesAdd, m_bOnNewFilesAdd ? TRUE : FALSE );
-	regKey.SetStringValue( k_csRegKeyDiffToolPath, m_csDiffToolPath );
-	regKey.SetDWORDValue( k_csUseAKWaveViewerForDiff, m_bUseAKWavViewerToDiff ? 1 : 0 );
-
-	regKey.Close();
+	m_pUtilities->SetUserPreferenceDword( k_csRegFolder + k_csRegKeyNewFilesAdd, m_bOnNewFilesAdd ? TRUE : FALSE );
+	m_pUtilities->SetUserPreferenceString( k_csRegFolder + k_csRegKeyDiffToolPath, m_csDiffToolPath );
+	m_pUtilities->SetUserPreferenceDword( k_csRegFolder + k_csUseAKWaveViewerForDiff, m_bUseAKWavViewerToDiff ? 1 : 0 );
 
 	// Pool termination
 	svn_pool_destroy( m_pGlobalPool );
@@ -371,21 +359,6 @@ ISourceControl::OperationResult SubversionSourceControl::GetOperationList( Opera
 
 LPCWSTR SubversionSourceControl::GetOperationName( DWORD in_dwOperationID )
 {
-	static bool s_bInitializedOperationNames = false;
-	static CString s_operationNames[SubversionSourceControl::OperationIDCount];
-
-	if ( !s_bInitializedOperationNames  )
-	{
-		AFX_MANAGE_STATE( AfxGetStaticModuleState() );
-
-		for ( unsigned int i=0 ; i<SubversionSourceControl::OperationIDCount ; ++i )
-		{
-			s_operationNames[i].LoadString( s_operationNameIDs[i] );
-		}
-
-		s_bInitializedOperationNames = true;
-	}
-
 	if( in_dwOperationID >= 0 && in_dwOperationID < OperationIDCount )
 		return s_operationNames[in_dwOperationID];
 
@@ -427,7 +400,7 @@ ISourceControl::OperationResult SubversionSourceControl::_GetFileStatus( const S
 
 	// Load the 'non-versioned' status text
 	CString csStatusNonVersioned;
-	csStatusNonVersioned.LoadString( IDS_STATUS_NON_VERSIONED );
+	csStatusNonVersioned = _T("non-versioned");
 
 	SvnPool subPool( m_pGlobalPool );
 
@@ -448,7 +421,7 @@ ISourceControl::OperationResult SubversionSourceControl::_GetFileStatus( const S
 		if( status.m_bTreeConflict )
 		{
 			CString csTreeConflict;
-			csTreeConflict.LoadString( IDS_STATUS_TREE_CONFLICT );
+			csTreeConflict = _T(", tree conflict");
 			csStatus += csTreeConflict;
 		}
 
@@ -483,20 +456,20 @@ ISourceControl::OperationResult SubversionSourceControl::GetFileStatusIcons( con
 		switch( status.m_kind )
 		{
 			case svn_wc_status_added:
-				csToolTip.LoadString( k_iconsToolTipIDs[ IconsIndexes_Added ].uiToolTipID );
+				csToolTip = k_tooltipText[ IconsIndexes_Added ];
 				iconItem.m_hIcon = m_icons[ IconsIndexes_Added ];
 				iconItem.m_bstrToolTip = csToolTip.AllocSysString();
 				break;
 
 			case svn_wc_status_normal:
-				csToolTip.LoadString( k_iconsToolTipIDs[ IconsIndexes_Normal ].uiToolTipID );
+				csToolTip = k_tooltipText[ IconsIndexes_Normal ];
 				iconItem.m_hIcon = m_icons[ IconsIndexes_Normal ];
 				iconItem.m_bstrToolTip = csToolTip.AllocSysString();
 				break;
 
 			case svn_wc_status_conflicted:
 			case svn_wc_status_modified:
-				csToolTip.LoadString( k_iconsToolTipIDs[ IconsIndexes_Modified ].uiToolTipID );
+				csToolTip = k_tooltipText[ IconsIndexes_Modified ];
 				iconItem.m_hIcon = m_icons[ IconsIndexes_Modified ];
 				iconItem.m_bstrToolTip = csToolTip.AllocSysString();
 				break;
@@ -775,8 +748,8 @@ AK::Wwise::ISourceControl::IOperationResult* SubversionSourceControl::Delete( co
 		CString csCaption;
 		CString csMessage;
 
-		csCaption.LoadString( IDS_DELETE_CONFIRMATION_CAPTION );
-		csMessage.LoadString( IDS_DELETE_CONFIRMATION );
+		csCaption = _T("Delete confirmation");
+		csMessage = _T("Are you sure you want to delete the selected file(s)?");
 
 		if( m_pUtilities->MessageBox( NULL, csMessage, csCaption, MB_YESNO ) != IDYES )
 			return NULL;
@@ -856,12 +829,12 @@ AK::Wwise::ISourceControl::IOperationResult* SubversionSourceControl::Delete( co
 
 			if ( bSuccess )
 			{
-				csMessage.Format( IDS_SUCCESS_DELETE, csFilename );
+				csMessage.Format( _T("Successfully deleted local file %s"), csFilename );
 				pResult->AddFile( csFilename );
 			}
 			else
 			{
-				csMessage.Format( IDS_ERROR_DELETE, csFilename, SourceControlHelpers::GetLastErrorString() );
+				csMessage.Format( _T("Error deleting local file %s (%s)"), csFilename, SourceControlHelpers::GetLastErrorString() );
 			}
 
 			m_pUtilities->GetProgressDialog()->AddLogMessage( csMessage );
@@ -904,11 +877,11 @@ AK::Wwise::ISourceControl::IOperationResult* SubversionSourceControl::Rename( co
 
 			if ( ::MoveFile( csOldFilename, renameDialog.GetNewFilename() ) == FALSE )
 			{
-				csMessage.Format( IDS_ERROR_RENAME_LOCAL, csOldFilename );
+				csMessage.Format( _T("Error renaming local file %s"), csOldFilename );
 			}
 			else
 			{
-				csMessage.Format( IDS_SUCCESS_RENAME_LOCAL, csOldFilename, renameDialog.GetNewFilename() );
+				csMessage.Format( _T("Successfully renamed local file %s to %s"), csOldFilename, renameDialog.GetNewFilename() );
 				
 				pResult = new FileOperationResult();
 				pResult->AddMovedFile( csOldFilename, renameDialog.GetNewFilename() );
@@ -930,7 +903,7 @@ AK::Wwise::ISourceControl::IOperationResult* SubversionSourceControl::Rename( co
 			{
 				CString csMessage;
 
-				csMessage.Format( IDS_ERROR_RENAME_FILE_EXIST, csOldFilename, renameDialog.GetNewFilename() );
+				csMessage.Format( _T("Can't rename %s to %s, file already exists"), csOldFilename, renameDialog.GetNewFilename() );
 
 				m_pUtilities->GetProgressDialog()->AddLogMessage( csMessage );
 			}
@@ -1008,7 +981,7 @@ AK::Wwise::ISourceControl::IOperationResult* SubversionSourceControl::Move( cons
 	CString csRoot( szRootPath );
 
 	CString csPrompt;
-	csPrompt.LoadStringW( IDS_SELECT_MOVE_FOLDER );
+	csPrompt = _T("Choose the destination folder for the Move operation.");
 
 	// Let the user decide the destination
 	wchar_t szDestinationDir[MAX_PATH] = {0};
@@ -1023,7 +996,8 @@ AK::Wwise::ISourceControl::IOperationResult* SubversionSourceControl::Move( cons
 
 		std::vector<CString> newPaths;
 		bool bCanProceed = SourceControlHelpers::CanProceedWithMove( in_rFilenameList, szDestinationDir, newPaths, m_pUtilities,
-			IDS_MOVE_FAILED_FILE_ALREADY_EXIST, IDS_MOVE_FAILED_NAME_CONFLICT );
+			_T("Error: The following file already exist in the destination directory: %1"),
+			_T("Error: Multiple files with the same name can't be moved at the same destination (%1).") );
 
 		if( bCanProceed )
 		{
@@ -1084,12 +1058,12 @@ void SubversionSourceControl::Move( const CString& in_csFrom, const CString& in_
 
 		if ( ::MoveFile( in_csFrom, in_csTo ) )
 		{
-			csMessage.Format( IDS_SUCCESS_MOVE_LOCAL, (LPCTSTR)in_csFrom, (LPCTSTR)in_csTo );
+			csMessage.Format( _T("Successfully moved local file %s to %s"), (LPCTSTR)in_csFrom, (LPCTSTR)in_csTo );
 			io_pResult->AddMovedFile( in_csFrom, in_csTo );
 		}
 		else
 		{
-			csMessage.Format( IDS_ERROR_MOVE_LOCAL, (LPCTSTR)in_csFrom, SourceControlHelpers::GetLastErrorString() );
+			csMessage.Format( _T("Error moving local file %s (%s)"), (LPCTSTR)in_csFrom, SourceControlHelpers::GetLastErrorString() );
 		}
 
 		m_pUtilities->GetProgressDialog()->AddLogMessage( csMessage );
@@ -1109,7 +1083,7 @@ void SubversionSourceControl::Move( const CString& in_csFrom, const CString& in_
 			 || ::PathFileExists( in_csTo ) )
 		{
 			CString csMessage;
-			csMessage.Format( IDS_ERROR_MOVE_FILE_EXIST, in_csFrom, in_csTo );
+			csMessage.Format( _T("Can't move %s to %s, file already exists"), in_csFrom, in_csTo );
 
 			m_pUtilities->GetProgressDialog()->AddLogMessage( csMessage );
 		}
@@ -1144,8 +1118,8 @@ void SubversionSourceControl::Revert( const CStringList& in_rFilenameList )
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
 	CString csCaption, csMessage;
-	csCaption.LoadString( IDS_SUBVERSION_NAME );
-	csMessage.LoadString( IDS_SUBVERSION_REVERT_CONFIRMATION_QUESTION );
+	csCaption = _T("Subversion");
+	csMessage = _T("Are you sure you want to revert the selected item(s)? You will lose all changes since the last update.");
 
 	if( m_pUtilities->MessageBox( NULL, csMessage, csCaption, MB_YESNO ) == IDYES )
 	{
@@ -1228,8 +1202,8 @@ void SubversionSourceControl::Diff( const CStringList& in_rFilenameList )
 		CString csMessage;
 		CString csCaption;
 
-		csMessage.LoadString( IDS_ERROR_NO_DIFF_TOOL );
-		csCaption.LoadString( IDS_MESSAGEBOX_CAPTION );
+		csMessage = _T("No diff tool specified");
+		csCaption = _T("Subversion plug-in");
 
 		m_pUtilities->MessageBox( NULL, csMessage, csCaption, MB_OK | MB_ICONERROR );
 	}
@@ -1332,59 +1306,59 @@ CString SubversionSourceControl::GetSVNStatusKindText( svn_wc_status_kind in_sta
 	switch( in_status )
 	{
 		case svn_wc_status_none:
-			csStatus.LoadString( IDS_STATUS_NONE );
+			csStatus = _T("none");
 			break;
 
 		case svn_wc_status_unversioned:
-			csStatus.LoadString( IDS_STATUS_NON_VERSIONED );
+			csStatus = _T("non-versioned");
 			break;
 
 		case svn_wc_status_normal:
-			csStatus.LoadString( IDS_STATUS_NORMAL );
+			csStatus = _T("normal");
 			break;
 
 		case svn_wc_status_added:
-			csStatus.LoadString( IDS_STATUS_ADDED );
+			csStatus = _T("added");
 			break;
 
 		case svn_wc_status_missing:
-			csStatus.LoadString( IDS_STATUS_MISSING );
+			csStatus = _T("missing");
 			break;
 
 		case svn_wc_status_deleted:
-			csStatus.LoadString( IDS_STATUS_DELETED );
+			csStatus = _T("deleted");
 			break;
 
 		case svn_wc_status_replaced:
-			csStatus.LoadString( IDS_STATUS_REPLACED );
+			csStatus = _T("replaced");
 			break;
 
 		case svn_wc_status_modified:
-			csStatus.LoadString( IDS_STATUS_MODIFIED );
+			csStatus = _T("modified");
 			break;
 
 		case svn_wc_status_merged:
-			csStatus.LoadString( IDS_STATUS_MERGED );
+			csStatus = _T("merged");
 			break;
 
 		case svn_wc_status_conflicted:
-			csStatus.LoadString( IDS_STATUS_CONFLICTED );
+			csStatus = _T("conflicted");
 			break;
 
 		case svn_wc_status_ignored:
-			csStatus.LoadString( IDS_STATUS_IGNORED );
+			csStatus = _T("ignored");
 			break;
 
 		case svn_wc_status_obstructed:
-			csStatus.LoadString( IDS_STATUS_OBSTRUCTED );
+			csStatus = _T("obstructed");
 			break;
 
 		case svn_wc_status_external:
-			csStatus.LoadString( IDS_STATUS_EXTERNAL );
+			csStatus = _T("external");
 			break;
 
 		case svn_wc_status_incomplete:
-			csStatus.LoadString( IDS_STATUS_INCOMPLETE );
+			csStatus = _T("incomplete");
 			break;
 
 		default:
@@ -1655,8 +1629,8 @@ void SubversionSourceControl::RunCommand( const CString& in_rCommand )
 		CString csMessage;
 		CString csCaption;
 
-		csMessage.Format( IDS_ERROR_RUN_COMMAND, in_rCommand );
-		csCaption.LoadString( IDS_MESSAGEBOX_CAPTION );
+		csMessage.Format( _T("Could not run the following command:\n%s"), in_rCommand );
+		csCaption = _T("Subversion plug-in");
 
 		m_pUtilities->MessageBox( NULL, csMessage, csCaption, MB_OK | MB_ICONERROR );
 		
@@ -1688,7 +1662,7 @@ void SubversionSourceControl::ManageSVNError( svn_error_t* in_pError, SVNErrorDe
 
 					CString csCaption;
 					CString csMessage( in_pError->message );
-					csCaption.LoadString( IDS_MESSAGEBOX_CAPTION );
+					csCaption = _T("Subversion plug-in");
 
 					svn_error_t* pChildError = in_pError->child;
 
@@ -1729,7 +1703,7 @@ svn_error_t* SubversionSourceControl::CancelCallback( AK::Wwise::ISourceControlU
 		AFX_MANAGE_STATE( AfxGetStaticModuleState() );
 
 		CStringA csCanceled;
-		csCanceled.LoadString( IDS_OPERATION_CANCELED );
+		csCanceled = _T("Operation canceled.");
 		return svn_error_create( SVN_ERR_CANCELLED, NULL, csCanceled );
 	}
 
@@ -1762,43 +1736,43 @@ void SubversionSourceControl::NotifyCallback( SubversionSourceControl* in_pSourc
 			// Adding a path to revision control.
 			case svn_wc_notify_add:
 			case svn_wc_notify_update_add:
-				csNotifyText.Format( IDS_NOTIFY_ADDED, csPath );
+				csNotifyText.Format( _T("Added: %s"), csPath );
 				break;
 
 			// Copying a versioned path.
 			case svn_wc_notify_copy:
-				csNotifyText.Format( IDS_NOTIFY_COPIED, csPath );
+				csNotifyText.Format( _T("Copied: %s"), csPath );
 				break;
 			  
 			// Deleting a versioned path.
 			case svn_wc_notify_delete:
 			case svn_wc_notify_update_delete:
-				csNotifyText.Format( IDS_NOTIFY_DELETED, csPath );
+				csNotifyText.Format( _T("Deleted: %s"), csPath );
 				break;
 
 			// Restoring a missing path from the pristine text-base.
 			case svn_wc_notify_restore:
-				csNotifyText.Format( IDS_NOTIFY_RESTORED, csPath );
+				csNotifyText.Format( _T("Restored: %s"), csPath );
 				break;
 			  
 			// Reverting a modified path.
 			case svn_wc_notify_revert:
-				csNotifyText.Format( IDS_NOTIFY_REVERTED, csPath );
+				csNotifyText.Format( _T("Reverted: %s"), csPath );
 				break;
 
 			// A revert operation has failed.
 			case svn_wc_notify_failed_revert:
-				csNotifyText.Format( IDS_NOTIFY_FAILED_REVERT, csPath );
+				csNotifyText.Format( _T("Failed revert: %s"), csPath );
 				break;
 
 			// Resolving a conflict.
 			case svn_wc_notify_resolved:
-				csNotifyText.Format( IDS_NOTIFY_RESOLVED, csPath );
+				csNotifyText.Format( _T("Resolved: %s"), csPath );
 				break;
 
 			// Skipping a path.
 			case svn_wc_notify_skip:
-				csNotifyText.Format( IDS_NOTIFY_SKIPPED, csPath );
+				csNotifyText.Format( _T("Skipped: %s"), csPath );
 				break;
 
 			// Got any other action in an update.
@@ -1816,84 +1790,84 @@ void SubversionSourceControl::NotifyCallback( SubversionSourceControl* in_pSourc
 				if ( ( in_pNotifyInfo->content_state == svn_wc_notify_state_conflicted ) || 
 					 ( in_pNotifyInfo->prop_state == svn_wc_notify_state_conflicted ) )
 				{
-					csNotifyText.Format( IDS_NOTIFY_UPDATE_CONFLICT, csPath );
+					csNotifyText.Format( _T("Conflicted: %s"), csPath );
 				}
 				else if ( ( in_pNotifyInfo->content_state == svn_wc_notify_state_merged) || 
 					      ( in_pNotifyInfo->prop_state == svn_wc_notify_state_merged ) )
 				{
-					csNotifyText.Format( IDS_NOTIFY_UPDATE_MERGED, csPath );
+					csNotifyText.Format( _T("Merged: %s"), csPath );
 				}
 				else
 				{
-					csNotifyText.Format( IDS_NOTIFY_UPDATE_UPDATE, csPath );
+					csNotifyText.Format( _T("Updated: %s"), csPath );
 				}
 				break;
 
 			// The last notification in an update (including updates of externals).
 			case svn_wc_notify_update_completed:
-				csNotifyText.Format( IDS_NOTIFY_COMPLETED, in_pNotifyInfo->revision );
+				csNotifyText.Format( _T("Completed at revision: %d."), in_pNotifyInfo->revision );
 				break;
 
 			// Updating an external module.
 			case svn_wc_notify_update_external:
-				csNotifyText.Format( IDS_NOTIFY_UPDATE_EXTERNAL, csPath );
+				csNotifyText.Format( _T("External: %s"), csPath );
 				break;
 
 			// The last notification in a status (including status on externals).
 			case svn_wc_notify_status_completed:
 			case svn_wc_notify_status_external:
-				csNotifyText.Format( IDS_NOTIFY_STATUS );
+				csNotifyText.Format( _T("Status") );
 				break;
 
 			// Committing a modification.
 			case svn_wc_notify_commit_modified:
-				csNotifyText.Format( IDS_NOTIFY_COMMIT_MODIFIED, csPath );
+				csNotifyText.Format( _T("Modified: %s"), csPath );
 				break;
 			  
 			// Committing an addition.
 			case svn_wc_notify_commit_added:
-				csNotifyText.Format( IDS_NOTIFY_COMMIT_ADDED, csPath );
+				csNotifyText.Format( _T("Adding %s"), csPath );
 				break;
 
 			// Committing a deletion.
 			case svn_wc_notify_commit_deleted:
-				csNotifyText.Format( IDS_NOTIFY_COMMIT_DELETED, csPath );
+				csNotifyText.Format( _T("Deleting %s"), csPath );
 				break;
 
 			// Committing a replacement.
 			case svn_wc_notify_commit_replaced:
-				csNotifyText.Format( IDS_NOTIFY_COMMIT_REPLACED, csPath );
+				csNotifyText.Format( _T("Replaced: %s"), csPath );
 				break;
 
 			// Transmitting post-fix text-delta data for a file.
 			case svn_wc_notify_commit_postfix_txdelta:
-				csNotifyText.Format( IDS_NOTIFY_COMMIT_POSTFIX, csPath );
+				csNotifyText.Format( _T("Sending content: %s"), csPath );
 				break;
 
 			// Processed a single revision's blame.
 			case svn_wc_notify_blame_revision:
-				csNotifyText.Format( IDS_NOTIFY_BLAME_REVISION, csPath );
+				csNotifyText.Format( _T("Blame revision."), csPath );
 				break;
 
 			// Locking a path. @since New in 1.2.
 			case svn_wc_notify_locked:
 				if ( in_pNotifyInfo->lock && in_pNotifyInfo->lock->owner )
-					csNotifyText.Format( IDS_NOTIFY_LOCKED, CString( in_pNotifyInfo->lock->owner ), csPath );
+					csNotifyText.Format( _T("Locked by '%s': %s."), CString( in_pNotifyInfo->lock->owner ), csPath );
 				break;
 
 			// Unlocking a path. @since New in 1.2.
 			case svn_wc_notify_unlocked:
-				csNotifyText.Format( IDS_NOTIFY_UNLOCKED, csPath );
+				csNotifyText.Format( _T("Unlocked: %s"), csPath );
 				break;
 
 			// Failed to lock a path. @since New in 1.2.
 			case svn_wc_notify_failed_lock:
-				csNotifyText.Format( IDS_NOTIFY_FAILED_LOCK, csPath );
+				csNotifyText.Format( _T("Lock failed: %s"), csPath );
 				break;
 
 			// Failed to unlock a path. @since New in 1.2.
 			case svn_wc_notify_failed_unlock:
-				csNotifyText.Format( IDS_NOTIFY_FAILED_UNLOCK, csPath );
+				csNotifyText.Format( _T("Unlock failed: %s"), csPath );
 				break;
 		}
 
@@ -1977,7 +1951,7 @@ svn_error_t* SubversionSourceControl::ShowLogCallback( AK::Wwise::ISourceControl
 	if ( in_pAuthor )
 		csAuthor = CString( in_pAuthor );
 	else
-		csAuthor.LoadString( IDS_LOGRECEIVER_NO_AUTHOR );
+		csAuthor = _T("(no author)");
 
 	svn_error_t* pError = NULL;
 
@@ -1992,7 +1966,7 @@ svn_error_t* SubversionSourceControl::ShowLogCallback( AK::Wwise::ISourceControl
 	}
 	else
 	{
-		csDate.LoadString( IDS_LOGRECEIVER_NO_DATE );
+		csDate = _T("(no date)");
 	}
 
 	if ( !pError )
@@ -2006,7 +1980,7 @@ svn_error_t* SubversionSourceControl::ShowLogCallback( AK::Wwise::ISourceControl
 		}
 		else
 		{
-			csMessage.LoadString( IDS_LOGRECEIVER_NO_MESSAGE );
+			csMessage = _T("(no message)");
 		}
 
 		// Get the actions
@@ -2064,14 +2038,14 @@ svn_error_t* SubversionSourceControl::ShowLogCallback( AK::Wwise::ISourceControl
 
 		if ( csActions.IsEmpty() )
 		{
-			csActions.LoadString( IDS_LOGRECEIVER_NO_ACTION );
+			csActions = _T("(no action)");
 		}
 	}
 
 	if ( !pError )
 	{
 		CString csLog;
-		csLog.Format( IDS_SHOWLOG_FORMAT, in_revision, csActions, csAuthor, csDate, csMessage );
+		csLog.Format( _T("Revision: %d, Actions: '%s', Author: '%s', Date: '%s', Message: '%s'"), in_revision, csActions, csAuthor, csDate, csMessage );
 		
 		in_pUtilities->GetProgressDialog()->AddLogMessage( csLog );
 	}

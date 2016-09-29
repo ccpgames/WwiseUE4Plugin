@@ -114,13 +114,23 @@ class AKAUDIO_API UAkGameplayStatics : public UBlueprintFunctionLibrary
 	static void SetSwitch( FName SwitchGroup, FName SwitchState, class AActor* Actor );
 
 	/**
-	 * Sets UseReverbVolumes flag on a specified actor. Set value to true to use reverb volumes on this component.
-	 *
-	 * @param inUseReverbVolumes - Whether to use reverb volumes or not.
-	 * @param Actor - Actor on which to set the flag
-	 */
+	* Sets UseReverbVolumes flag on a specified actor. Set value to true to use reverb volumes on this component.
+	*
+	* @param inUseReverbVolumes - Whether to use reverb volumes or not.
+	* @param Actor - Actor on which to set the flag
+	*/
 	UFUNCTION(BlueprintCallable, Category="Audiokinetic|Actor")
 	static void UseReverbVolumes(bool inUseReverbVolumes, class AActor* Actor);
+
+	/**
+	* Set the output bus volume (direct) to be used for the specified game object.
+	* The control value is a number ranging from 0.0f to 1.0f.
+	*
+	* @param BusVolume - Bus volume to set
+	* @param Actor - Actor on which to set the flag
+	*/
+	UFUNCTION(BlueprintCallable, Category = "Audiokinetic|Actor")
+	static void SetOutputBusVolume(float BusVolume, class AActor* Actor);
 
 	/**
 	 * Sets the occlusion calculation refresh interval, targetting the root component of a specified actor.
@@ -145,13 +155,13 @@ class AKAUDIO_API UAkGameplayStatics : public UBlueprintFunctionLibrary
 	/**
 	 * Start all Ak ambient sounds.
 	 */
-	UFUNCTION(BlueprintCallable, Category="Audiokinetic|AkAmbientSound", meta=(WorldContext="WorldContextObject"))
+	UFUNCTION(BlueprintCallable, Category="Audiokinetic|AkAmbientSound", meta=(HidePin = "WorldContextObject", DefaultToSelf = "WorldContextObject"))
 	static void StartAllAmbientSounds(UObject* WorldContextObject);
 	
 	/**
 	 * Stop all Ak ambient sounds.
 	 */
-	UFUNCTION(BlueprintCallable, Category="Audiokinetic|AkAmbientSound", meta=(WorldContext="WorldContextObject"))
+	UFUNCTION(BlueprintCallable, Category="Audiokinetic|AkAmbientSound", meta=(HidePin = "WorldContextObject", DefaultToSelf = "WorldContextObject"))
 	static void StopAllAmbientSounds(UObject* WorldContextObject);
 
 	
@@ -161,10 +171,6 @@ class AKAUDIO_API UAkGameplayStatics : public UBlueprintFunctionLibrary
 	UFUNCTION(BlueprintCallable, Category="Audiokinetic|SoundBanks")
 	static void ClearBanks();
 
-    UFUNCTION(BlueprintCallable, Category = "Audiokinetic|SoundBanks")
-    static bool IsBankLoaded(class UAkAudioBank* Bank);
-
-
 	/* 
 	 * Loads a bank.
 	 * @param Bank - The bank to load.
@@ -172,16 +178,6 @@ class AKAUDIO_API UAkGameplayStatics : public UBlueprintFunctionLibrary
 	 */
 	UFUNCTION(BlueprintCallable, Category="Audiokinetic|SoundBanks", meta=(AdvancedDisplay="1"))
 	static void LoadBank(class UAkAudioBank* Bank, const FString& BankName);
-
-
-    /*
-    * Loads a bank asynchronously .
-    * @param Bank - The bank to load.
-    *
-    */
-    UFUNCTION(BlueprintCallable, Category = "Audiokinetic|SoundBanks", meta = (AdvancedDisplay = "1"))
-    static void LoadBankAsync(class UAkAudioBank* Bank);
-
 
 	/* 
 	 * Loads a bank by its name.

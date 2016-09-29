@@ -6,7 +6,6 @@
 
 #include "stdafx.h"
 
-#include <AK/Plugin/AkAudioInputSourceFactory.h>
 #include <math.h>
 
 #include "SoundInput.h"
@@ -44,7 +43,7 @@ void SoundInput::GetFormatCallback(
 {
     io_AudioFormat.SetAll(
             48000,// Sample rate
-            AK_SPEAKER_SETUP_MONO,
+            AkChannelConfig(1, AK_SPEAKER_SETUP_MONO),
             16,						// Bits per samples
             2,						// 2 bytes per samples
             AK_INT,					// feeding integers(signed)

@@ -85,7 +85,9 @@ namespace AK
 		{
 			LicenseStatus_Unlicensed,
 			LicenseStatus_Expired,
-			LicenseStatus_Valid
+			LicenseStatus_Valid,
+
+			LicenseStatus_Incompatible		//the plugin is for an older version of wwise
 		};
 
 		/// Log message severity.

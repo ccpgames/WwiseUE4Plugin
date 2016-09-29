@@ -17,11 +17,13 @@ using std::string;
 /// \sa DrawTextOnScreen()
 enum DrawStyle
 {
-	DrawStyle_Control,  ///< Control text, this is the default style
+	DrawStyle_Control = 0,  ///< Control text, this is the default style
 	DrawStyle_Selected, ///< Highlighted Control text
 	DrawStyle_Title,	///< Page title text
 	DrawStyle_Error,	///< Error Message Text
-	DrawStyle_Text		///< Plain Text, smaller font
+	DrawStyle_Text,		///< Plain Text, smaller font
+	
+	DrawStyle_Num		///< Number of styles
 };
 
 

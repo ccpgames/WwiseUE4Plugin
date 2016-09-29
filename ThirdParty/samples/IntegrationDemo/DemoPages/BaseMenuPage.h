@@ -50,6 +50,9 @@ private:
 	/// Delegate function for the " Interactive Music Demo" button.
 	void OpenInteractiveMusicDemoPage( void* in_pSender, ControlEvent* in_pEvent );
 
+	/// Delegate function for the " MIDI API Demo" button.
+	void OpenMIDIMetronomeDemoPage( void* in_pSender, ControlEvent* in_pEvent );
+
 	/// Delegate function for the "Motion Demo" button.
 	void OpenMotionDemoPage( void* in_pSender, ControlEvent* in_pEvent );
 

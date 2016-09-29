@@ -199,7 +199,7 @@ void PerforceSourceControl::OutputStat( StrDict* in_pStrDict )
 	if ( pUnresolved )
 	{
 		CString csUnresolved;
-		csUnresolved.LoadString( IDS_PERFORCE_STATUS_UNRESOLVED );
+		csUnresolved = _T("unresolved");
 
 		AddEnumerationString( csStatus, csUnresolved );
 
@@ -242,7 +242,7 @@ void PerforceSourceControl::OutputStat( StrDict* in_pStrDict )
 	if ( pOurLock )
 	{
 		CString csLock;
-		csLock.LoadString( IDS_PERFORCE_STATUS_LOCK );
+		csLock = _T("lock");
 
 		AddEnumerationString( csStatus, csLock );
 		fileStatus |= FileStatus_LocalLock;
@@ -261,7 +261,7 @@ void PerforceSourceControl::OutputStat( StrDict* in_pStrDict )
 		{
 			// There's a newer version of the file on the server
 			CString csOutdated;
-			csOutdated.LoadString( IDS_PERFORCE_STATUS_OUTDATED );
+			csOutdated = _T("outdated");
 
 			AddEnumerationString( csStatus, csOutdated );
 
@@ -273,7 +273,7 @@ void PerforceSourceControl::OutputStat( StrDict* in_pStrDict )
 		{
 			// The file doesn't exist locally, or is obstructed by a folder with the same name
 			CString csMissing;
-			csMissing.LoadString( IDS_PERFORCE_STATUS_MISSING );
+			csMissing = _T("missing");
 
 			AddEnumerationString( csStatus, csMissing );
 
@@ -283,7 +283,7 @@ void PerforceSourceControl::OutputStat( StrDict* in_pStrDict )
 		// Set the default "normal" text only if we have no other status text displayed
 		if ( csStatus.IsEmpty() )
 		{
-			csStatus.LoadString( IDS_PERFORCE_STATUS_ONSERVER );
+			csStatus = _T("normal");
 		}
 
 		// If we are here, the file is on the server
@@ -342,7 +342,7 @@ void PerforceSourceControl::OutputStat( StrDict* in_pStrDict )
 				if ( pOtherLockN )
 				{
 					CString csLock;
-					csLock.LoadString( IDS_PERFORCE_STATUS_LOCK );
+					csLock = _T("lock");
 
 					csOwnerText += CString( L", " ) + csLock;
 
@@ -417,8 +417,8 @@ void PerforceSourceControl::Prompt( const StrPtr& in_rMessage, StrBuf& out_rUser
 			CString csCaption;
 			CString csMessage;
 
-			csCaption.LoadString( IDS_PERFORCE_RESOLVE_ACCEPT_CAPTION );
-			csMessage.LoadString( IDS_PERFORCE_RESOLVE_ACCEPT_MESSAGE );
+			csCaption = _T("Perforce plug-in");
+			csMessage = _T("Replace the current file with the merged result file?");
 
 			if ( m_bMergeFileChanged && m_pUtilities->MessageBox( NULL, csMessage, csCaption, MB_YESNO | MB_ICONQUESTION ) == IDYES )
 			{
@@ -439,7 +439,7 @@ void PerforceSourceControl::Prompt( const StrPtr& in_rMessage, StrBuf& out_rUser
 
 		CString csCaption, csMessage;
 
-		csCaption.LoadString( IDS_PERFORCE_LOGIN_CAPTION );
+		csCaption = _T("Perforce Login");
 		csMessage = in_rMessage.Value();
 
 		CString csInput;
@@ -475,16 +475,13 @@ void PerforceSourceControl::Diff( FileSys* in_pTheirsFile, FileSys* in_pYoursFil
 
 	if ( bSucceed )
 	{
-        // Get the diff tool from registry
-		CRegKey regKey;
-		regKey.Create( HKEY_CURRENT_USER, m_pUtilities->GetRegistryPath() + k_csRegFolder );
-
+        // Get the diff tool from user preferences
 		TCHAR szDiffCommand[MAX_PATH] = {0};
 		ULONG uSize = ARRAYSIZE( szDiffCommand );
-		regKey.QueryStringValue( k_csRegKeyDiffCommand, szDiffCommand, &uSize );
+		m_pUtilities->GetUserPreferenceString( k_csRegFolder + k_csRegKeyDiffCommand, szDiffCommand, uSize );
 
 		DWORD dwUseAKWaveViewerForDiff = 1;
-		regKey.QueryDWORDValue( k_csUseAKWaveViewerForDiff, dwUseAKWaveViewerForDiff );
+		m_pUtilities->GetUserPreferenceDword( k_csRegFolder + k_csUseAKWaveViewerForDiff, dwUseAKWaveViewerForDiff );
 
 		CString csCommand( szDiffCommand );
         
@@ -522,8 +519,8 @@ void PerforceSourceControl::Diff( FileSys* in_pTheirsFile, FileSys* in_pYoursFil
 		CString csCaption;
 		CString csMessage;
 
-		csCaption.LoadString( IDS_PERFORCE_MESSAGEBOX_CAPTION );
-		csMessage.LoadString( IDS_PERFORCE_DIFF_ERROR_MESSAGE );
+		csCaption = _T("Perforce plug-in");
+		csMessage = _T("An error occurred launching diff tool");
 
 		m_pUtilities->MessageBox( NULL, csMessage, csCaption, MB_OK | MB_ICONERROR );
 	}
@@ -621,8 +618,8 @@ void PerforceSourceControl::Merge( FileSys* in_pBaseFile, FileSys* in_pTheirsFil
 		CString csCaption;
 		CString csMessage;
 
-		csCaption.LoadString( IDS_PERFORCE_RESOLVE_ERROR_MERGE_CAPTION );
-		csMessage.LoadString( IDS_PERFORCE_RESOLVE_ERROR_MERGE_MESSAGE );
+		csCaption = _T("Perforce plug-in");
+		csMessage = _T("An error occurred launching merge tool");
 
 		m_pUtilities->MessageBox( NULL, csMessage, csCaption, MB_OK | MB_ICONERROR );
 	}

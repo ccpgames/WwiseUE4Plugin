@@ -49,8 +49,8 @@ bool SourceControlHelpers::CanProceedWithMove(
 	const CString& in_csDestinationDir,
 	std::vector<CString>& out_rNewPaths,
 	AK::Wwise::ISourceControlUtilities* in_pUtilities,
-	UINT in_uiIdsErrorAlreadyExist,
-	UINT in_uiIdsErrorNameConflict )
+	LPCTSTR in_pszErrorAlreadyExist,
+	LPCTSTR in_pszErrorNameConflict )
 {
 	bool bCanProceed = true;
 
@@ -73,7 +73,7 @@ bool SourceControlHelpers::CanProceedWithMove(
 		{
 			// Can't move: a file with the same name exist at destination
 			CString csMsg;
-			csMsg.FormatMessage( in_uiIdsErrorAlreadyExist, szNewPath );
+			csMsg.FormatMessage( in_pszErrorAlreadyExist, szNewPath );
 			in_pUtilities->GetProgressDialog()->AddLogMessage( csMsg );
 
 			bCanProceed = false;
@@ -83,7 +83,7 @@ bool SourceControlHelpers::CanProceedWithMove(
 		{
 			// Can't move: two files with the same name moved same destination
 			CString csMsg;
-			csMsg.FormatMessage( in_uiIdsErrorNameConflict, szNewPath );
+			csMsg.FormatMessage( in_pszErrorNameConflict, szNewPath );
 			in_pUtilities->GetProgressDialog()->AddLogMessage( csMsg );
 
 			bCanProceed = false;
@@ -123,7 +123,7 @@ CString SourceControlHelpers::GetLastErrorString()
 	}
 
 	CString csFinal;
-	csFinal.Format( L"Error %d: '%s'", err, (LPCTSTR)csMessage );
+	csFinal.Format( _T("Error %d: '%s'"), err, (LPCTSTR)csMessage );
 	return csFinal;
 }
 

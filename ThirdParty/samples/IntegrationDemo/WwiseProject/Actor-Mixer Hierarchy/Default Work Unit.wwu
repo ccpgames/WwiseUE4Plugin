@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<WwiseDocument Type="WorkUnit" ID="{88012962-D6A8-4400-BC86-DF1A5980EDFA}" SchemaVersion="70">
+<WwiseDocument Type="WorkUnit" ID="{88012962-D6A8-4400-BC86-DF1A5980EDFA}" SchemaVersion="72">
 	<AudioObjects>
 		<WorkUnit Name="Default Work Unit" ID="{88012962-D6A8-4400-BC86-DF1A5980EDFA}" PersistMode="Standalone">
 			<ChildrenList>
@@ -14,10 +14,10 @@
 						<Property Name="Priority" Type="int16">
 							<ValueList>
 								<Value>100</Value>
-								<Value Platform="Windows">100</Value>
 								<Value Platform="iOS">100</Value>
-								<Value Platform="PS4">100</Value>
 								<Value Platform="Mac">100</Value>
+								<Value Platform="PS4">100</Value>
+								<Value Platform="Windows">100</Value>
 							</ValueList>
 						</Property>
 					</PropertyList>
@@ -41,21 +41,6 @@
 								<File ID="306982885"/>
 							</ConvertedFileIDList>
 						</AudioFileSource>
-						<SourcePlugin Name="Audio Input" ID="{701EB49F-9FBD-49E9-99FB-4291BBA2C5C2}" ShortID="644238497" PluginName="Wwise Audio Input" CompanyID="0" PluginID="200">
-							<Language>French(Canada)</Language>
-						</SourcePlugin>
-						<SourcePlugin Name="MP3 Input" ID="{864D14A9-8BAE-4B3E-BA78-D5A15E349ECB}" ShortID="685307368" PluginName="Wwise MP3 Input" CompanyID="0" PluginID="201">
-							<Language>French(Canada)</Language>
-						</SourcePlugin>
-						<SourcePlugin Name="Sine" ID="{1A8965BC-BDBF-4076-883F-F0862A155102}" ShortID="13945494" PluginName="Wwise Sine" CompanyID="0" PluginID="100">
-							<Language>French(Canada)</Language>
-						</SourcePlugin>
-						<SourcePlugin Name="Tone Generator" ID="{7B67563E-8299-4A16-B60E-453C19F66718}" ShortID="521053454" PluginName="Wwise Tone Generator" CompanyID="0" PluginID="102">
-							<Language>French(Canada)</Language>
-						</SourcePlugin>
-						<SourcePlugin Name="Wwise Silence" ID="{F2F43000-B6BB-42BD-BAF2-3660849E0021}" ShortID="685259227" PluginName="Wwise Silence" CompanyID="0" PluginID="101">
-							<Language>French(Canada)</Language>
-						</SourcePlugin>
 					</ChildrenList>
 					<ActiveSourceList>
 						<ActiveSource Name="Hello" ID="{2B2BB61A-EDDE-4219-B3ED-88AA9F94C541}" Platform="Linked"/>
@@ -473,7 +458,6 @@ used or modified for a commercial purpose nor for public demonstration.</Comment
 					<PropertyList>
 						<Property Name="BypassEffect0" Type="bool">
 							<ValueList>
-								<Value Platform="Wii">False</Value>
 								<Value Platform="WiiUSW">False</Value>
 								<Value Platform="3DS">False</Value>
 							</ValueList>
@@ -481,49 +465,42 @@ used or modified for a commercial purpose nor for public demonstration.</Comment
 						<Property Name="BypassEffect1" Type="bool">
 							<ValueList>
 								<Value>True</Value>
-								<Value Platform="Wii">False</Value>
 								<Value Platform="WiiUSW">True</Value>
 								<Value Platform="3DS">False</Value>
 							</ValueList>
 						</Property>
 						<Property Name="BypassEffect2" Type="bool">
 							<ValueList>
-								<Value Platform="Wii">False</Value>
 								<Value Platform="WiiUSW">False</Value>
 								<Value Platform="3DS">False</Value>
 							</ValueList>
 						</Property>
 						<Property Name="BypassEffect3" Type="bool">
 							<ValueList>
-								<Value Platform="Wii">False</Value>
 								<Value Platform="WiiUSW">False</Value>
 								<Value Platform="3DS">False</Value>
 							</ValueList>
 						</Property>
 						<Property Name="RenderEffect0" Type="bool">
 							<ValueList>
-								<Value Platform="Wii">False</Value>
 								<Value Platform="WiiUSW">False</Value>
 								<Value Platform="3DS">False</Value>
 							</ValueList>
 						</Property>
 						<Property Name="RenderEffect1" Type="bool">
 							<ValueList>
-								<Value Platform="Wii">False</Value>
 								<Value Platform="WiiUSW">False</Value>
 								<Value Platform="3DS">False</Value>
 							</ValueList>
 						</Property>
 						<Property Name="RenderEffect2" Type="bool">
 							<ValueList>
-								<Value Platform="Wii">False</Value>
 								<Value Platform="WiiUSW">False</Value>
 								<Value Platform="3DS">False</Value>
 							</ValueList>
 						</Property>
 						<Property Name="RenderEffect3" Type="bool">
 							<ValueList>
-								<Value Platform="Wii">False</Value>
 								<Value Platform="WiiUSW">False</Value>
 								<Value Platform="3DS">False</Value>
 							</ValueList>
@@ -611,13 +588,12 @@ used or modified for a commercial purpose nor for public demonstration.</Comment
 				<Sound Name="Hello_RSX" ID="{3C2A8C74-D9C7-4F38-A9E9-EB9764C6FB04}" ShortID="127164717" Type="Voice">
 					<ExcludedPlatformList>
 						<Platform>VitaSW</Platform>
-						<Platform>Wii</Platform>
-						<Platform>WiiUSW</Platform>
+						<Platform>VitaHW</Platform>
 						<Platform>Xbox360</Platform>
-						<Platform>3DS</Platform>
+						<Platform>WiiUSW</Platform>
 						<Platform>iOS</Platform>
 						<Platform>Mac</Platform>
-						<Platform>VitaHW</Platform>
+						<Platform>3DS</Platform>
 					</ExcludedPlatformList>
 					<PropertyList>
 						<Property Name="DivergenceCenter" Type="int32">
@@ -629,10 +605,10 @@ used or modified for a commercial purpose nor for public demonstration.</Comment
 						<Property Name="Priority" Type="int16">
 							<ValueList>
 								<Value>100</Value>
-								<Value Platform="Windows">100</Value>
 								<Value Platform="iOS">100</Value>
-								<Value Platform="PS4">100</Value>
 								<Value Platform="Mac">100</Value>
+								<Value Platform="PS4">100</Value>
+								<Value Platform="Windows">100</Value>
 							</ValueList>
 						</Property>
 					</PropertyList>

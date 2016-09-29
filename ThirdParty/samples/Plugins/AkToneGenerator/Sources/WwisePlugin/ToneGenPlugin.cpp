@@ -12,7 +12,6 @@
 #include "resource.h"
 #include "ToneGenPlugin.h"
 #include "TopicAlias.h"
-#include <AK\Plugin\AkToneSourceFactory.h>
 #include <AK/Tools/Common/AkAssert.h>
 
 using namespace AK;
@@ -25,46 +24,7 @@ AK_BEGIN_POPULATE_TABLE(ToneGenProp)
 	AK_POP_ITEM(IDC_RADIO_FIXLENGTH, szDurMode)
 AK_END_POPULATE_TABLE()
 
-// Table of display name resources ( one for each property )
-struct DisplayNameInfo
-{
-	LPCWSTR wszPropName;
-	UINT    uiDisplayName;
-};
-
-static DisplayNameInfo g_DisplayNames[] = 
-{
-	{ szStartFreq, IDS_STARTFREQ },
-	{ szStartFreqRandMin, IDS_STARTFREQRANDMIN },
-	{ szStartFreqRandMax, IDS_STARTFREQRANDMAX },
-	{ szStopFreq, IDS_STOPFREQ },
-	{ szStopFreqRandMin, IDS_STOPFREQRANDMIN },
-	{ szStopFreqRandMax, IDS_STOPFREQRANDMAX },
-	{ szSweepFreq, IDS_SWEEPFREQ },
-	{ szSweepFreqType, IDS_SWEEPFREQTYPE },
-	{ szWaveType, IDS_WAVETYPE },
-	{ szWaveGain, IDS_WAVEGAIN },
-	{ szDurMode, IDS_DURMODE },
-	{ szFixDur, IDS_FIXDUR },
-	{ szAttackTime, IDS_ATTACKTIME },
-	{ szDecayTime, IDS_DECAYTIME },
-	{ szSustainTime, IDS_SUSTAINTIME },
-	{ szSustainLevel, IDS_SUSTAINVAL },
-	{ szReleaseTime, IDS_RELEASETIME },
-	{ szChannelMask, IDS_CHANNELMASK },
-	{ NULL, NULL }
-};
-
-// These IDs must be the same as those specified in the plug-in's XML definition file.
-// Note that there are restrictions on the values you can use for CompanyID, and PluginID
-// must be unique for the specified CompanyID. Furthermore, these IDs are persisted
-// in project files. NEVER CHANGE THEM or existing projects will not recognize this Plug-in.
-// Be sure to read the SDK documentation regarding Plug-ins XML definition files.
-const short ToneGenPlugin::CompanyID = AKCOMPANYID_AUDIOKINETIC;
-const short ToneGenPlugin::PluginID = AKSOURCEID_TONE;
-
-//If the same class is used to generate motion data, it needs a separate ID
-const short ToneGenPlugin::MotionPluginID = AKSOURCEID_MOTIONTONE;
+const AkUInt32 AKSOURCEID_TONE = 102;	//Same as defined in the XML
 
 // Constructor
 ToneGenPlugin::ToneGenPlugin(AkUInt16 in_idPlugin)
@@ -72,8 +32,8 @@ ToneGenPlugin::ToneGenPlugin(AkUInt16 in_idPlugin)
 , m_hwndPropView( NULL )
 , m_hwndObjPane( NULL )
 {
-	m_idDialogBig = in_idPlugin == PluginID ? IDD_TONEGENPLUGIN_BIG : IDD_MOTIONTONEGENPLUGIN_BIG;
-	m_idDialogSmall = in_idPlugin == PluginID ? IDD_TONEGENPLUGIN_SMALL : IDD_MOTIONTONEGENPLUGIN_SMALL;
+	m_idDialogBig = in_idPlugin == AKSOURCEID_TONE ? IDD_TONEGENPLUGIN_BIG : IDD_MOTIONTONEGENPLUGIN_BIG;
+	m_idDialogSmall = in_idPlugin == AKSOURCEID_TONE ? IDD_TONEGENPLUGIN_SMALL : IDD_MOTIONTONEGENPLUGIN_SMALL;
 }
 
 // Destructor
@@ -117,8 +77,6 @@ HINSTANCE ToneGenPlugin::GetResourceHandle() const
 // Determine what dialog just get called and set the property names to UI control binding populated table.
 bool ToneGenPlugin::GetDialog( eDialog in_eDialog, UINT & out_uiDialogID, PopulateTableItem *& out_pTable ) const
 {
-	CComVariant varProp;
-
 	switch ( in_eDialog )
 	{
 	case SettingsDialog:
@@ -293,24 +251,6 @@ bool ToneGenPlugin::GetBankParameters( const GUID & in_guidPlatform, AK::Wwise::
 	return true;
 }
 
-// Allow Wwise to retrieve a user friendly name for that property (e.g. Undo etc.).
-bool ToneGenPlugin::DisplayNameForProp( LPCWSTR in_szPropertyName, LPWSTR out_szDisplayName, UINT in_unCharCount ) const
-{
-	for ( DisplayNameInfo * pDisplayNameInfo = g_DisplayNames; pDisplayNameInfo->wszPropName; pDisplayNameInfo++ )
-	{
-		if ( !wcscmp( in_szPropertyName, pDisplayNameInfo->wszPropName ) )
-		{
-			// Get resource handle
-			HINSTANCE hInst = AfxGetStaticModuleState()->m_hCurrentResourceHandle;
-			::LoadString( hInst, pDisplayNameInfo->uiDisplayName, out_szDisplayName, in_unCharCount );
-			return true;
-		}
-	}
-
-	AKASSERT( 0 && "Need display name for property" );
-	return false;
-}
-
 // Implement online help when the user clicks on the "?" icon .
 bool ToneGenPlugin::Help( HWND in_hWnd, eDialog in_eDialog, LPCWSTR in_szLanguageCode ) const
 {
@@ -404,4 +344,44 @@ void ToneGenPlugin::EnableDlgItem( HWND in_hwndDialog, UINT in_uiDlgItem, BOOL i
 	HWND hwndItem = GetDlgItem( in_hwndDialog, in_uiDlgItem );
 	AKASSERT( hwndItem );
 	::EnableWindow( hwndItem, in_bEnable );
+}
+
+bool ToneGenPlugin::GetSourceDuration( double& out_dblMinDuration, double& out_dblMaxDuration ) const
+{
+	double dblDuration = 0.f;
+	CComVariant varProp;
+
+	AKASSERT( m_pPSet );
+	if( m_pPSet == nullptr )
+	{
+		out_dblMinDuration = 0.f;
+		out_dblMaxDuration = FLT_MAX;
+		return false;
+	}
+
+	m_pPSet->GetValue( m_pPSet->GetCurrentPlatform(), szDurMode, varProp );
+	if( varProp.intVal == DurMode_Fixed )
+	{
+		m_pPSet->GetValue( m_pPSet->GetCurrentPlatform(), szFixDur, varProp );
+		dblDuration = varProp.fltVal;
+	}
+	else
+	{
+		m_pPSet->GetValue( m_pPSet->GetCurrentPlatform(), szAttackTime, varProp );
+		dblDuration += varProp.fltVal;
+
+		m_pPSet->GetValue( m_pPSet->GetCurrentPlatform(), szDecayTime, varProp );
+		dblDuration += varProp.fltVal;
+
+		m_pPSet->GetValue( m_pPSet->GetCurrentPlatform(), szSustainTime, varProp );
+		dblDuration += varProp.fltVal;
+
+		m_pPSet->GetValue( m_pPSet->GetCurrentPlatform(), szReleaseTime, varProp );
+		dblDuration += varProp.fltVal;
+	}
+
+	out_dblMinDuration = dblDuration;
+	out_dblMaxDuration = dblDuration;
+
+	return true;
 }

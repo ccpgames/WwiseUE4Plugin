@@ -28,14 +28,6 @@ AK_BEGIN_POPULATE_TABLE(DelayProp)
 	AK_POP_ITEM(IDC_CHECK_PROCESSLFE, szProcessLFE)
 AK_END_POPULATE_TABLE()
 
-// These IDs must be the same as those specified in the plug-in's XML definition file.
-// Note that there are restrictions on the values you can use for CompanyID, and PluginID
-// must be unique for the specified CompanyID. Furthermore, these IDs are persisted
-// in project files. NEVER CHANGE THEM or existing projects will not recognize this Plug-in.
-// Be sure to read the SDK documentation regarding Plug-ins XML definition files.
-const short DelayPlugin::CompanyID = AKCOMPANYID_AUDIOKINETIC;
-const short DelayPlugin::PluginID = AKEFFECTID_DELAY;
-
 // Constructor
 DelayPlugin::DelayPlugin()
 	: m_pPSet( NULL ), m_hwndPropView( NULL )

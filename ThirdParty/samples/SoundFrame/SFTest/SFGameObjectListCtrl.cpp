@@ -68,16 +68,21 @@ int SFGameObjectListCtrl::AddObject( IGameObject * in_pObject )
 	int idx = InsertItem( GetItemCount(), csTemp );
 	SetItemText( idx, 1, in_pObject->GetName() );
 
-	AkSoundPosition gameObjectPosition = {0};
+	static const AkVector pos = { 0, 0, 0 };
+	static const AkVector front = { 0, 0, -1 };
+	static const AkVector top = { 0, 1, 0 };
+	AkSoundPosition gameObjectPosition;
+	gameObjectPosition.Set(pos, front, top);
+	
 	m_pPositionDlg->GetGameObjectPosition( in_pObject->GetID(), gameObjectPosition );
 
-	csTemp.Format( _T("%.0f"), gameObjectPosition.Position.X );
+	csTemp.Format( _T("%.0f"), gameObjectPosition.Position().X );
 	SetItemText( idx, 2, csTemp );
-	csTemp.Format( _T("%.0f"), gameObjectPosition.Position.Z );
+	csTemp.Format( _T("%.0f"), gameObjectPosition.Position().Z );
 	SetItemText( idx, 3, csTemp );
-	csTemp.Format( _T("%.2f"), gameObjectPosition.Orientation.X );
+	csTemp.Format( _T("%.2f"), gameObjectPosition.OrientationFront().X );
 	SetItemText( idx, 4, csTemp );
-	csTemp.Format( _T("%.2f"), gameObjectPosition.Orientation.Z );
+	csTemp.Format( _T("%.2f"), gameObjectPosition.OrientationFront().Z );
 	SetItemText( idx, 5, csTemp );
 
 	SetItemData( idx, (DWORD_PTR)in_pObject );

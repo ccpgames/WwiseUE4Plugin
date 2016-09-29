@@ -22,13 +22,15 @@
 // DemoPositioning Public Methods
 /////////////////////////////////////////////////////////////////////
 
-DemoPositioning::DemoPositioning( Menu& in_ParentMenu )
+DemoPositioning::DemoPositioning(Menu& in_ParentMenu, bool in_bIsMultiPosition)
 	: Page( in_ParentMenu, "Positioning Demo")
 	, m_pChip( NULL )
+	, m_pCloneChip( NULL )
 	, m_fGameObjectX( 0 )
 	, m_fGameObjectZ( 0 )
 	, m_fWidth( 0.0f )
 	, m_fHeight( 0.0f )
+	, m_bMultiposition(in_bIsMultiPosition)
 
 {
 	m_szHelp =  "This demo shows how to do 3D positioning in "
@@ -43,7 +45,7 @@ DemoPositioning::DemoPositioning( Menu& in_ParentMenu )
 bool DemoPositioning::Init()
 {
 	// Register the "Human" game object
-	AK::SoundEngine::RegisterGameObj( GAME_OBJECT_POSTEST, "Positioning Demo" );
+	AK::SoundEngine::RegisterGameObj( GAME_OBJECT_POSTEST, "Helicopter" );
 
 	// Load the sound bank
 	AkBankID bankID; // Not used
@@ -67,19 +69,77 @@ void DemoPositioning::Release()
 	Page::Release();
 }
 
+#define HELICOPTER_CLONE_X_OFFSET (50)
+#define POSITION_RANGE (200.0f)
+
+float DemoPositioning::PixelsToAKPos_X(float in_X)
+{
+	return ((in_X / m_fWidth) - 0.5f) * POSITION_RANGE;
+}
+
+float DemoPositioning::PixelsToAKPos_Y(float in_y)
+{
+	return -((in_y / m_fHeight) - 0.5f) * POSITION_RANGE;
+}
+
 void DemoPositioning::UpdateGameObjPos()
 {
 	float x, y;
 	m_pChip->GetPos(x, y);
-
+	
 	// Set 3D position
-	AkSoundPosition soundPos;
-	m_fGameObjectX = soundPos.Position.X = ( ( x / m_fWidth ) - 0.5f ) * 200.0f;
-	soundPos.Position.Y = 0;
-	m_fGameObjectZ = soundPos.Position.Z = -( ( y / m_fHeight ) - 0.5f ) * 200.0f;;
-	soundPos.Orientation.Z = 1;
-	soundPos.Orientation.Y = soundPos.Orientation.X = 0;
-	AK::SoundEngine::SetPosition( GAME_OBJECT_POSTEST, soundPos );
+	if (m_bMultiposition)
+	{
+		// Two helicopters in one sound.
+		const int numMultiPositions = 2;
+
+		// Converting X-Y UI into X-Z world plan.
+		AkVector position;
+		m_fGameObjectX = position.X = PixelsToAKPos_X(x);
+		position.Y = 0;
+		m_fGameObjectZ = position.Z = PixelsToAKPos_Y(y);
+		AkVector orientationFront; 
+		orientationFront.Z = 1;
+		orientationFront.Y = orientationFront.X = 0;
+		AkVector orientationTop;
+		orientationTop.X = orientationTop.Z = 0;
+		orientationTop.Y = 1;
+
+		AkSoundPosition soundPos[numMultiPositions];
+		AkSoundPosition& firstPos = soundPos[0];
+		firstPos.Set(position, orientationFront, orientationTop);
+
+		// Make the second position of the second Helicopter to always be HELICOPTER_CLONE_X_OFFSET Distance units offset from main Helicopter.
+		position = firstPos.Position();
+		position.X += HELICOPTER_CLONE_X_OFFSET;
+		AkSoundPosition& secondPos = soundPos[1];
+		secondPos.Set(position, orientationFront, orientationTop);
+
+		// Update the Second Chip position on screen.
+		m_pCloneChip->SetPosition(int(x + (HELICOPTER_CLONE_X_OFFSET*m_fWidth / POSITION_RANGE)), (int)y);
+
+		AK::SoundEngine::SetMultiplePositions(GAME_OBJECT_POSTEST, soundPos, numMultiPositions);
+	}
+	else
+	{
+		// Single Helicopter.
+
+		// Converting X-Y UI into X-Z world plan.
+		AkVector position;
+		m_fGameObjectX = position.X = PixelsToAKPos_X(x);
+		position.Y = 0;
+		m_fGameObjectZ = position.Z = PixelsToAKPos_Y(y);
+		AkVector orientationFront;
+		orientationFront.Z = 1;
+		orientationFront.Y = orientationFront.X = 0;
+		AkVector orientationTop;
+		orientationTop.X = orientationTop.Z = 0;
+		orientationTop.Y = 1; 
+		
+		AkSoundPosition soundPos;
+		soundPos.Set(position, orientationFront, orientationTop);
+		AK::SoundEngine::SetPosition(GAME_OBJECT_POSTEST, soundPos);
+	}
 }
 
 bool DemoPositioning::Update()
@@ -112,6 +172,10 @@ void DemoPositioning::Draw()
 	Page::Draw();
 
 	m_pChip->Draw();
+	if (m_bMultiposition)
+	{
+		m_pCloneChip->Draw();
+	}
 
 	char strBuf[50];
 	snprintf( strBuf, 50, "X: %.2f\nZ: %.2f", m_fGameObjectX, m_fGameObjectZ );
@@ -142,6 +206,13 @@ void DemoPositioning::InitControls()
 	m_pChip->SetLabel( "o" );
 	m_pChip->UseJoystick(UG_STICKRIGHT);
 	m_pChip->SetNonLinear();
+
+	if (m_bMultiposition)
+	{
+		m_pChip->SetLabel("0");
+		m_pCloneChip = new MovableChip(*this);
+		m_pCloneChip->SetLabel("1");
+	}
 
 	m_fWidth = (float)m_pParentMenu->GetWidth() - (float)m_pChip->GetRightBottomMargin();
 	m_fHeight = (float)m_pParentMenu->GetHeight() - (float)m_pChip->GetRightBottomMargin();

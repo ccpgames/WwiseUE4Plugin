@@ -1,0 +1,16 @@
+//////////////////////////////////////////////////////////////////////
+//
+// AkSoundEngineExports.h
+//
+// Export/import DLL macro.
+//
+// Copyright (c) 2006 Audiokinetic Inc. / All Rights Reserved
+//
+//////////////////////////////////////////////////////////////////////
+#pragma once
+
+#ifdef AK_WIN
+#define AKPLUGINDLL_API __declspec(dllexport)
+#else
+#define AKPLUGINDLL_API
+#endif

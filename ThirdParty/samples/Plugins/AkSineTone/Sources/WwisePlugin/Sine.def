@@ -4,4 +4,3 @@ LIBRARY      "Sine"
 
 EXPORTS
 	AkCreatePlugin
-	AkGetSoundEngineCallbacks

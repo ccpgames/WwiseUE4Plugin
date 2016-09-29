@@ -14,7 +14,8 @@ public:
 
 	/// DemoPositioning class constructor.
 	DemoPositioning(
-		Menu& in_pParentMenu	///< - Pointer to the Menu that the page belongs to
+		Menu& in_pParentMenu,	///< - Pointer to the Menu that the page belongs to
+		bool in_bIsMultiPosition
 		);
 
 	/// Override of the Parent's Init() method.
@@ -37,10 +38,19 @@ private:
 	virtual void InitControls();
 	void UpdateGameObjPos();
 
+	// Helpers
+
+	float PixelsToAKPos_X(float in_X);
+	float PixelsToAKPos_Y(float in_y);
+
+	// Members
+
 	MovableChip *m_pChip;
+	MovableChip *m_pCloneChip;
 
 	float m_fGameObjectX;
 	float m_fGameObjectZ;
 	float m_fWidth;
 	float m_fHeight;
+	bool m_bMultiposition;
 };

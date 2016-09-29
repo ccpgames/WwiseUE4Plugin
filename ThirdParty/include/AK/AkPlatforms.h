@@ -59,6 +59,10 @@
 
 	#include <AK/SoundEngine/Platforms/Linux/AkTypes.h>
 
+#elif defined( __EMSCRIPTEN__ )
+
+	#include <AK/SoundEngine/Platforms/Emscripten/AkTypes.h>
+	
 #elif defined( __QNX__ )
 
 	#include <AK/SoundEngine/Platforms/QNX/AkTypes.h>

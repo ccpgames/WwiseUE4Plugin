@@ -25,8 +25,10 @@ CSFTestPositioningDlg::GameObjectInfo::GameObjectInfo()
 	::ZeroMemory( &m_position, sizeof( AkSoundPosition ) );
 
 	// Default position and orientation for a Game object
-	m_position.Position.Z = 1.0;
-	m_position.Orientation.Z = -1.0;
+	static const AkVector pos = { 0, 0, 1 };
+	static const AkVector front = { 0, 0, -1 };
+	static const AkVector top = { 0, 1, 0 };
+	m_position.Set(pos, front, top);
 }
 
 CSFTestPositioningDlg::ListenerInfo::ListenerInfo()
@@ -41,8 +43,10 @@ CSFTestPositioningDlg::ListenerInfo::ListenerInfo()
 	::ZeroMemory( &m_position, sizeof( AkListenerPosition ) );
 	
 	// Default position and orientation of the listener
-	m_position.OrientationFront.Z = 1.0;
-	m_position.OrientationTop.Y = 1.0;
+	static const AkVector pos = { 0, 0, 0 };
+	static const AkVector front = { 0, 0, 1 };
+	static const AkVector top = { 0, 1, 0 };
+	m_position.Set(pos, front, top);
 }
 
 CSFTestPositioningDlg::CSFTestPositioningDlg(CWnd* pParent /*=NULL*/)
@@ -180,22 +184,22 @@ void CSFTestPositioningDlg::OnCbnSelchangeGameObjectCombo()
 		IGameObject* pGameObject = m_gameObjectCombo.GetObject( idx );
 		const GameObjectInfo& rObjectInfo = m_objectInfoMap[pGameObject->GetID()];
 
-		m_gameObjectPosX.SetPos( (int)rObjectInfo.m_position.Position.X );
-		m_gameObjectPosZ.SetPos( (int)rObjectInfo.m_position.Position.Z );
+		m_gameObjectPosX.SetPos( (int)rObjectInfo.m_position.Position().X );
+		m_gameObjectPosZ.SetPos( (int)rObjectInfo.m_position.Position().Z );
 
-		m_gameObjectOriAngle.SetPos( CalcAngle( rObjectInfo.m_position.Orientation.X, rObjectInfo.m_position.Orientation.Z ) );
+		m_gameObjectOriAngle.SetPos( CalcAngle( rObjectInfo.m_position.OrientationFront().X, rObjectInfo.m_position.OrientationFront().Z ) );
 
 		CString csTemp;
-		csTemp.Format( _T("%.0f"), rObjectInfo.m_position.Position.X );
+		csTemp.Format( _T("%.0f"), rObjectInfo.m_position.Position().X );
 		SetDlgItemText( IDC_GAME_OBJECT_POSX_STATIC, csTemp );
 
-		csTemp.Format( _T("%.0f"), rObjectInfo.m_position.Position.Z );
+		csTemp.Format( _T("%.0f"), rObjectInfo.m_position.Position().Z );
 		SetDlgItemText( IDC_GAME_OBJECT_POSZ_STATIC, csTemp );
 
-		csTemp.Format( _T("%.2f"), rObjectInfo.m_position.Orientation.X );
+		csTemp.Format( _T("%.2f"), rObjectInfo.m_position.OrientationFront().X );
 		SetDlgItemText( IDC_GAME_OBJECT_ORIX_STATIC, csTemp );
 
-		csTemp.Format( _T("%.2f"), rObjectInfo.m_position.Orientation.Z );
+		csTemp.Format( _T("%.2f"), rObjectInfo.m_position.OrientationFront().Z );
 		SetDlgItemText( IDC_GAME_OBJECT_ORIZ_STATIC, csTemp );
 
 		CheckDlgButton( IDC_L0_CHECK, rObjectInfo.m_activeListener[0]? BST_CHECKED : BST_UNCHECKED );
@@ -235,22 +239,22 @@ void CSFTestPositioningDlg::OnCbnSelchangeListenerCombo()
 	{
 		const ListenerInfo& rListenerInfo = m_listenerInfoVector[idx];
 
-		m_listenerPosX.SetPos( (int)rListenerInfo.m_position.Position.X );
-		m_listenerPosZ.SetPos( (int)rListenerInfo.m_position.Position.Z );
+		m_listenerPosX.SetPos( (int)rListenerInfo.m_position.Position().X );
+		m_listenerPosZ.SetPos( (int)rListenerInfo.m_position.Position().Z );
 
-		m_listenerOriAngle.SetPos( CalcAngle( rListenerInfo.m_position.OrientationFront.X, rListenerInfo.m_position.OrientationFront.Z ) );
+		m_listenerOriAngle.SetPos( CalcAngle( rListenerInfo.m_position.OrientationFront().X, rListenerInfo.m_position.OrientationFront().Z ) );
 
 		CString csTemp;
-		csTemp.Format( _T("%.0f"), rListenerInfo.m_position.Position.X );
+		csTemp.Format( _T("%.0f"), rListenerInfo.m_position.Position().X );
 		SetDlgItemText( IDC_LISTENER_POSX_STATIC, csTemp );
 
-		csTemp.Format( _T("%.0f"), rListenerInfo.m_position.Position.Z );
+		csTemp.Format( _T("%.0f"), rListenerInfo.m_position.Position().Z );
 		SetDlgItemText( IDC_LISTENER_POSZ_STATIC, csTemp );
 
-		csTemp.Format( _T("%.2f"), rListenerInfo.m_position.OrientationFront.X );
+		csTemp.Format( _T("%.2f"), rListenerInfo.m_position.OrientationFront().X );
 		SetDlgItemText( IDC_LISTENER_ORIX_STATIC, csTemp );
 
-		csTemp.Format( _T("%.2f"), rListenerInfo.m_position.OrientationFront.Z );
+		csTemp.Format( _T("%.2f"), rListenerInfo.m_position.OrientationFront().Z );
 		SetDlgItemText( IDC_LISTENER_ORIZ_STATIC, csTemp );
 
 		CheckDlgButton( IDC_SPATIALIZATION_CHECK, rListenerInfo.m_bSpatialized? BST_CHECKED : BST_UNCHECKED );
@@ -317,7 +321,7 @@ void CSFTestPositioningDlg::SetListenerSpatialization( AkUInt32 in_uiIndex, CSFT
 	pVolumes[ 3 ] = in_rListenerInfo.m_fVolumeOffsetRearLeft;
 	pVolumes[ 4 ] = in_rListenerInfo.m_fVolumeOffsetRearRight;
 	pVolumes[ 5 ] = in_rListenerInfo.m_fVolumeOffsetLfe;
-	m_pSoundFrame->SetListenerSpatialization( in_uiIndex, in_rListenerInfo.m_bSpatialized, AkChannelConfig( AK_SPEAKER_SETUP_5_1 ), in_rListenerInfo.m_bSpatialized? NULL : pVolumes );
+	m_pSoundFrame->SetListenerSpatialization( in_uiIndex, in_rListenerInfo.m_bSpatialized, AkChannelConfig( 6, AK_SPEAKER_SETUP_5_1 ), in_rListenerInfo.m_bSpatialized? NULL : pVolumes );
 }
 
 void CSFTestPositioningDlg::OnBnClickedEnableSpatialization()
@@ -383,23 +387,22 @@ void CSFTestPositioningDlg::OnGameObjectPosOriChanged()
 		IGameObject* pGameObject = m_gameObjectCombo.GetObject( idx );
 		GameObjectInfo& rObjectInfo = m_objectInfoMap[pGameObject->GetID()];
 
-		rObjectInfo.m_position.Position.X = (AkReal32) m_gameObjectPosX.GetPos();
-		rObjectInfo.m_position.Position.Z = (AkReal32) m_gameObjectPosZ.GetPos();
-
-		rObjectInfo.m_position.Orientation.X = (AkReal32) cos( (double)m_gameObjectOriAngle.GetPos() * ( 2 * s_pi ) / 360.0 );
-		rObjectInfo.m_position.Orientation.Z = (AkReal32) sin( (double)m_gameObjectOriAngle.GetPos() * ( 2 * s_pi ) / 360.0 );
+		AkVector pos = { (AkReal32)m_gameObjectPosX.GetPos(), 0, (AkReal32)m_gameObjectPosZ.GetPos() };
+		AkVector front = { (AkReal32)cos((double)m_gameObjectOriAngle.GetPos() * (2 * s_pi) / 360.0), 0, (AkReal32)sin((double)m_gameObjectOriAngle.GetPos() * (2 * s_pi) / 360.0) };
+		AkVector top = { 0, 1, 0 };
+		rObjectInfo.m_position.Set(pos, front, top);
 
 		CString csTemp;
-		csTemp.Format( _T("%.0f"), rObjectInfo.m_position.Position.X );
+		csTemp.Format( _T("%.0f"), rObjectInfo.m_position.Position().X );
 		SetDlgItemText( IDC_GAME_OBJECT_POSX_STATIC, csTemp );
 
-		csTemp.Format( _T("%.0f"), rObjectInfo.m_position.Position.Z );
+		csTemp.Format( _T("%.0f"), rObjectInfo.m_position.Position().Z );
 		SetDlgItemText( IDC_GAME_OBJECT_POSZ_STATIC, csTemp );
 
-		csTemp.Format( _T("%.2f"), rObjectInfo.m_position.Orientation.X );
+		csTemp.Format( _T("%.2f"), rObjectInfo.m_position.OrientationFront().X );
 		SetDlgItemText( IDC_GAME_OBJECT_ORIX_STATIC, csTemp );
 
-		csTemp.Format( _T("%.2f"), rObjectInfo.m_position.Orientation.Z );
+		csTemp.Format( _T("%.2f"), rObjectInfo.m_position.OrientationFront().Z );
 		SetDlgItemText( IDC_GAME_OBJECT_ORIZ_STATIC, csTemp );
 
 		// Set the game object position
@@ -410,27 +413,26 @@ void CSFTestPositioningDlg::OnGameObjectPosOriChanged()
 void CSFTestPositioningDlg::OnListenerPosOriChanged()
 {
 	int idx = m_listenerCombo.GetCurSel();
-	if( idx != CB_ERR )
+	if (idx != CB_ERR)
 	{
 		ListenerInfo& rListenerInfo = m_listenerInfoVector[idx];
 
-		rListenerInfo.m_position.Position.X = (AkReal32) m_listenerPosX.GetPos();
-		rListenerInfo.m_position.Position.Z = (AkReal32) m_listenerPosZ.GetPos();
-
-		rListenerInfo.m_position.OrientationFront.X = (AkReal32) cos( (double)m_listenerOriAngle.GetPos() * ( 2 * s_pi ) / 360.0 );
-		rListenerInfo.m_position.OrientationFront.Z = (AkReal32) sin( (double)m_listenerOriAngle.GetPos() * ( 2 * s_pi ) / 360.0 );
+		AkVector pos = { (AkReal32)m_listenerPosX.GetPos(), 0, (AkReal32)m_listenerPosZ.GetPos() };
+		AkVector front = { (AkReal32)cos((double)m_listenerOriAngle.GetPos() * (2 * s_pi) / 360.0), 0, (AkReal32)sin((double)m_listenerOriAngle.GetPos() * (2 * s_pi) / 360.0) };
+		AkVector top = { 0, 1, 0 };
+		rListenerInfo.m_position.Set(pos, front, top);
 
 		CString csTemp;
-		csTemp.Format( _T("%.0f"), rListenerInfo.m_position.Position.X );
+		csTemp.Format( _T("%.0f"), rListenerInfo.m_position.Position().X );
 		SetDlgItemText( IDC_LISTENER_POSX_STATIC, csTemp );
 
-		csTemp.Format( _T("%.0f"), rListenerInfo.m_position.Position.Z );
+		csTemp.Format( _T("%.0f"), rListenerInfo.m_position.Position().Z );
 		SetDlgItemText( IDC_LISTENER_POSZ_STATIC, csTemp );
 
-		csTemp.Format( _T("%.2f"), rListenerInfo.m_position.OrientationFront.X );
+		csTemp.Format( _T("%.2f"), rListenerInfo.m_position.OrientationFront().X );
 		SetDlgItemText( IDC_LISTENER_ORIX_STATIC, csTemp );
 
-		csTemp.Format( _T("%.2f"), rListenerInfo.m_position.OrientationFront.Z );
+		csTemp.Format( _T("%.2f"), rListenerInfo.m_position.OrientationFront().Z );
 		SetDlgItemText( IDC_LISTENER_ORIZ_STATIC, csTemp );
 
 		// Set the listener position

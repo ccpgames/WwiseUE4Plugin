@@ -39,8 +39,7 @@ public class AkAudio : ModuleRules
             {
                 "Core",
                 "CoreUObject",
-                "Engine",
-                "Voice"
+                "Engine"
             });
 
         PrivateDependencyModuleNames.AddRange(
@@ -50,7 +49,8 @@ public class AkAudio : ModuleRules
                 "CoreUObject",
                 "Engine",
                 "SlateCore",
-                "NetworkReplayStreaming"
+                "NetworkReplayStreaming",
+                "Projects"
             });
 
         string akDir = Path.GetFullPath(Path.Combine(ModuleDirectory, "../../ThirdParty"));
@@ -163,7 +163,6 @@ public class AkAudio : ModuleRules
 
             PublicAdditionalLibraries.Add("dsound.lib");
             PublicAdditionalLibraries.Add("dxguid.lib");
-            PublicAdditionalLibraries.Add("AkMP3Source.lib");
             PublicAdditionalLibraries.Add("Msacm32.lib");
             PublicAdditionalLibraries.Add("XInput.lib");
         }
@@ -260,6 +259,7 @@ public class AkAudio : ModuleRules
         AddWwiseLib(Target, "AkAudioInputSource");
         AddWwiseLib(Target, "AkSynthOne");
         AddWwiseLib(Target, "AkConvolutionReverbFX");
+        AddWwiseLib(Target, "AkRecorderFX");
 
         if ((Target.Platform != UnrealTargetPlatform.Android) && (Target.Platform != UnrealTargetPlatform.Linux) && (Target.Platform != UnrealTargetPlatform.Mac) && (Target.Platform != UnrealTargetPlatform.IOS))
         {

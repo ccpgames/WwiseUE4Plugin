@@ -320,7 +320,7 @@ bool DemoMIDICallbacks::Init()
 	m_iPlayingID = AK::SoundEngine::PostEvent( 
 		AK::EVENTS::PLAYMUSICDEMO3,
 		GAME_OBJECT_MUSIC,
-		AK_MidiEvent | AK_EndOfEvent,
+		AK_MIDIEvent | AK_EndOfEvent,
 		&DemoMIDICallbacks::MusicCallback,
 		this
 		);
@@ -333,16 +333,16 @@ void DemoMIDICallbacks::MusicCallback( AkCallbackType in_eType, AkCallbackInfo* 
 {
 	DemoMIDICallbacks* pPage = (DemoMIDICallbacks*)in_pCallbackInfo->pCookie;
 	
-	if ( in_eType == AK_MidiEvent )
+	if ( in_eType == AK_MIDIEvent )
 	{
-		AkMidiEventCallbackInfo* pMidiInfo = static_cast<AkMidiEventCallbackInfo*>( in_pCallbackInfo );
+		AkMIDIEventCallbackInfo* pMidiInfo = static_cast<AkMIDIEventCallbackInfo*>( in_pCallbackInfo );
 
-		if( pMidiInfo->midiEvent.IsCcEvent() )
+		if( pMidiInfo->midiEvent.byType == AK_MIDI_EVENT_TYPE_CONTROLLER )
 		{
 			pPage->m_byCc = pMidiInfo->midiEvent.Cc.byCc;
 			pPage->m_byValue = pMidiInfo->midiEvent.Cc.byValue;
 		}
-		else if( pMidiInfo->midiEvent.IsNoteOn() )
+		else if( pMidiInfo->midiEvent.byType == AK_MIDI_EVENT_TYPE_NOTE_ON )
 		{
 			pPage->m_byNote = pMidiInfo->midiEvent.NoteOnOff.byNote;
 			pPage->m_byVelocity = pMidiInfo->midiEvent.NoteOnOff.byVelocity;

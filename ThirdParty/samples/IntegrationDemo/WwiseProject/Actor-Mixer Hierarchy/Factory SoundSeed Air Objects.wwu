@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<WwiseDocument Type="WorkUnit" ID="{BB5DD793-F285-4F74-8D1D-DF7A4B893280}" SchemaVersion="70">
+<WwiseDocument Type="WorkUnit" ID="{BB5DD793-F285-4F74-8D1D-DF7A4B893280}" SchemaVersion="72">
 	<AudioObjects>
 		<WorkUnit Name="Factory SoundSeed Air Objects" ID="{BB5DD793-F285-4F74-8D1D-DF7A4B893280}" PersistMode="Standalone">
 			<ChildrenList>

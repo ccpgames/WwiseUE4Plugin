@@ -283,8 +283,8 @@ public:
 	AkPlayingID PostEventAtLocation(
 		class UAkAudioEvent * in_pEvent,
 		FVector in_Location,
-		FVector in_Orientation,
-		class UWorld* World
+		FRotator in_Orientation,
+		class UWorld* in_World
 		);
 
 	/**
@@ -297,8 +297,8 @@ public:
 	AkPlayingID PostEventAtLocation(
 		const FString& in_EventName,
 		FVector in_Location,
-		FVector in_Orientation,
-		class UWorld* World
+		FRotator in_Orientation,
+		class UWorld* in_World
 		);
 
 	/** Spawn an AkComponent at a location. Allows, for example, to set a switch on a fire and forget sound.
@@ -308,7 +308,7 @@ public:
 	 * @param AutoPost - Automatically post the event once the AkComponent is created.
 	 * @param AutoDestroy - Automatically destroy the AkComponent once the event is finished.
 	 */
-	class UAkComponent* SpawnAkComponentAtLocation( class UAkAudioEvent* in_pAkEvent, FVector Location, FRotator Orientation, bool AutoPost, const FString& EventName, bool AutoDestroy, class UWorld* World );
+	class UAkComponent* SpawnAkComponentAtLocation( class UAkAudioEvent* in_pAkEvent, FVector Location, FRotator Orientation, bool AutoPost, const FString& EventName, bool AutoDestroy, class UWorld* in_World );
 
 	/**
 	 * Post a trigger to ak soundengine
@@ -390,6 +390,19 @@ public:
 	AKRESULT SetAuxSends(
 		const AkGameObjectID in_GameObjId,
 		TArray<AkAuxSendValue>& in_AuxSendValues
+		);
+
+	/**
+	 * Set the output bus volume (direct) to be used for the specified game object.
+	 * The control value is a number ranging from 0.0f to 1.0f.
+	 *
+	 * @param in_GameObjId		Wwise Game Object ID
+	 * @param in_fControlValue	Control value to set
+	 * @return	Always returns Ak_Success
+	 */
+	AKRESULT SetGameObjectOutputBusVolume(
+		const UAkComponent* in_pAkComponent,
+		float in_fControlValue
 		);
 
 	/**
@@ -654,6 +667,20 @@ public:
 		out_vect.Z = in_vect.Y;
 	}
 
+	static inline void FVectorsToAKTransform(const FVector& in_Position, const FVector& in_Front, const FVector& in_Up, AkTransform& out_AkTransform)
+	{
+		AkVector Position;
+		AkVector Front;
+		AkVector Up;
+
+		FVectorToAKVector(in_Position, Position);
+		FVectorToAKVector(in_Front, Front);
+		FVectorToAKVector(in_Up, Up);
+
+		// Convert from the UE axis system to the Wwise axis system
+		out_AkTransform.Set(Position, Front, Up);
+	}
+
 	FAkBankManager * GetAkBankManager()
 	{
 		return AkBankManager;
@@ -682,22 +709,15 @@ public:
 	/** Remove a AkReverbVolume from the active volumes linked list. */
 	void RemoveAkReverbVolumeFromList(class AAkReverbVolume* in_VolumeToRemove);
 
-	/** Delegate for level change */
-	void OnLevelRemoved(ULevel* InLevel, UWorld* InWorld);
-
 private:
 	bool EnsureInitialized();
 
 	void SetBankDirectory();
-
-#pragma region Oculus Wwise integration
-	void RegisterSpatialiserPlugins();
-#pragma endregion Oculus Wwise integration
-
+	
 	void* AllocatePermanentMemory( int32 Size, /*OUT*/ bool& AllocatedInPool );
 	
 	AkPlayingID PostEventInternal(
-		const TCHAR * in_pszEvent, 
+		const FString& in_szEvent, 
 		class UAkComponent* AkComponent, 
 		AkUInt32 in_uFlags /*= 0*/,
 		AkCallbackFunc in_pfnCallback /*= NULL*/,
@@ -711,6 +731,10 @@ private:
 
 	static bool m_bSoundEngineInitialized;
 	TArray< FVector > m_listenerPositions;
+
+	// OCULUS_START - vhamm - suspend audio when not in focus
+	bool m_isSuspended;
+	// OCULUS_END
 
 	uint8 MaxAuxBus;
 

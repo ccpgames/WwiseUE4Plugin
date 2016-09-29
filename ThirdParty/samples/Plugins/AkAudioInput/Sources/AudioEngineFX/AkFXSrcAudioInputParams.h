@@ -14,9 +14,9 @@
 #ifndef _AKFXSRC_AUDIOINPUTPARAMS_H_
 #define _AKFXSRC_AUDIOINPUTPARAMS_H_
 
-#include <AK/Plugin/AkAudioInputSourceFactory.h>
 #include <AK/Tools/Common/AkAssert.h>
 #include <math.h>
+#include <AK/SoundEngine/Common/IAkPlugin.h>
 
 // Parameters IDs.
 const AkPluginParamID AK_SRCAUDIOINPUT_FXPARAM_GAIN_ID		= 1;

@@ -11,11 +11,6 @@
 #include "AkToneGenParams.h"
 #include <AK/Tools/Common/AkBankReadHelpers.h>
 
-// Plugin mechanism. Parameters node creation function to be registered to the FX manager.
-AK::IAkPluginParam * CreateToneSourceParams( AK::IAkPluginMemAlloc * in_pAllocator )
-{
-	return AK_PLUGIN_NEW( in_pAllocator, CAkToneGenParams() );
-}
 
 // Constructor.
 CAkToneGenParams::CAkToneGenParams()

@@ -1,12 +1,6 @@
 //////////////////////////////////////////////////////////////////////
 //
-// Copyright (c) Audiokinetic Inc. 2006-2016. All rights reserved.
-//
-// Audiokinetic Wwise SDK version, build number and copyright constants.
-// These are used by sample projects to display the version and to
-// include it in their assembly info. They can also be used by games
-// or tools to display the current version and build number of the
-// Wwise Sound Engine.
+// Copyright (c) 2006 Audiokinetic Inc. / All Rights Reserved
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -23,25 +17,25 @@
 //@{
 
 /// Wwise SDK major version
-#define AK_WWISESDK_VERSION_MAJOR				2015
+#define AK_WWISESDK_VERSION_MAJOR				2016
 
 /// Wwise SDK minor version
 #define AK_WWISESDK_VERSION_MINOR				1
 
 /// Wwise SDK sub-minor version
-#define AK_WWISESDK_VERSION_SUBMINOR			6
+#define AK_WWISESDK_VERSION_SUBMINOR			3
 
 /// Wwise SDK build number
-#define AK_WWISESDK_VERSION_BUILD				5553
+#define AK_WWISESDK_VERSION_BUILD				5878
 
 /// Wwise SDK build date (year)
 #define AK_WWISESDK_BUILD_YEAR					2016
 
 /// Wwise SDK build date (month)
-#define AK_WWISESDK_BUILD_MONTH					3
+#define AK_WWISESDK_BUILD_MONTH					9
 
 /// Wwise SDK build date (day)
-#define AK_WWISESDK_BUILD_DAY					8
+#define AK_WWISESDK_BUILD_DAY					23
 
 //@}
 
@@ -77,22 +71,18 @@
 											AK_WWISESDK_VERSION_NICKNAME_POSTFIX
 
 /// Wwise SDK branch
-#define AK_WWISESDK_BRANCH					"wwise_v2015.1"
+#define AK_WWISESDK_BRANCH					"wwise_v2016.1"
 
 /// @name Wwise SDK Copyright Notice
 
 //@{
-#if !defined(__APPLE__) || !defined(__PPU__)
-	// Note: On g++ anc sony compiler this create an illegal character sequence.
-	// Changing text encoding can fix it for the two platforms but create problems
-	// with the microsoft compiler...
-	
 	/// Wwise SDK copyright notice
 	#define AK_WWISESDK_COPYRIGHT 				"\xA9 2006-2016. Audiokinetic Inc. All rights reserved."
-#endif
 	/// Wwise SDK copyright notice
 	#define AK_WWISESDK_COPYRIGHT_CONSOLE 		"(C) 2006-2016. Audiokinetic Inc. All rights reserved."
 //@}
+
+#define AK_WWISESDK_VERSION_COMBINED ((AK_WWISESDK_VERSION_MAJOR<<8) | AK_WWISESDK_VERSION_MINOR)
 
 #endif // _AKWWISESDKVERSION_H_
 

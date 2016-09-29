@@ -663,10 +663,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="AkSinkXAudio.h" />
+    <ClInclude Include="SinkPluginParams.h" />
     <ClInclude Include="..\..\..\..\..\..\include\AK\Plugin\AkSinkFactory.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AkSinkXAudio.cpp">
+    </ClCompile>
+    <ClCompile Include="SinkPluginParams.cpp">
     </ClCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

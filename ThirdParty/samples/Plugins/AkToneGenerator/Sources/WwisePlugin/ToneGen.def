@@ -4,4 +4,3 @@ LIBRARY      "ToneGen"
 
 EXPORTS
 	AkCreatePlugin
-	AkGetSoundEngineCallbacks

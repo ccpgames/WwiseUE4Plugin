@@ -168,9 +168,8 @@ int32 UInterpTrackAkAudioEvent::AddKeyframe(float Time, UInterpTrackInst* TrInst
 
 	// Find the correct index to insert this cut.
 	int32 i=0; for( i=0; i<Events.Num() && Events[i].Time < Time; i++);
-	Events.InsertUninitialized(i);
-	Events[i] = NewAkEvent;
-
+	Events.Insert(NewAkEvent, i);
+	
 	return i;
 }
 

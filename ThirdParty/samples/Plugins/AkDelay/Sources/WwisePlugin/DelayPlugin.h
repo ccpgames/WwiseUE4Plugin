@@ -27,9 +27,6 @@ public:
     virtual bool GetBankParameters( const GUID & in_guidPlatform, AK::Wwise::IWriteData* in_pDataWriter ) const;
 	virtual bool Help( HWND in_hWnd, eDialog in_eDialog, LPCWSTR in_szLanguageCode ) const;
 
-	static const short CompanyID;
-	static const short PluginID;
-
 private:
 	void EnableFeedback( );
 

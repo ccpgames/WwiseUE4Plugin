@@ -75,8 +75,6 @@ namespace AK
 
 #define AK_INFINITE                             (AK_UINT_MAX)
 
-#define AkMakeLong(a,b)							MAKELONG((a),(b))
-
 #define AkMax(x1, x2)	(((x1) > (x2))? (x1): (x2))
 #define AkMin(x1, x2)	(((x1) < (x2))? (x1): (x2))
 #define AkClamp(x, min, max)  ((x) < (min)) ? (min) : (((x) > (max) ? (max) : (x)))
@@ -369,7 +367,7 @@ namespace AKPLATFORM
 		mbstate_t state;
 		memset (&state, '\0', sizeof (state));
 
-		return wcsrtombs(	io_pszAnsiString,		// destination
+		return (AkInt32)wcsrtombs(io_pszAnsiString,		// destination
 							&in_pszUnicodeString,	// source
 							in_uiOutBufferSize,		// destination length
 							&state);				// 
@@ -386,7 +384,7 @@ namespace AKPLATFORM
 		mbstate_t state;
 		memset (&state, '\0', sizeof (state));
 
-		return mbsrtowcs((wchar_t*)io_pvUnicodeStringBuffer,	// destination
+		return (AkInt32)mbsrtowcs((wchar_t*)io_pvUnicodeStringBuffer,	// destination
 									&in_pszAnsiString,					// source
 									in_uiOutBufferSize,					// destination length
 									&state);							// 
@@ -519,30 +517,39 @@ namespace AKPLATFORM
 
 }
 
+#ifdef AK_ENABLE_INSTRUMENT
 
-#define AK_ENABLE_RAZOR_USER_MARKERS
-#if defined( AK_ENABLE_RAZOR_PROFILING ) && defined( AK_ENABLE_RAZOR_USER_MARKERS )
-	#include <libperf.h>
-	#define AK_sceRazorCpuPushMarkerTID( text ) sceRazorCpuPushMarkerWithHud( text, 0, SCE_RAZOR_MARKER_DISABLE_HUD )
-	#define AK_sceRazorCpuPopMarkerTID() sceRazorCpuPopMarker( )
-#else
-	#define AK_sceRazorCpuPushMarkerTID( text )
-	#define AK_sceRazorCpuPopMarkerTID() 
-#endif
+#include <perf.h>
 
-class AKAutoRazorMarker
+class AkInstrumentScope
 {
 public:
-	inline AKAutoRazorMarker( const char* in_text )
+	inline AkInstrumentScope( const char *in_pszZoneName ) 
 	{
-		AK_sceRazorCpuPushMarkerTID( in_text );
+		sceRazorCpuPushMarkerStatic( in_pszZoneName, 0, SCE_RAZOR_MARKER_DISABLE_HUD );
 	}
 
-	inline ~AKAutoRazorMarker()
+	inline ~AkInstrumentScope()
 	{
-		AK_sceRazorCpuPopMarkerTID();
+		sceRazorCpuPopMarker();
 	}
 };
 
+#define AK_INSTRUMENT_BEGIN( _zone_name_ ) sceRazorCpuPushMarkerStatic( text, 0, SCE_RAZOR_MARKER_DISABLE_HUD )
+#define AK_INSTRUMENT_BEGIN_C( _color_, _zone_name_ ) sceRazorCpuPushMarkerStatic( text, _color_, SCE_RAZOR_MARKER_DISABLE_HUD )
+#define AK_INSTRUMENT_END( _zone_name_ ) sceRazorCpuPopMarker()
+#define AK_INSTRUMENT_SCOPE( _zone_name_ ) AkInstrumentScope akInstrumentScope_##__LINE__(_zone_name_)
+
+#define AK_INSTRUMENT_IDLE_BEGIN( _zone_name_ )
+#define AK_INSTRUMENT_IDLE_END( _zone_name_ )
+#define AK_INSTRUMENT_IDLE_SCOPE( _zone_name_ )
+
+#define AK_INSTRUMENT_STALL_BEGIN( _zone_name_ )
+#define AK_INSTRUMENT_STALL_END( _zone_name_ )
+#define AK_INSTRUMENT_STALL_SCOPE( _zone_name_ )
+
+#define AK_INSTRUMENT_THREAD_START( _thread_name_ )
+
+#endif // AK_ENABLE_INSTRUMENT
 
 #endif  // _AK_PLATFORM_FUNCS_H_

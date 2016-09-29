@@ -1,8 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AkMP3Source", "AkMP3Source\Sources\AudioEngineFX\Win32\AkMP3SourceWindows_vc140.vcxproj", "{345B4A4A-66D5-B15C-E009-3498854FC0F7}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AkSineSource", "AkSineTone\Sources\AudioEngineFX\Win32\AkSineSourceWindows_vc140.vcxproj", "{13C36967-AFCB-37DB-D41E-5D0D365569BF}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AkToneSource", "AkToneGenerator\Sources\AudioEngineFX\Win32\AkToneSourceWindows_vc140.vcxproj", "{5EC7C017-93A5-40CA-23B8-A4C17FEF82DA}"
@@ -33,38 +31,6 @@ Global
 		Release(StaticCRT)|x64 = Release(StaticCRT)|x64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{345B4A4A-66D5-B15C-E009-3498854FC0F7}.Debug|Win32.ActiveCfg = Debug|Win32
-		{345B4A4A-66D5-B15C-E009-3498854FC0F7}.Debug|Win32.Build.0 = Debug|Win32
-		{345B4A4A-66D5-B15C-E009-3498854FC0F7}.Debug|x64.ActiveCfg = Debug|x64
-		{345B4A4A-66D5-B15C-E009-3498854FC0F7}.Debug|x64.Build.0 = Debug|x64
-		{345B4A4A-66D5-B15C-E009-3498854FC0F7}.Debug(StaticCRT)|Win32.ActiveCfg = Debug(StaticCRT)|Win32
-		{345B4A4A-66D5-B15C-E009-3498854FC0F7}.Debug(StaticCRT)|Win32.Build.0 = Debug(StaticCRT)|Win32
-		{345B4A4A-66D5-B15C-E009-3498854FC0F7}.Debug(StaticCRT)|x64.ActiveCfg = Debug(StaticCRT)|x64
-		{345B4A4A-66D5-B15C-E009-3498854FC0F7}.Debug(StaticCRT)|x64.Build.0 = Debug(StaticCRT)|x64
-		{345B4A4A-66D5-B15C-E009-3498854FC0F7}.Profile|Win32.ActiveCfg = Profile|Win32
-		{345B4A4A-66D5-B15C-E009-3498854FC0F7}.Profile|Win32.Build.0 = Profile|Win32
-		{345B4A4A-66D5-B15C-E009-3498854FC0F7}.Profile|x64.ActiveCfg = Profile|x64
-		{345B4A4A-66D5-B15C-E009-3498854FC0F7}.Profile|x64.Build.0 = Profile|x64
-		{345B4A4A-66D5-B15C-E009-3498854FC0F7}.Profile_EnableAsserts|Win32.ActiveCfg = Profile_EnableAsserts|Win32
-		{345B4A4A-66D5-B15C-E009-3498854FC0F7}.Profile_EnableAsserts|Win32.Build.0 = Profile_EnableAsserts|Win32
-		{345B4A4A-66D5-B15C-E009-3498854FC0F7}.Profile_EnableAsserts|x64.ActiveCfg = Profile_EnableAsserts|x64
-		{345B4A4A-66D5-B15C-E009-3498854FC0F7}.Profile_EnableAsserts|x64.Build.0 = Profile_EnableAsserts|x64
-		{345B4A4A-66D5-B15C-E009-3498854FC0F7}.Profile(StaticCRT)|Win32.ActiveCfg = Profile(StaticCRT)|Win32
-		{345B4A4A-66D5-B15C-E009-3498854FC0F7}.Profile(StaticCRT)|Win32.Build.0 = Profile(StaticCRT)|Win32
-		{345B4A4A-66D5-B15C-E009-3498854FC0F7}.Profile(StaticCRT)|x64.ActiveCfg = Profile(StaticCRT)|x64
-		{345B4A4A-66D5-B15C-E009-3498854FC0F7}.Profile(StaticCRT)|x64.Build.0 = Profile(StaticCRT)|x64
-		{345B4A4A-66D5-B15C-E009-3498854FC0F7}.Profile(StaticCRT)_EnableAsserts|Win32.ActiveCfg = Profile(StaticCRT)_EnableAsserts|Win32
-		{345B4A4A-66D5-B15C-E009-3498854FC0F7}.Profile(StaticCRT)_EnableAsserts|Win32.Build.0 = Profile(StaticCRT)_EnableAsserts|Win32
-		{345B4A4A-66D5-B15C-E009-3498854FC0F7}.Profile(StaticCRT)_EnableAsserts|x64.ActiveCfg = Profile(StaticCRT)_EnableAsserts|x64
-		{345B4A4A-66D5-B15C-E009-3498854FC0F7}.Profile(StaticCRT)_EnableAsserts|x64.Build.0 = Profile(StaticCRT)_EnableAsserts|x64
-		{345B4A4A-66D5-B15C-E009-3498854FC0F7}.Release|Win32.ActiveCfg = Release|Win32
-		{345B4A4A-66D5-B15C-E009-3498854FC0F7}.Release|Win32.Build.0 = Release|Win32
-		{345B4A4A-66D5-B15C-E009-3498854FC0F7}.Release|x64.ActiveCfg = Release|x64
-		{345B4A4A-66D5-B15C-E009-3498854FC0F7}.Release|x64.Build.0 = Release|x64
-		{345B4A4A-66D5-B15C-E009-3498854FC0F7}.Release(StaticCRT)|Win32.ActiveCfg = Release(StaticCRT)|Win32
-		{345B4A4A-66D5-B15C-E009-3498854FC0F7}.Release(StaticCRT)|Win32.Build.0 = Release(StaticCRT)|Win32
-		{345B4A4A-66D5-B15C-E009-3498854FC0F7}.Release(StaticCRT)|x64.ActiveCfg = Release(StaticCRT)|x64
-		{345B4A4A-66D5-B15C-E009-3498854FC0F7}.Release(StaticCRT)|x64.Build.0 = Release(StaticCRT)|x64
 		{13C36967-AFCB-37DB-D41E-5D0D365569BF}.Debug|Win32.ActiveCfg = Debug|Win32
 		{13C36967-AFCB-37DB-D41E-5D0D365569BF}.Debug|Win32.Build.0 = Debug|Win32
 		{13C36967-AFCB-37DB-D41E-5D0D365569BF}.Debug|x64.ActiveCfg = Debug|x64

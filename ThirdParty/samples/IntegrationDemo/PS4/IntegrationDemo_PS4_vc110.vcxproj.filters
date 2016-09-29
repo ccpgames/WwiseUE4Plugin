@@ -2,28 +2,28 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="Common">
-      <UniqueIdentifier>{6EB6A928-31F0-564C-AAFE-95106D5437BA}</UniqueIdentifier>
+      <UniqueIdentifier>{A3320BA0-9C18-BE45-9B9C-6987B1B0D3AE}</UniqueIdentifier>
     </Filter>
     <Filter Include="DemoPages">
-      <UniqueIdentifier>{A625F400-8B82-474C-AD5B-90CC34B08B09}</UniqueIdentifier>
+      <UniqueIdentifier>{98E49D52-A596-CD4A-8951-FF6FD13A6A61}</UniqueIdentifier>
     </Filter>
     <Filter Include="MenuSystem">
-      <UniqueIdentifier>{4ED27217-60C4-334E-9950-7BE3211F73E1}</UniqueIdentifier>
+      <UniqueIdentifier>{D9923E2C-1734-AD42-AB12-72DD949C47E1}</UniqueIdentifier>
     </Filter>
     <Filter Include="SoundEngine">
-      <UniqueIdentifier>{8A46264E-55FB-C74A-8ECE-60FFB207ACFB}</UniqueIdentifier>
+      <UniqueIdentifier>{5870185A-E8A2-EE4C-B46E-B8999FC869F5}</UniqueIdentifier>
     </Filter>
     <Filter Include="SoundEngine\PS4">
-      <UniqueIdentifier>{26E3A56C-9179-AA43-878B-55D6C2C65E7A}</UniqueIdentifier>
+      <UniqueIdentifier>{75E08F8E-BF95-514C-ADA9-C4D51538E960}</UniqueIdentifier>
     </Filter>
     <Filter Include="SoundEngine\Common">
-      <UniqueIdentifier>{E0EB9069-3CC0-CC4B-8145-E49956BB9ECB}</UniqueIdentifier>
+      <UniqueIdentifier>{CEA6E899-1E63-1049-8DBC-A7EB607CDEF5}</UniqueIdentifier>
     </Filter>
     <Filter Include="sample_utilities">
-      <UniqueIdentifier>{02133DF5-E806-2047-B585-15C31228A53C}</UniqueIdentifier>
+      <UniqueIdentifier>{307D6FD3-00B0-5B49-BD3A-ADF6439A8522}</UniqueIdentifier>
     </Filter>
     <Filter Include="sample_utilities\graphics">
-      <UniqueIdentifier>{206E6102-9CCE-484B-920E-EE7C0D9CC15E}</UniqueIdentifier>
+      <UniqueIdentifier>{97DDC864-538C-DD47-919E-CD97EB62642C}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -70,6 +70,9 @@
     <ClInclude Include="..\DemoPages\DemoMicrophone.h">
       <Filter>DemoPages</Filter>
     </ClInclude>
+    <ClInclude Include="..\DemoPages\DemoMIDIMetronome.h">
+      <Filter>DemoPages</Filter>
+    </ClInclude>
     <ClInclude Include="..\DemoPages\DemoMotion.h">
       <Filter>DemoPages</Filter>
     </ClInclude>
@@ -77,6 +80,9 @@
       <Filter>DemoPages</Filter>
     </ClInclude>
     <ClInclude Include="..\DemoPages\DemoPositioning.h">
+      <Filter>DemoPages</Filter>
+    </ClInclude>
+    <ClInclude Include="..\DemoPages\DemoPositioningMenu.h">
       <Filter>DemoPages</Filter>
     </ClInclude>
     <ClInclude Include="..\DemoPages\DemoRTPCCarEngine.h">
@@ -187,6 +193,9 @@
     <ClCompile Include="..\DemoPages\DemoMicrophone.cpp">
       <Filter>DemoPages</Filter>
     </ClCompile>
+    <ClCompile Include="..\DemoPages\DemoMIDIMetronome.cpp">
+      <Filter>DemoPages</Filter>
+    </ClCompile>
     <ClCompile Include="..\DemoPages\DemoMotion.cpp">
       <Filter>DemoPages</Filter>
     </ClCompile>
@@ -194,6 +203,9 @@
       <Filter>DemoPages</Filter>
     </ClCompile>
     <ClCompile Include="..\DemoPages\DemoPositioning.cpp">
+      <Filter>DemoPages</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DemoPages\DemoPositioningMenu.cpp">
       <Filter>DemoPages</Filter>
     </ClCompile>
     <ClCompile Include="..\DemoPages\DemoRTPCCarEngine.cpp">

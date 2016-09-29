@@ -13,10 +13,11 @@
 #include "DemoMarkers.h"
 #include "DemoMusicCallbacks.h"
 #include "DemoInteractiveMusic.h"
+#include "DemoMIDIMetronome.h"
 #include "DemoMotion.h"
 #include "DemoExternalSources.h"
 #include "DemoFootstepsManyVariables.h"
-#include "DemoPositioning.h"
+#include "DemoPositioningMenu.h"
 
 #if defined INTEGRATIONDEMO_MICROPHONE
 #include "DemoMicrophone.h"

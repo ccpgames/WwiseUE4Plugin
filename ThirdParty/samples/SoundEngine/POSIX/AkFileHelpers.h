@@ -15,7 +15,12 @@
 #include <AK/SoundEngine/Common/IAkStreamMgr.h>
 #include <AK/SoundEngine/Common/AkStreamMgrModule.h>
 #include <sys/stat.h>
-#include <sys/errno.h>
+
+#ifdef AK_EMSCRIPTEN
+	#include <errno.h>
+#else
+	#include <sys/errno.h>
+#endif
 
 class CAkFileHelpers
 {
@@ -175,8 +180,8 @@ public:
 		AkUInt64		in_uPosition,		// Position from which to start writing.
 		AkUInt32		in_uSizeToWrite)
 	{
-
-#ifdef AK_QNX
+		
+#if defined( AK_QNX ) || defined (AK_EMSCRIPTEN)
 		if( !fseeko( in_hFile, in_uPosition, SEEK_SET ) )
 #else
 #ifdef AK_LINUX

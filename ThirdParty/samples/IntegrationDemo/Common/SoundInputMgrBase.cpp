@@ -7,7 +7,7 @@
 #include "stdafx.h"
 #include "SoundInputMgrBase.h"
 #include "SoundInputMgr.h"
-#include <AK/Plugin/AkAudioInputSourceFactory.h>
+#include <AK/Plugin/AkAudioInputPlugin.h>
 
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------

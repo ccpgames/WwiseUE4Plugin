@@ -144,7 +144,7 @@ private:
 	void TermWwise();
 
 	/// Calculates the amount of time to sleep at the end of each frame.
-	AkUInt32 CalculateSleepTime();
+	AkInt32 CalculateSleepTime();
 	// Menu System Objects
 	InputMgr* m_pInput;	///< The application's input manager pointer.
 	Menu*     m_pMenu;	///< The menu system pointer.
@@ -156,8 +156,6 @@ private:
 	// Timing Variables
 	AkInt64  m_PerfFreq;			///< The system's performance frequency.
 	AkInt64  m_FrameStartPerf;		///< Performance counter value at the start of a frame.
-	AkInt64	 m_LastFrameStart;		///< The performance counter value at the start of the previous frame.
-	AkReal32 m_LastFrameDuration;	///< The duration of the previous frame in milliseconds.
 	
 	bool m_bGamePaused;
 };

@@ -20,6 +20,10 @@
 #include "IntegrationDemo.h"
 #include "DemoLocalization.h"
 
+#ifdef AK_ENABLE_INSTRUMENT
+	#pragma comment( lib, "ScePerf_stub_weak" )
+#endif
+
 const int AK_DEFAULT_DISPLAY_WIDTH = 1280;
 const int AK_DEFAULT_DISPLAY_HEIGHT = 720;
 
@@ -32,11 +36,6 @@ extern const char			sceUserMainThreadName[]		= "IntegrationDemo";
 size_t	sceLibcHeapSize = 256*1024*1024;
 
 const AkOSChar* g_szIntegrationDemoBanksPath = AKTEXT( "/app0/" ); // May change to "sd0:" during init // hostapp // app0:
-
-#ifdef AK_ENABLE_RAZOR_PROFILING
-	#pragma comment (lib, "ScePerf_stub")
-	#include <libperf.h>
-#endif // AK_ENABLE_RAZOR_PROFILING
 
 /////////////////////////////////////////////////////////////////////////////////
 //                              MEMORY HOOKS SETUP

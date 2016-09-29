@@ -9,7 +9,6 @@
 
 #include "stdafx.h"
 #include "AkDelay.h"
-#include <AK/Plugin/AkDelayFXFactory.h>
 #include "DelayPlugin.h"
 #include <AK/Wwise/Utilities.h>
 #include <AK/Tools/Common/AkAssert.h>
@@ -64,25 +63,16 @@ CAkDelayApp theApp;
 BOOL CAkDelayApp::InitInstance()
 {
 	CWinApp::InitInstance();
-
+	AK::Wwise::RegisterWwisePlugin();
 	return TRUE;
 }
 
 AK::Wwise::IPluginBase* __stdcall AkCreatePlugin( unsigned short in_usCompanyID, unsigned short in_usPluginID )
 {
-	AKASSERT( in_usCompanyID == DelayPlugin::CompanyID && in_usPluginID == DelayPlugin::PluginID );
-
 	return new DelayPlugin;
 }
 
-bool __stdcall AkGetSoundEngineCallbacks( unsigned short in_usCompanyID, unsigned short in_usPluginID, AkCreatePluginCallback & out_funcEffect, AkCreateParamCallback & out_funcParam )
-{
-	AKASSERT( in_usCompanyID == DelayPlugin::CompanyID && in_usPluginID == DelayPlugin::PluginID );
-
-	out_funcEffect = CreateDelayFX;
-	out_funcParam = CreateDelayFXParams;
-	return true;
-}
 
 /// Dummy assert hook for Wwise plug-ins using AKASSERT (cassert used by default).
 DEFINEDUMMYASSERTHOOK;
+DEFINE_PLUGIN_REGISTER_HOOK;

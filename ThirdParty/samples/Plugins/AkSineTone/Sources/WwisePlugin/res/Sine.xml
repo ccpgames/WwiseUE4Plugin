@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Copyright (C) 2006 Audiokinetic Inc. -->
 <PluginModule>
-	<SourcePlugin Name="Wwise Sine" CompanyID="0" PluginID="100">
+	<SourcePlugin Name="Wwise Sine" CompanyID="0" PluginID="100" >
 		<PluginInfo CanUnlink="true">
 			<PlatformSupport>
 				<Platform Name="Windows"></Platform>
@@ -20,6 +20,7 @@
 				<Platform Name="VitaHW"></Platform>
 				<Platform Name="3DS"></Platform>
 				<Platform Name="iOS"></Platform>
+        <Platform Name="Emscripten"></Platform>
 			</PlatformSupport>
 		</PluginInfo>
 		<Properties>

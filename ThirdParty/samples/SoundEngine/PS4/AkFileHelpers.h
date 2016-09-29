@@ -35,7 +35,7 @@ public:
 		__AKFILEHELPERS_ASSERT(in_pszFilename != NULL);
 		__AKFILEHELPERS_ASSERT(strlen(in_pszFilename) < AK_MAX_PATH);
 
-		out_hFile = (AkFileHandle)NULL;
+		out_hFile = SCE_FIOS_HANDLE_INVALID;
 
 		// Open mode
 		SceFiosOpenParams params = SCE_FIOS_OPENPARAMS_INITIALIZER;
@@ -62,10 +62,10 @@ public:
 		const int result = sceFiosFHOpenSync( NULL, &out_hFile, in_pszFilename, &params );
 		if ( result != SCE_FIOS_OK )
 	    {
-			if (out_hFile != (AkFileHandle)NULL)
+			if (out_hFile != SCE_FIOS_HANDLE_INVALID)
 				sceFiosFHCloseSync( NULL, out_hFile );
 
-			out_hFile = (AkFileHandle)NULL;
+			out_hFile = SCE_FIOS_HANDLE_INVALID;
 
 			if ( SCE_FIOS_ERROR_BAD_PATH == result )
 				return AK_FileNotFound;

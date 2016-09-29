@@ -32,6 +32,7 @@
 #include "AkToneGen.h"
 #include "AkWaveTables.h"
 #include <AK/Tools/Common/AkAssert.h>
+#include <AK/AkWwiseSDKVersion.h>
 
 #include <math.h>
 #include <stdlib.h>
@@ -139,10 +140,19 @@ number of trailing zeroes in an increasing index.
 // Desc: Plugin mechanism. Dynamic create function whose address must be 
 //       registered to the FX manager.
 //-----------------------------------------------------------------------------
-AK::IAkPlugin* CreateToneSource( AK::IAkPluginMemAlloc * in_pAllocator )
+AK::IAkPlugin* AkCreateToneSource( AK::IAkPluginMemAlloc * in_pAllocator )
 {
 	return AK_PLUGIN_NEW( in_pAllocator, CAkToneGen() );
 }
+
+// Plugin mechanism. Parameters node creation function to be registered to the FX manager.
+AK::IAkPluginParam * AkCreateToneSourceParams(AK::IAkPluginMemAlloc * in_pAllocator)
+{
+	return AK_PLUGIN_NEW(in_pAllocator, CAkToneGenParams());
+}
+
+AK::PluginRegistration AkToneSourceRegistration(AkPluginTypeSource, 0, 102, AkCreateToneSource, AkCreateToneSourceParams);
+AK::PluginRegistration AkToneSourceMotionRegistration(AkPluginTypeMotionSource, 0, 403, AkCreateToneSource, AkCreateToneSourceParams);
 
 // Initialize the seed only once
 AkUInt32 CAkToneGen::s_uSeedVal = 22222;
@@ -496,6 +506,7 @@ AKRESULT CAkToneGen::GetPluginInfo( AkPluginInfo & out_rPluginInfo )
 	out_rPluginInfo.eType = AkPluginTypeSource;
 	out_rPluginInfo.bIsInPlace = true;
 	out_rPluginInfo.bIsAsynchronous = false;
+	out_rPluginInfo.uBuildVersion = AK_WWISESDK_VERSION_COMBINED;
 	return AK_Success;
 }
 

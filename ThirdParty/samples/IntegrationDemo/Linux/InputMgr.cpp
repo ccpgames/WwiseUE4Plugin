@@ -9,9 +9,8 @@
 #include "InputMgr.h"
 #include "Platform.h"
 #include "UniversalInput.h"
-#include <ncurses.h>
 
-int g_lastCh = 0;
+#include <SDL2/SDL.h>
 
 InputMgr::~InputMgr()
 {
@@ -53,39 +52,130 @@ void InputMgr::Release()
 
 void InputMgr::Update()
 {
+	// Basic Gesture handling (implemented in 10 minutes in a "just to get it working" fashion.
+	static bool bDidMotion = false;
+	SDL_Scancode lastCh = SDL_SCANCODE_UNKNOWN;
+
 	UGStickState stickState[] = {{0.f, 0.f},{0.f,0.f} };
 	UGBtnState btnState = 0;
 
-	switch ( g_lastCh )
+	SDL_Event e;
+	while (SDL_PollEvent(&e))
 	{
-	case KEY_UP:
-	case 'w':
+		switch (e.type) {
+		case SDL_KEYDOWN:
+			switch (e.key.keysym.scancode)
+			{
+			case SDL_SCANCODE_UP:
+			case SDL_SCANCODE_W:
+			case SDL_SCANCODE_DOWN:
+			case SDL_SCANCODE_S:
+			case SDL_SCANCODE_LEFT:
+			case SDL_SCANCODE_A:
+			case SDL_SCANCODE_RIGHT:
+			case SDL_SCANCODE_D:
+			case SDL_SCANCODE_RETURN:
+			case SDL_SCANCODE_BACKSPACE:
+				lastCh = e.key.keysym.scancode;
+				break;
+			default:
+				break;
+			}
+			break;
+
+		case SDL_FINGERMOTION:
+			{
+				bool bHandleX = abs(e.tfinger.dx) > abs(e.tfinger.dy);
+
+				if (bHandleX)
+				{
+					if (abs(e.tfinger.dx) > 100)
+					{
+						// User is largely swiping on sides, consider an escape.
+						lastCh = SDL_SCANCODE_BACKSPACE;
+						printf("Swiping Back\n");
+						bDidMotion = true;
+					}
+					else if (e.tfinger.dx > 0)
+					{
+						lastCh = SDL_SCANCODE_RIGHT;
+						bDidMotion = true;
+					}
+					else if (e.tfinger.dx < 0)
+					{
+						lastCh = SDL_SCANCODE_LEFT;
+						bDidMotion = true;
+					}
+				}
+				else //y
+				{
+					if (e.tfinger.dy > 0)
+					{
+						lastCh = SDL_SCANCODE_DOWN;
+						bDidMotion = true;
+					}
+					else if (e.tfinger.dy < 0)
+					{
+						lastCh = SDL_SCANCODE_UP;
+						bDidMotion = true;
+					}
+				}
+			}
+			break;
+
+		case SDL_FINGERDOWN:
+			bDidMotion = false;
+			break;
+
+		case SDL_MULTIGESTURE:
+			printf("SDL_MULTIGESTURE\n");
+			break;
+
+		case SDL_FINGERUP:
+			if (!bDidMotion)
+			{
+				// condider a touch.
+				lastCh = SDL_SCANCODE_RETURN;
+			}
+			break;
+
+		case SDL_QUIT:
+			//done = true;
+			return;
+			break;
+
+		default:
+			break;
+		}
+	}
+
+	switch ( lastCh )
+	{
+	case SDL_SCANCODE_UP:
+	case SDL_SCANCODE_W:
 		btnState = UG_DPAD_UP;
 		break;
-	case KEY_DOWN:
-	case 's':
+	case SDL_SCANCODE_DOWN:
+	case SDL_SCANCODE_S:
 		btnState = UG_DPAD_DOWN;
 		break;
-	case KEY_LEFT:
-	case 'a':
+	case SDL_SCANCODE_LEFT:
+	case SDL_SCANCODE_A:
 		btnState = UG_DPAD_LEFT;
 		break;
-	case KEY_RIGHT:
-	case 'd':
+	case SDL_SCANCODE_RIGHT:
+	case SDL_SCANCODE_D:
 		btnState = UG_DPAD_RIGHT;
 		break;
-	case KEY_ENTER:
-	case 10:
+	case SDL_SCANCODE_RETURN:
 		btnState = UG_BUTTON1;
 		break;
-	case KEY_BACKSPACE:
+	case SDL_SCANCODE_BACKSPACE:
 		btnState = UG_BUTTON2;
 		break;
 	default:
-		printf("%d ", g_lastCh );
+		break;
 	}
-
-	g_lastCh = 0;
 
 	m_pUInput->SetState(1, true, btnState, stickState);
 }

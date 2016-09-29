@@ -45,7 +45,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				AdditionalIncludeDirectories=".;..;..\..\..\..\..\..\include"
-				PreprocessorDefinitions="_DEBUG;WIN32;AUDIOKINETIC;AKSOUNDENGINE_EXPORTS;AKSOUNDENGINE_DLL"
+				PreprocessorDefinitions="_DEBUG;WIN32;AUDIOKINETIC"
 				EnableEnhancedInstructionSet="1"
 				UsePrecompiledHeader="0"
 			/>
@@ -54,7 +54,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_DEBUG;WIN32;AUDIOKINETIC;AKSOUNDENGINE_EXPORTS;AKSOUNDENGINE_DLL"
+				PreprocessorDefinitions="_DEBUG;WIN32;AUDIOKINETIC"
 				AdditionalIncludeDirectories=".;..;..\..\..\..\..\..\include"
 			/>
 			<Tool
@@ -119,7 +119,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				AdditionalIncludeDirectories=".;..;..\..\..\..\..\..\include"
-				PreprocessorDefinitions="_DEBUG;WIN64;AUDIOKINETIC;AKSOUNDENGINE_EXPORTS;AKSOUNDENGINE_DLL"
+				PreprocessorDefinitions="_DEBUG;WIN64;AUDIOKINETIC"
 				UsePrecompiledHeader="0"
 			/>
 			<Tool
@@ -127,7 +127,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_DEBUG;WIN64;AUDIOKINETIC;AKSOUNDENGINE_EXPORTS;AKSOUNDENGINE_DLL"
+				PreprocessorDefinitions="_DEBUG;WIN64;AUDIOKINETIC"
 				AdditionalIncludeDirectories=".;..;..\..\..\..\..\..\include"
 			/>
 			<Tool
@@ -191,7 +191,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				AdditionalIncludeDirectories=".;..;..\..\..\..\..\..\include"
-				PreprocessorDefinitions="_DEBUG;WIN32;AUDIOKINETIC;AKSOUNDENGINE_EXPORTS"
+				PreprocessorDefinitions="_DEBUG;WIN32;AUDIOKINETIC"
 				EnableEnhancedInstructionSet="1"
 				UsePrecompiledHeader="0"
 			/>
@@ -200,7 +200,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_DEBUG;WIN32;AUDIOKINETIC;AKSOUNDENGINE_EXPORTS"
+				PreprocessorDefinitions="_DEBUG;WIN32;AUDIOKINETIC"
 				AdditionalIncludeDirectories=".;..;..\..\..\..\..\..\include"
 			/>
 			<Tool
@@ -265,7 +265,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				AdditionalIncludeDirectories=".;..;..\..\..\..\..\..\include"
-				PreprocessorDefinitions="_DEBUG;WIN64;AUDIOKINETIC;AKSOUNDENGINE_EXPORTS"
+				PreprocessorDefinitions="_DEBUG;WIN64;AUDIOKINETIC"
 				UsePrecompiledHeader="0"
 			/>
 			<Tool
@@ -273,7 +273,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_DEBUG;WIN64;AUDIOKINETIC;AKSOUNDENGINE_EXPORTS"
+				PreprocessorDefinitions="_DEBUG;WIN64;AUDIOKINETIC"
 				AdditionalIncludeDirectories=".;..;..\..\..\..\..\..\include"
 			/>
 			<Tool
@@ -337,7 +337,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				AdditionalIncludeDirectories=".;..;..\..\..\..\..\..\include"
-				PreprocessorDefinitions="NDEBUG;WIN32;AUDIOKINETIC;AKSOUNDENGINE_EXPORTS;AKSOUNDENGINE_DLL"
+				PreprocessorDefinitions="NDEBUG;WIN32;AUDIOKINETIC"
 				EnableEnhancedInstructionSet="1"
 				UsePrecompiledHeader="0"
 			/>
@@ -346,7 +346,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="NDEBUG;WIN32;AUDIOKINETIC;AKSOUNDENGINE_EXPORTS;AKSOUNDENGINE_DLL"
+				PreprocessorDefinitions="NDEBUG;WIN32;AUDIOKINETIC"
 				AdditionalIncludeDirectories=".;..;..\..\..\..\..\..\include"
 			/>
 			<Tool
@@ -411,7 +411,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				AdditionalIncludeDirectories=".;..;..\..\..\..\..\..\include"
-				PreprocessorDefinitions="NDEBUG;WIN64;AUDIOKINETIC;AKSOUNDENGINE_EXPORTS;AKSOUNDENGINE_DLL"
+				PreprocessorDefinitions="NDEBUG;WIN64;AUDIOKINETIC"
 				UsePrecompiledHeader="0"
 			/>
 			<Tool
@@ -419,7 +419,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="NDEBUG;WIN64;AUDIOKINETIC;AKSOUNDENGINE_EXPORTS;AKSOUNDENGINE_DLL"
+				PreprocessorDefinitions="NDEBUG;WIN64;AUDIOKINETIC"
 				AdditionalIncludeDirectories=".;..;..\..\..\..\..\..\include"
 			/>
 			<Tool
@@ -483,7 +483,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				AdditionalIncludeDirectories=".;..;..\..\..\..\..\..\include"
-				PreprocessorDefinitions="NDEBUG;WIN32;AK_ENABLE_ASSERTS;AUDIOKINETIC;AKSOUNDENGINE_EXPORTS"
+				PreprocessorDefinitions="NDEBUG;WIN32;AK_ENABLE_ASSERTS;AUDIOKINETIC"
 				EnableEnhancedInstructionSet="1"
 				UsePrecompiledHeader="0"
 			/>
@@ -492,7 +492,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="NDEBUG;WIN32;AK_ENABLE_ASSERTS;AUDIOKINETIC;AKSOUNDENGINE_EXPORTS"
+				PreprocessorDefinitions="NDEBUG;WIN32;AK_ENABLE_ASSERTS;AUDIOKINETIC"
 				AdditionalIncludeDirectories=".;..;..\..\..\..\..\..\include"
 			/>
 			<Tool
@@ -557,7 +557,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				AdditionalIncludeDirectories=".;..;..\..\..\..\..\..\include"
-				PreprocessorDefinitions="NDEBUG;WIN64;AK_ENABLE_ASSERTS;AUDIOKINETIC;AKSOUNDENGINE_EXPORTS"
+				PreprocessorDefinitions="NDEBUG;WIN64;AK_ENABLE_ASSERTS;AUDIOKINETIC"
 				UsePrecompiledHeader="0"
 			/>
 			<Tool
@@ -565,7 +565,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="NDEBUG;WIN64;AK_ENABLE_ASSERTS;AUDIOKINETIC;AKSOUNDENGINE_EXPORTS"
+				PreprocessorDefinitions="NDEBUG;WIN64;AK_ENABLE_ASSERTS;AUDIOKINETIC"
 				AdditionalIncludeDirectories=".;..;..\..\..\..\..\..\include"
 			/>
 			<Tool
@@ -629,7 +629,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				AdditionalIncludeDirectories=".;..;..\..\..\..\..\..\include"
-				PreprocessorDefinitions="NDEBUG;WIN32;AUDIOKINETIC;AKSOUNDENGINE_EXPORTS"
+				PreprocessorDefinitions="NDEBUG;WIN32;AUDIOKINETIC"
 				EnableEnhancedInstructionSet="1"
 				UsePrecompiledHeader="0"
 			/>
@@ -638,7 +638,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="NDEBUG;WIN32;AUDIOKINETIC;AKSOUNDENGINE_EXPORTS"
+				PreprocessorDefinitions="NDEBUG;WIN32;AUDIOKINETIC"
 				AdditionalIncludeDirectories=".;..;..\..\..\..\..\..\include"
 			/>
 			<Tool
@@ -703,7 +703,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				AdditionalIncludeDirectories=".;..;..\..\..\..\..\..\include"
-				PreprocessorDefinitions="NDEBUG;WIN64;AUDIOKINETIC;AKSOUNDENGINE_EXPORTS"
+				PreprocessorDefinitions="NDEBUG;WIN64;AUDIOKINETIC"
 				UsePrecompiledHeader="0"
 			/>
 			<Tool
@@ -711,7 +711,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="NDEBUG;WIN64;AUDIOKINETIC;AKSOUNDENGINE_EXPORTS"
+				PreprocessorDefinitions="NDEBUG;WIN64;AUDIOKINETIC"
 				AdditionalIncludeDirectories=".;..;..\..\..\..\..\..\include"
 			/>
 			<Tool
@@ -775,7 +775,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				AdditionalIncludeDirectories=".;..;..\..\..\..\..\..\include"
-				PreprocessorDefinitions="NDEBUG;WIN32;AK_ENABLE_ASSERTS;AUDIOKINETIC;AKSOUNDENGINE_EXPORTS"
+				PreprocessorDefinitions="NDEBUG;WIN32;AK_ENABLE_ASSERTS;AUDIOKINETIC"
 				EnableEnhancedInstructionSet="1"
 				UsePrecompiledHeader="0"
 			/>
@@ -784,7 +784,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="NDEBUG;WIN32;AK_ENABLE_ASSERTS;AUDIOKINETIC;AKSOUNDENGINE_EXPORTS"
+				PreprocessorDefinitions="NDEBUG;WIN32;AK_ENABLE_ASSERTS;AUDIOKINETIC"
 				AdditionalIncludeDirectories=".;..;..\..\..\..\..\..\include"
 			/>
 			<Tool
@@ -849,7 +849,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				AdditionalIncludeDirectories=".;..;..\..\..\..\..\..\include"
-				PreprocessorDefinitions="NDEBUG;WIN64;AK_ENABLE_ASSERTS;AUDIOKINETIC;AKSOUNDENGINE_EXPORTS"
+				PreprocessorDefinitions="NDEBUG;WIN64;AK_ENABLE_ASSERTS;AUDIOKINETIC"
 				UsePrecompiledHeader="0"
 			/>
 			<Tool
@@ -857,7 +857,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="NDEBUG;WIN64;AK_ENABLE_ASSERTS;AUDIOKINETIC;AKSOUNDENGINE_EXPORTS"
+				PreprocessorDefinitions="NDEBUG;WIN64;AK_ENABLE_ASSERTS;AUDIOKINETIC"
 				AdditionalIncludeDirectories=".;..;..\..\..\..\..\..\include"
 			/>
 			<Tool
@@ -921,7 +921,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				AdditionalIncludeDirectories=".;..;..\..\..\..\..\..\include"
-				PreprocessorDefinitions="NDEBUG;AK_OPTIMIZED;WIN32;AUDIOKINETIC;AKSOUNDENGINE_EXPORTS;AKSOUNDENGINE_DLL"
+				PreprocessorDefinitions="NDEBUG;AK_OPTIMIZED;WIN32;AUDIOKINETIC"
 				EnableEnhancedInstructionSet="1"
 				UsePrecompiledHeader="0"
 			/>
@@ -930,7 +930,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="NDEBUG;AK_OPTIMIZED;WIN32;AUDIOKINETIC;AKSOUNDENGINE_EXPORTS;AKSOUNDENGINE_DLL"
+				PreprocessorDefinitions="NDEBUG;AK_OPTIMIZED;WIN32;AUDIOKINETIC"
 				AdditionalIncludeDirectories=".;..;..\..\..\..\..\..\include"
 			/>
 			<Tool
@@ -995,7 +995,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				AdditionalIncludeDirectories=".;..;..\..\..\..\..\..\include"
-				PreprocessorDefinitions="NDEBUG;AK_OPTIMIZED;WIN64;AUDIOKINETIC;AKSOUNDENGINE_EXPORTS;AKSOUNDENGINE_DLL"
+				PreprocessorDefinitions="NDEBUG;AK_OPTIMIZED;WIN64;AUDIOKINETIC"
 				UsePrecompiledHeader="0"
 			/>
 			<Tool
@@ -1003,7 +1003,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="NDEBUG;AK_OPTIMIZED;WIN64;AUDIOKINETIC;AKSOUNDENGINE_EXPORTS;AKSOUNDENGINE_DLL"
+				PreprocessorDefinitions="NDEBUG;AK_OPTIMIZED;WIN64;AUDIOKINETIC"
 				AdditionalIncludeDirectories=".;..;..\..\..\..\..\..\include"
 			/>
 			<Tool
@@ -1067,7 +1067,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				AdditionalIncludeDirectories=".;..;..\..\..\..\..\..\include"
-				PreprocessorDefinitions="NDEBUG;AK_OPTIMIZED;WIN32;AUDIOKINETIC;AKSOUNDENGINE_EXPORTS"
+				PreprocessorDefinitions="NDEBUG;AK_OPTIMIZED;WIN32;AUDIOKINETIC"
 				EnableEnhancedInstructionSet="1"
 				UsePrecompiledHeader="0"
 			/>
@@ -1076,7 +1076,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="NDEBUG;AK_OPTIMIZED;WIN32;AUDIOKINETIC;AKSOUNDENGINE_EXPORTS"
+				PreprocessorDefinitions="NDEBUG;AK_OPTIMIZED;WIN32;AUDIOKINETIC"
 				AdditionalIncludeDirectories=".;..;..\..\..\..\..\..\include"
 			/>
 			<Tool
@@ -1141,7 +1141,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				AdditionalIncludeDirectories=".;..;..\..\..\..\..\..\include"
-				PreprocessorDefinitions="NDEBUG;AK_OPTIMIZED;WIN64;AUDIOKINETIC;AKSOUNDENGINE_EXPORTS"
+				PreprocessorDefinitions="NDEBUG;AK_OPTIMIZED;WIN64;AUDIOKINETIC"
 				UsePrecompiledHeader="0"
 			/>
 			<Tool
@@ -1149,7 +1149,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="NDEBUG;AK_OPTIMIZED;WIN64;AUDIOKINETIC;AKSOUNDENGINE_EXPORTS"
+				PreprocessorDefinitions="NDEBUG;AK_OPTIMIZED;WIN64;AUDIOKINETIC"
 				AdditionalIncludeDirectories=".;..;..\..\..\..\..\..\include"
 			/>
 			<Tool

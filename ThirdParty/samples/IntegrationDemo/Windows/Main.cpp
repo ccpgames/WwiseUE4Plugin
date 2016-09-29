@@ -159,6 +159,12 @@ LRESULT CALLBACK WindowProc( HWND in_hWnd, UINT in_unMsg, WPARAM in_wParam, LPAR
 {
 	switch ( in_unMsg )
 	{
+	case WM_SIZE:
+		if(in_wParam == SIZE_MINIMIZED)
+			IntegrationDemo::Instance().PauseAllSounds();
+		if(in_wParam == SIZE_RESTORED || in_wParam == SIZE_MAXIMIZED)
+			IntegrationDemo::Instance().ResumeAllSounds();
+		break;
 	case WM_DESTROY:
 		PostQuitMessage( 0 );
 		return TRUE;

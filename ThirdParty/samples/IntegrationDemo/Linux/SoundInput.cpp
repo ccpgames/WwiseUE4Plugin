@@ -6,7 +6,6 @@
 
 #include "stdafx.h"
 
-#include <AK/Plugin/AkAudioInputSourceFactory.h>
 #include <math.h>
 
 #include "SoundInput.h"

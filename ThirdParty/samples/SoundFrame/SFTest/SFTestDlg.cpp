@@ -1049,14 +1049,28 @@ void CSFTestDlg::OnBnClickedSBDefImport()
 void CSFTestDlg::OnBnClickedGenerateSoundBank()
 {
 	WCHAR szBankNameBuffer[MAX_PATH] = {0};
-	LPCWSTR strBankName = szBankNameBuffer;
+	LPCWSTR strBankNameList[MAX_PATH]; 
 	LPCWSTR strPlatform = _T("Windows");  // Windows, XBox360 or PS3
 	LPCWSTR strLanguage = _T("English(US)");
 
 	GetDlgItemText( IDC_SOUNDBANK_NAME_EDIT, szBankNameBuffer, MAX_PATH );
 
+	WCHAR* strBankNames;
+	WCHAR token[] = L" ";
+	WCHAR *remainingBankNames = NULL;
+
+	strBankNames = wcstok_s(szBankNameBuffer, token, &remainingBankNames);
+	int bankCount = 0;
+	while (strBankNames != NULL)
+	{
+		strBankNameList[bankCount] = strBankNames;
+		bankCount++;
+
+		strBankNames = wcstok_s(NULL, token, &remainingBankNames);
+	}
+
 	// Generate the Sound bank in Wwise
-	bool bResult = m_pSoundFrame->GenerateSoundBanks( &strBankName, 1, &strPlatform, 1, &strLanguage, 1 );
+	bool bResult = m_pSoundFrame->GenerateSoundBanks(strBankNameList, bankCount, &strPlatform, 1, &strLanguage, 1);
 	if ( !bResult )
 		MessageBox( L"SoundBank Generation Failed." );
 }

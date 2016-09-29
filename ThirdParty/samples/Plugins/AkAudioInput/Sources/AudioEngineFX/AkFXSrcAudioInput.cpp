@@ -11,6 +11,7 @@
 #include "AkFXSrcAudioInput.h"
 #include <AK/Tools/Common/AkAssert.h>
 #include <math.h>
+#include <AK/AkWwiseSDKVersion.h>
 
 // Holds audio input information
 struct AudioInputStream
@@ -28,11 +29,20 @@ AkAudioInputPluginGetGainCallbackFunc CAkFXSrcAudioInput::m_pfnGetGainCallback =
 // Useful definitions
 static const AkReal32 RAMPMAXTIME	= 0.1f;		// 100 ms ramps, worst-case
 
+
 // Plugin mechanism. FX create function and register its address to the FX manager.
 AK::IAkPlugin* CreateAudioInputSource( AK::IAkPluginMemAlloc * in_pAllocator )
 {
 	return AK_PLUGIN_NEW( in_pAllocator, CAkFXSrcAudioInput() );
 }
+
+// Plugin mechanism. Parameter node create function to be registered to the FX manager.
+AK::IAkPluginParam * CreateAudioInputSourceParams(AK::IAkPluginMemAlloc * in_pAllocator)
+{
+	return AK_PLUGIN_NEW(in_pAllocator, CAkFxSrcAudioInputParams());
+}
+
+AK::PluginRegistration AkAudioInputSourceRegistration(AkPluginTypeSource, AKCOMPANYID_AUDIOKINETIC, 200, CreateAudioInputSource, CreateAudioInputSourceParams);
 
 // Constructor.
 CAkFXSrcAudioInput::CAkFXSrcAudioInput()
@@ -59,7 +69,7 @@ AKRESULT CAkFXSrcAudioInput::Init(	AK::IAkPluginMemAlloc *			in_pAllocator,    	
 
 	// Set parameters access
     m_pSharedParams = reinterpret_cast<CAkFxSrcAudioInputParams*>(in_pParams);
-	
+
     if( m_pfnGetFormatCallback )
     {
         m_pfnGetFormatCallback( in_pSourceFXContext->GetVoiceInfo()->GetPlayingID(), io_rFormat );
@@ -94,6 +104,7 @@ AKRESULT CAkFXSrcAudioInput::GetPluginInfo( AkPluginInfo & out_rPluginInfo )
     out_rPluginInfo.eType = AkPluginTypeSource;
 	out_rPluginInfo.bIsInPlace = true;
 	out_rPluginInfo.bIsAsynchronous = false;
+	out_rPluginInfo.uBuildVersion = AK_WWISESDK_VERSION_COMBINED;
     return AK_Success;
 }
 

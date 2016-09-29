@@ -198,112 +198,112 @@ IDI_SUBVERSION_MODIFIED ICON                    "SubversionStatus_Modified.ico"
 // String Table
 //
 
-STRINGTABLE 
-BEGIN
-    IDS_SUBVERSION_NAME     "Subversion"
-    IDS_SUBVERSION_UPDATEALL_NAME "Update"
-    IDS_STATUS_NON_VERSIONED "non-versioned"
-    IDS_STATUS_NONE         "none"
-    IDS_STATUS_NORMAL       "normal"
-    IDS_STATUS_ADDED        "added"
-    IDS_STATUS_MISSING      "missing"
-    IDS_STATUS_DELETED      "deleted"
-END
+//STRINGTABLE 
+//BEGIN
+    //IDS_SUBVERSION_NAME     //"Subversion"
+    //IDS_SUBVERSION_UPDATEALL_NAME //"Update"
+    //IDS_STATUS_NON_VERSIONED //"non-versioned"
+    //IDS_STATUS_NONE         //"none"
+    //IDS_STATUS_NORMAL       //"normal"
+    //IDS_STATUS_ADDED        //"added"
+    //IDS_STATUS_MISSING      //"missing"
+    //IDS_STATUS_DELETED      //"deleted"//
+//END
 
-STRINGTABLE 
-BEGIN
-    IDS_STATUS_REPLACED     "replaced"
-    IDS_STATUS_MODIFIED     "modified"
-    IDS_STATUS_MERGED       "merged"
-    IDS_STATUS_CONFLICTED   "conflicted"
-    IDS_STATUS_IGNORED      "ignored"
-    IDS_STATUS_OBSTRUCTED   "obstructed"
-    IDS_STATUS_EXTERNAL     "external"
-    IDS_STATUS_INCOMPLETE   "incomplete"
-    IDS_OPERATION_CANCELED  "Operation canceled."
-    IDS_OPERATIONS_UPDATE   "Update"
-    IDS_OPERATIONS_COMMIT   "Commit"
-    IDS_ERROR_RENAME_LOCAL  "Error renaming local file %s"
-    IDS_MESSAGEBOX_CAPTION  "Subversion plug-in"
-    IDS_OPERATIONS_ADD      "Add"
-    IDS_OPERATIONS_DELETE   "Delete"
-    IDS_OPERATIONS_RENAME   "Rename"
-END
+//STRINGTABLE 
+//BEGIN
+    //IDS_STATUS_REPLACED     //"replaced"
+    //IDS_STATUS_MODIFIED     //"modified"
+    //IDS_STATUS_MERGED       //"merged"
+    //IDS_STATUS_CONFLICTED   //"conflicted"
+    //IDS_STATUS_IGNORED      //"ignored"
+    //IDS_STATUS_OBSTRUCTED   //"obstructed"
+    //IDS_STATUS_EXTERNAL     //"external"
+    //IDS_STATUS_INCOMPLETE   //"incomplete"
+    //IDS_OPERATION_CANCELED  //"Operation canceled."
+    //IDS_OPERATIONS_UPDATE   //"Update"
+    //IDS_OPERATIONS_COMMIT   //"Commit"
+    //IDS_ERROR_RENAME_LOCAL  //"Error renaming local file %s"
+    //IDS_MESSAGEBOX_CAPTION  //"Subversion plug-in"
+    //IDS_OPERATIONS_ADD      //"Add"
+    //IDS_OPERATIONS_DELETE   //"Delete"
+    //IDS_OPERATIONS_RENAME   //"Rename"//
+//END
 
-STRINGTABLE 
-BEGIN
-    IDS_OPERATIONS_REVERT   "Revert"
-    IDS_OPERATIONS_RESOLVED "Resolved"
-    IDS_OPERATIONS_DIFF     "Diff"
-    IDS_OPERATIONS_SHOWLOG  "Show Log"
-    IDS_NOTIFY_ADDED        "Added: %s"
-    IDS_NOTIFY_COPIED       "Copied: %s"
-    IDS_NOTIFY_DELETED      "Deleted: %s"
-    IDS_NOTIFY_RESTORED     "Restored: %s"
-    IDS_NOTIFY_REVERTED     "Reverted: %s"
-    IDS_NOTIFY_FAILED_REVERT "Failed revert: %s"
-    IDS_NOTIFY_RESOLVED     "Resolved: %s"
-    IDS_NOTIFY_SKIPPED      "Skipped: %s"
-    IDS_NOTIFY_COMMIT_MODIFIED "Modified: %s"
-    IDS_ERROR_DELETE        "Error deleting local file %s (%s)"
-    IDS_NOTIFY_UPDATE_UPDATE "Updated: %s"
-    IDS_NOTIFY_COMPLETED    "Completed at revision: %d."
-END
+//STRINGTABLE 
+//BEGIN
+    //IDS_OPERATIONS_REVERT   //"Revert"
+    //IDS_OPERATIONS_RESOLVED //"Resolved"
+    //IDS_OPERATIONS_DIFF     //"Diff"
+    //IDS_OPERATIONS_SHOWLOG  //"Show Log"
+    //IDS_NOTIFY_ADDED        //"Added: %s"
+    //IDS_NOTIFY_COPIED       //"Copied: %s"
+    //IDS_NOTIFY_DELETED      //"Deleted: %s"
+    //IDS_NOTIFY_RESTORED     //"Restored: %s"
+    //IDS_NOTIFY_REVERTED     //"Reverted: %s"
+    //IDS_NOTIFY_FAILED_REVERT //"Failed revert: %s"
+    //IDS_NOTIFY_RESOLVED     //"Resolved: %s"
+    //IDS_NOTIFY_SKIPPED      //"Skipped: %s"
+    //IDS_NOTIFY_COMMIT_MODIFIED //"Modified: %s"
+    //IDS_ERROR_DELETE        //"Error deleting local file %s (%s)"
+    //IDS_NOTIFY_UPDATE_UPDATE //"Updated: %s"
+    //IDS_NOTIFY_COMPLETED    //"Completed at revision: %d."//
+//END
 
-STRINGTABLE 
-BEGIN
-    IDS_NOTIFY_UPDATE_EXTERNAL "External: %s"
-    IDS_NOTIFY_STATUS       "Status"
-    IDS_SUCCESS_DELETE      "Successfully deleted local file %s"
-    IDS_SUCCESS_RENAME_LOCAL "Successfully renamed local file %s to %s"
-    IDS_NOTIFY_COMMIT_ADDED "Adding %s"
-    IDS_NOTIFY_COMMIT_DELETED "Deleting %s"
-    IDS_NOTIFY_COMMIT_REPLACED "Replaced: %s"
-    IDS_NOTIFY_COMMIT_POSTFIX "Sending content: %s"
-    IDS_NOTIFY_BLAME_REVISION "Blame revision."
-    IDS_NOTIFY_LOCKED       "Locked by '%s': %s."
-    IDS_NOTIFY_UNLOCKED     "Unlocked: %s"
-    IDS_NOTIFY_FAILED_LOCK  "Lock failed: %s"
-    IDS_NOTIFY_FAILED_UNLOCK "Unlock failed: %s"
-    IDS_NOTIFY_UPDATE_CONFLICT "Conflicted: %s"
-    IDS_NOTIFY_UPDATE_MERGED "Merged: %s"
-    IDS_ERROR_RENAME_MESSAGE "The file name is invalid"
-END
+//STRINGTABLE 
+//BEGIN
+    //IDS_NOTIFY_UPDATE_EXTERNAL //"External: %s"
+    //IDS_NOTIFY_STATUS       //"Status"
+    //IDS_SUCCESS_DELETE      //"Successfully deleted local file %s"
+    //IDS_SUCCESS_RENAME_LOCAL //"Successfully renamed local file %s to %s"
+    //IDS_NOTIFY_COMMIT_ADDED //"Adding %s"
+    //IDS_NOTIFY_COMMIT_DELETED //"Deleting %s"
+    //IDS_NOTIFY_COMMIT_REPLACED //"Replaced: %s"
+    //IDS_NOTIFY_COMMIT_POSTFIX //"Sending content: %s"
+    //IDS_NOTIFY_BLAME_REVISION //"Blame revision."
+    //IDS_NOTIFY_LOCKED       //"Locked by '%s': %s."
+    //IDS_NOTIFY_UNLOCKED     //"Unlocked: %s"
+    //IDS_NOTIFY_FAILED_LOCK  //"Lock failed: %s"
+    //IDS_NOTIFY_FAILED_UNLOCK //"Unlock failed: %s"
+    //IDS_NOTIFY_UPDATE_CONFLICT //"Conflicted: %s"
+    //IDS_NOTIFY_UPDATE_MERGED //"Merged: %s"
+    //IDS_ERROR_RENAME_MESSAGE //"The file name is invalid"//
+//END
 
-STRINGTABLE 
-BEGIN
-    IDS_ERROR_RENAME_FILE_EXIST "Can't rename %s to %s, file already exists"
-    IDS_OPERATIONS_GETLOCK  "Get Lock"
-    IDS_OPERATIONS_RELEASELOCK "Release Lock"
-    IDS_ICONS_TOOLTIP_ADD   "Added"
-    IDS_ICONS_TOOLTIP_MODIFIED "Modified"
-    IDS_ICONS_TOOLTIP_NORMAL "Normal"
-    IDS_LOGRECEIVER_NO_ACTION "(no action)"
-    IDS_LOGRECEIVER_NO_AUTHOR "(no author)"
-    IDS_LOGRECEIVER_NO_DATE "(no date)"
-    IDS_LOGRECEIVER_NO_MESSAGE "(no message)"
-    IDS_ERROR_RUN_COMMAND   "Could not run the following command:\n%s"
-    IDS_ERROR_NO_DIFF_TOOL  "No diff tool specified"
-    IDS_SHOWLOG_FORMAT      "Revision: %d, Actions: '%s', Author: '%s', Date: '%s', Message: '%s'"
-    IDS_DELETE_CONFIRMATION "Are you sure you want to delete the selected file(s)?"
-    IDS_DELETE_CONFIRMATION_CAPTION "Delete confirmation"
-    IDS_OPERATIONS_MOVE     "Move"
-END
+//STRINGTABLE 
+//BEGIN
+    //IDS_ERROR_RENAME_FILE_EXIST //"Can't rename %s to %s, file already exists"
+    //IDS_OPERATIONS_GETLOCK  //"Get Lock"
+    //IDS_OPERATIONS_RELEASELOCK //"Release Lock"
+    //IDS_ICONS_TOOLTIP_ADD   //"Added"
+    //IDS_ICONS_TOOLTIP_MODIFIED //"Modified"
+    //IDS_ICONS_TOOLTIP_NORMAL //"Normal"
+    //IDS_LOGRECEIVER_NO_ACTION //"(no action)"
+    //IDS_LOGRECEIVER_NO_AUTHOR //"(no author)"
+    //IDS_LOGRECEIVER_NO_DATE //"(no date)"
+    //IDS_LOGRECEIVER_NO_MESSAGE //"(no message)"
+    //IDS_ERROR_RUN_COMMAND   //"Could not run the following command:\n%s"
+    //IDS_ERROR_NO_DIFF_TOOL  //"No diff tool specified"
+    //IDS_SHOWLOG_FORMAT      //"Revision: %d, Actions: '%s', Author: '%s', Date: '%s', Message: '%s'"
+    //IDS_DELETE_CONFIRMATION //"Are you sure you want to delete the selected file(s)?"
+    //IDS_DELETE_CONFIRMATION_CAPTION //"Delete confirmation"
+    //IDS_OPERATIONS_MOVE     //"Move"//
+//END
 
-STRINGTABLE 
-BEGIN
-    IDS_MOVE_FAILED_FILE_ALREADY_EXIST 
-                            "Error: The following file already exist in the destination directory: %1"
-    IDS_MOVE_FAILED_NAME_CONFLICT 
-                            "Error: Multiple files with the same name can't be moved at the same destination (%1)."
-    IDS_SELECT_MOVE_FOLDER  "Choose the destination folder for the Move operation."
-    IDS_ERROR_MOVE_LOCAL    "Error moving local file %s (%s)"
-    IDS_SUCCESS_MOVE_LOCAL  "Successfully moved local file %s to %s"
-    IDS_ERROR_MOVE_FILE_EXIST "Can't move %s to %s, file already exists"
-    IDS_STATUS_TREE_CONFLICT ", tree conflict"
-    IDS_SUBVERSION_REVERT_CONFIRMATION_QUESTION 
-                            "Are you sure you want to revert the selected item(s)? You will lose all changes since the last update."
-END
+//STRINGTABLE 
+//BEGIN
+    //IDS_MOVE_FAILED_FILE_ALREADY_EXIST 
+                            //"Error: The following file already exist in the destination directory: %1"
+    //IDS_MOVE_FAILED_NAME_CONFLICT 
+                            //"Error: Multiple files with the same name can't be moved at the same destination (%1)."
+    //IDS_SELECT_MOVE_FOLDER  //"Choose the destination folder for the Move operation."
+    //IDS_ERROR_MOVE_LOCAL    //"Error moving local file %s (%s)"
+    //IDS_SUCCESS_MOVE_LOCAL  //"Successfully moved local file %s to %s"
+    //IDS_ERROR_MOVE_FILE_EXIST //"Can't move %s to %s, file already exists"
+    //IDS_STATUS_TREE_CONFLICT //", tree conflict"
+    //IDS_SUBVERSION_REVERT_CONFIRMATION_QUESTION 
+                            //"Are you sure you want to revert the selected item(s)? You will lose all changes since the last update."//
+//END
 
 #endif    // English (U.S.) resources
 /////////////////////////////////////////////////////////////////////////////

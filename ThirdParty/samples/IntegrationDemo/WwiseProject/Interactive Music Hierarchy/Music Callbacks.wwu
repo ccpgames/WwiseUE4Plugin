@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<WwiseDocument Type="WorkUnit" ID="{33D8A269-9B19-4CCD-B9B7-77FEA744BBDA}" SchemaVersion="70">
+<WwiseDocument Type="WorkUnit" ID="{33D8A269-9B19-4CCD-B9B7-77FEA744BBDA}" SchemaVersion="72">
 	<InteractiveMusic>
 		<WorkUnit Name="Music Callbacks" ID="{33D8A269-9B19-4CCD-B9B7-77FEA744BBDA}" PersistMode="Standalone">
 			<ChildrenList>

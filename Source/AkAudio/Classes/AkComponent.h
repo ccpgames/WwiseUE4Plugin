@@ -6,7 +6,8 @@
 
 #pragma once
 
-#include "AK/SoundEngine/Common/AkTypes.h"
+#include "Runtime/Launch/Resources/Version.h"
+#include "AkInclude.h"
 #include "AkComponent.generated.h"
 
 /*------------------------------------------------------------------------------------
@@ -30,17 +31,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category="Audiokinetic|AkComponent")
 	void PostAssociatedAkEvent();
 	
-
-    AkPlayingID PostAkTrackedEventByName(const FString& in_EventName);
-
-    /**
-    * Posts an event to Wwise, using this component as the game object source
-    *
-    * @param AkEvent		The event to post
-    */
-    AkPlayingID PostAkTrackedEvent(class UAkAudioEvent * AkEvent);
-
-    /**
+	/**
 	 * Posts an event to Wwise, using this component as the game object source
 	 *
 	 * @param AkEvent		The event to post
@@ -56,6 +47,8 @@ public:
 	UFUNCTION(BlueprintCallable, Category="Audiokinetic|AkComponent", meta = (DeprecatedFunction, DeprecationMessage = "Please use the \"Event Name\" field of Post Ak Event"))
 	void PostAkEventByName( const FString& in_EventName );
 	
+	AkPlayingID PostAkEventByNameWithCallback(const FString& in_EventName, AkUInt32 in_uFlags = 0, AkCallbackFunc in_pfnUserCallback = NULL, void * in_pUserCookie = NULL);
+
 	/**
 	 * Stops playback using this component as the game object to stop
 	 */
@@ -115,11 +108,26 @@ public:
 	UFUNCTION(BlueprintCallable, Category="Audiokinetic|AkComponent")
 	void UseReverbVolumes(bool inUseReverbVolumes);
 
+
+	/**
+	* Set the output bus volume (direct) to be used for the specified game object.
+	* The control value is a number ranging from 0.0f to 1.0f.
+	*
+	* @param BusVolume - Bus volume to set
+	*/
+	UFUNCTION(BlueprintCallable, Category = "Audiokinetic|AkComponent")
+	void SetOutputBusVolume(float BusVolume);
+
+
 	// Occlusion/obstruction functions
 
 	/** Modifies the attenuation computations on this game object to simulate sounds with a a larger or smaller area of effect. */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="AkComponent")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="AkComponent")
 	float AttenuationScalingFactor;
+
+	/** Sets the attenuation scaling factor, which modifies the attenuation computations on this game object to simulate sounds with a a larger or smaller area of effect. */
+	UFUNCTION(BlueprintCallable, Category = "Audiokinetic|AkComponent")
+	void SetAttenuationScalingFactor(float Value);
 
 	/** Time interval between occlusion/obstruction checks. Set to 0 to disable occlusion on this component. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AkComponent")
@@ -169,7 +177,11 @@ public:
 
 	// Begin USceneComponent Interface
 	virtual void Activate(bool bReset=false) override;
+#if ENGINE_MAJOR_VERSION == 4 && ENGINE_MINOR_VERSION <= 11
+	virtual void OnUpdateTransform(bool bSkipPhysicsMove, ETeleportType Teleport = ETeleportType::None) override; 
+#else
 	virtual void OnUpdateTransform(EUpdateTransformFlags UpdateTransformFlags, ETeleportType Teleport = ETeleportType::None) override;
+#endif
 	// End USceneComponent Interface
 
 	/** Gets all AkReverbVolumes at the AkComponent's current location, and puts them in a list
@@ -185,9 +197,6 @@ public:
 
 	/** Thread safe counter for number of active events */
 	FThreadSafeCounter NumActiveEvents;
-
-	/** Flag indicating we will soon destroy this AkComponent */
-	bool bFlaggedForDestroy;
 
 private:
 	/**
@@ -254,6 +263,34 @@ private:
 
 	/** Whether to automatically destroy the component when the event is finished */
 	bool bAutoDestroy;
+
+	struct AkComponentCallbackPackage
+	{
+		/** Copy of the user callback, for use in our own callback */
+		AkCallbackFunc pfnUserCallback;
+
+		/** Copy of the user cookie, for use in our own callback */
+		void * pUserCookie;
+
+		/** Copy of the user callback flags, for use in our own callback */
+		uint32 uUserFlags;
+
+		FThreadSafeCounter* pNumActiveEvents;
+
+		AkComponentCallbackPackage(AkCallbackFunc in_cbFunc, void* in_Cookie, uint32 in_Flags, FThreadSafeCounter* in_Counter)
+			: pfnUserCallback(in_cbFunc)
+			, pUserCookie(in_Cookie)
+			, uUserFlags(in_Flags)
+			, pNumActiveEvents(in_Counter)
+		{}
+	};
+
+	/** Whether an event was posted on the component. Never reset to false. */
+	bool bStarted;
+
+	/** Our own event callback */
+	static void AkComponentCallback(AkCallbackType in_eType, AkCallbackInfo* in_pCallbackInfo);
+
 
 	// Occlusion/obstruction features -------------------------------------------------------------
 

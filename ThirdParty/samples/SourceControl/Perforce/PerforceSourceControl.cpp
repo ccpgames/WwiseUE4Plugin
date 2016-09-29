@@ -29,12 +29,6 @@ using namespace Wwise;
 
 namespace
 {
-	struct ResourceIDPair
-	{
-		UINT uiIconID;
-		UINT uiToolTipID;
-	};
-
 	enum IconsIndexes
 	{
 		IconsIndexes_NotCheckOut = 0,
@@ -51,30 +45,40 @@ namespace
 		IconsIndexes_Count
 	};
 
-	const static ResourceIDPair k_resourceIDs[] = { { IDI_PERFORCE_STATUS_NOT_CHECKED_OUT,	IDS_PERFORCE_ICONS_TOOLTIP_NOT_CHECKED_OUT },
-													{ IDI_PERFORCE_STATUS_CHECKED_OUT,		IDS_PERFORCE_ICONS_TOOLTIP_CHECKED_OUT },
-													{ IDI_PERFORCE_STATUS_ADDED,			IDS_PERFORCE_ICONS_TOOLTIP_ADDED } ,
-													{ IDI_PERFORCE_STATUS_OTHER_CHECKOUT,	IDS_PERFORCE_ICONS_TOOLTIP_OTHER_CHECKOUT },	
-													{ IDI_PERFORCE_STATUS_BOTH_CHECKOUT,	IDS_PERFORCE_ICONS_TOOLTIP_BOTH_CHECKOUT },
-													{ IDI_PERFORCE_STATUS_OUTDATED_NOT_CHECKED_OUT,	IDS_PERFORCE_ICONS_TOOLTIP_OUTDATED_NOT_CHECKED_OUT },
-													{ IDI_PERFORCE_STATUS_OUTDATED_CHECKED_OUT,		IDS_PERFORCE_ICONS_TOOLTIP_OUTDATED_CHECKED_OUT },
-													{ IDI_PERFORCE_STATUS_OUTDATED_OTHER_CHECKOUT,	IDS_PERFORCE_ICONS_TOOLTIP_OUTDATED_OTHER_CHECKOUT },	
-													{ IDI_PERFORCE_STATUS_OUTDATED_BOTH_CHECKOUT,	IDS_PERFORCE_ICONS_TOOLTIP_OUTDATED_BOTH_CHECKOUT }	};
+	const static UINT k_iconIDs[] = { IDI_PERFORCE_STATUS_NOT_CHECKED_OUT,
+										IDI_PERFORCE_STATUS_CHECKED_OUT,
+										IDI_PERFORCE_STATUS_ADDED,
+										IDI_PERFORCE_STATUS_OTHER_CHECKOUT,
+										IDI_PERFORCE_STATUS_BOTH_CHECKOUT,
+										IDI_PERFORCE_STATUS_OUTDATED_NOT_CHECKED_OUT,
+										IDI_PERFORCE_STATUS_OUTDATED_CHECKED_OUT,
+										IDI_PERFORCE_STATUS_OUTDATED_OTHER_CHECKOUT,
+										IDI_PERFORCE_STATUS_OUTDATED_BOTH_CHECKOUT};
 
-	const static UINT k_operationNameIDs[PerforceSourceControl::OperationID_ContextMenuCount] = { 0 /*OperationID_None*/,
-																		   IDS_PERFORCE_OPERATION_GETLATESTVERSION, 
-																		   IDS_PERFORCE_OPERATION_SUBMIT,
-																		   IDS_PERFORCE_OPERATION_CHECKOUT,
-																		   IDS_PERFORCE_OPERATION_LOCK,
-																		   IDS_PERFORCE_OPERATION_UNLOCK,
-																		   IDS_PERFORCE_OPERATION_ADD,
-																		   IDS_PERFORCE_OPERATION_DELETE,
-																		   IDS_PERFORCE_OPERATION_RENAME,
-																		   IDS_PERFORCE_OPERATION_MOVE,
-																		   IDS_PERFORCE_OPERATION_REVERT,
-																		   IDS_PERFORCE_OPERATION_RESOLVE,
-																		   IDS_PERFORCE_OPERATION_DIFF,
-																		   IDS_PERFORCE_OPERATION_HISTORY };
+	const static CString k_tooltipText[] = { _T("Not checked out"),
+											_T("Checked out"),
+											_T("Added"),
+											_T("Checked out by someone else"),	
+											_T("Checked out by you and someone else"),
+											_T("Outdated, Not checked out"),
+											_T("Outdated, Checked out"),
+											_T("Outdated, Checked out by someone else"),	
+											_T("Outdated, Checked out by you and someone else") };
+
+	const static CString k_operationNames[PerforceSourceControl::OperationID_ContextMenuCount] = { 0 /*OperationID_None*/,
+																		   _T("Get Latest Version"), 
+																		   _T("Submit Changes"),
+																		   _T("Check Out"),
+																		   _T("Lock"),
+																		   _T("Unlock"),
+																		   _T("Mark for Add"),
+																		   _T("Mark for Delete"),
+																		   _T("Rename"),
+																		   _T("Move"),
+																		   _T("Revert Changes"),
+																		   _T("Resolve"),
+																		   _T("Diff"),
+																		   _T("File History") };
 
 	const static CString s_csPerforceInstallRegistry = L"SOFTWARE\\PERFORCE\\";
 
@@ -173,7 +177,7 @@ PerforceSourceControl::PerforceSourceControl()
 
 	for ( unsigned int i=0 ; i<IconsIndexes_Count ; ++i )
 	{
-		m_icons[i] = ::LoadIcon( AfxGetStaticModuleState()->m_hCurrentResourceHandle, MAKEINTRESOURCE( k_resourceIDs[i].uiIconID ) );
+		m_icons[i] = ::LoadIcon( AfxGetStaticModuleState()->m_hCurrentResourceHandle, MAKEINTRESOURCE( k_iconIDs[i] ) );
 	}
 }
 
@@ -187,8 +191,7 @@ void PerforceSourceControl::GetPluginInfo( PluginInfo& out_rPluginInfo )
 	AFX_MANAGE_STATE( AfxGetStaticModuleState() );
 
 	// Plug-in name and version
-	CString csName;
-	csName.LoadString( IDS_PERFORCE_NAME );
+	CString csName = _T("Perforce");
 
 	out_rPluginInfo.m_bstrName = csName.AllocSysString();
 	out_rPluginInfo.m_uiVersion = k_uiVersion;
@@ -232,39 +235,39 @@ void PerforceSourceControl::Init( ISourceControlUtilities* in_pUtilities, bool i
 
 	m_pUtilities = in_pUtilities;
 
-	CRegKey regKey;
-	regKey.Create( HKEY_CURRENT_USER, m_pUtilities->GetRegistryPath() + k_csRegFolder );
-
-	DWORD bEnabled = FALSE;
-
-	if ( regKey.QueryDWORDValue( k_csRegKeyNewFilesAdd, bEnabled ) == ERROR_SUCCESS )
+	{
+		DWORD bEnabled = FALSE;
+		m_pUtilities->GetUserPreferenceDword( k_csRegFolder + k_csRegKeyNewFilesAdd, bEnabled );
 		m_bOnNewFilesAdd = bEnabled ? true : false;
+	}
 
-	if ( regKey.QueryDWORDValue( k_csRegKeyNewFilesCheckOut, bEnabled ) == ERROR_SUCCESS )
+	{
+		DWORD bEnabled = FALSE;
+		m_pUtilities->GetUserPreferenceDword( k_csRegFolder + k_csRegKeyNewFilesCheckOut, bEnabled );
 		m_bOnNewFilesCheckOut = bEnabled ? true : false;
+	}
 }
 
 void PerforceSourceControl::InitClientFromRegistry( ClientApi& io_client, AK::Wwise::ISourceControlUtilities* in_pUtilities )
 {
-	CRegKey regKey;
-	regKey.Create( HKEY_CURRENT_USER, in_pUtilities->GetRegistryPath() + k_csRegFolder );
-
+	const TCHAR chInvalid = (TCHAR)-1;
 	TCHAR szValue[MAX_PATH] = { 0 };
 	ULONG size = MAX_PATH;
 
-	if( regKey.QueryStringValue( k_csRegKeyClient, szValue, &size ) == ERROR_SUCCESS )
-	{
-		CW2A strClient( szValue );
-		io_client.SetClient( strClient );
-	}
+	in_pUtilities->GetUserPreferenceString( k_csRegFolder + k_csRegKeyClient, szValue, size );
+	CW2A strClient( szValue );
+	io_client.SetClient( strClient );
 
-	::memset( szValue, 0, sizeof( szValue) );
+	szValue[0] = chInvalid;
 	size = MAX_PATH;
 
-	if( regKey.QueryStringValue( k_csRegKeyServer, szValue, &size ) == ERROR_SUCCESS )
+	in_pUtilities->GetUserPreferenceString( k_csRegFolder + k_csRegKeyServer, szValue, size );
+	if( szValue[0] != chInvalid )
 	{
 		CString csServer( szValue );
-		if( regKey.QueryStringValue( k_csRegKeyPort, szValue, &size ) == ERROR_SUCCESS )
+		szValue[0] = chInvalid;
+		in_pUtilities->GetUserPreferenceString( k_csRegFolder + k_csRegKeyPort, szValue, size );
+		if( szValue[0] != chInvalid )
 		{
 			// Format: "server:port"
 			CW2A strServerAndPort( ServerAndPort( csServer, szValue ) );
@@ -274,7 +277,8 @@ void PerforceSourceControl::InitClientFromRegistry( ClientApi& io_client, AK::Ww
 	else
 	{
 		// Backward compatibility: "Port" used to contain "server:port"...
-		if( regKey.QueryStringValue( k_csRegKeyPort, szValue, &size ) == ERROR_SUCCESS )
+		in_pUtilities->GetUserPreferenceString( k_csRegFolder + k_csRegKeyPort, szValue, size );
+		if( szValue[0] != chInvalid )
 		{
 			// Format: "port"
 			CW2A strServerAndPort( szValue );
@@ -282,19 +286,21 @@ void PerforceSourceControl::InitClientFromRegistry( ClientApi& io_client, AK::Ww
 		}
 	}
 
-	::memset( szValue, 0, sizeof( szValue) );
+	szValue[0] = chInvalid;
 	size = MAX_PATH;
 	
-	if( regKey.QueryStringValue( k_csRegKeyHost, szValue, &size ) == ERROR_SUCCESS )
+	in_pUtilities->GetUserPreferenceString( k_csRegFolder + k_csRegKeyHost, szValue, size );
+	if( szValue[0] != chInvalid )
 	{
 		CW2A strClient( szValue );
 		io_client.SetHost( strClient );
 	}
 
-	::memset( szValue, 0, sizeof( szValue) );
+	szValue[0] = chInvalid;
 	size = MAX_PATH;
 
-	if( regKey.QueryStringValue( k_csRegKeyUser, szValue, &size ) == ERROR_SUCCESS )
+	in_pUtilities->GetUserPreferenceString( k_csRegFolder + k_csRegKeyUser, szValue, size );
+	if( szValue[0] != chInvalid )
 	{
 		CW2A strClient( szValue );
 		io_client.SetUser( strClient );
@@ -314,12 +320,8 @@ void PerforceSourceControl::Term()
 	Error error;
 	TermClient( error );
 
-	CRegKey regKey;
-
-	regKey.Create( HKEY_CURRENT_USER, m_pUtilities->GetRegistryPath() + k_csRegFolder );
-
-	regKey.SetDWORDValue( k_csRegKeyNewFilesAdd, m_bOnNewFilesAdd ? TRUE : FALSE );
-	regKey.SetDWORDValue( k_csRegKeyNewFilesCheckOut, m_bOnNewFilesCheckOut ? TRUE : FALSE );
+	m_pUtilities->SetUserPreferenceDword( k_csRegFolder + k_csRegKeyNewFilesAdd, m_bOnNewFilesAdd ? TRUE : FALSE );
+	m_pUtilities->SetUserPreferenceDword( k_csRegFolder + k_csRegKeyNewFilesCheckOut, m_bOnNewFilesCheckOut ? TRUE : FALSE );
 }
 
 void PerforceSourceControl::Destroy()
@@ -425,11 +427,9 @@ LPCWSTR PerforceSourceControl::GetOperationName( DWORD in_dwOperationID )
 
 	if ( !s_bInitializedOperationNames  )
 	{
-		AFX_MANAGE_STATE( AfxGetStaticModuleState() );
-
 		for ( unsigned int i=PerforceSourceControl::OperationID_None+1 ; i<PerforceSourceControl::OperationID_ContextMenuCount ; ++i )
 		{
-			s_operationNames[i].LoadString( k_operationNameIDs[i] );
+			s_operationNames[i] = k_operationNames[i];
 		}
 
 		s_bInitializedOperationNames = true;
@@ -511,8 +511,7 @@ ISourceControl::OperationResult PerforceSourceControl::GetFileStatus(
 		// Unsetted values must be 'local only'
 		POSITION fileListPos = in_rFilenameList.GetHeadPosition();
 
-		CString csStatus;
-		csStatus.LoadString( IDS_PERFORCE_STATUS_LOCAL_ONLY );
+		CString csStatus = _T( "local only" );
 
 		while ( fileListPos )
 		{
@@ -609,47 +608,47 @@ ISourceControl::OperationResult PerforceSourceControl::GetFileStatusIcons( const
 				if ( (fileStatus & FileStatus_OtherCheckout) && (fileStatus & FileStatus_LocalEdit) && (fileStatus & FileStatus_Outdated) )
 				{
 					hIcon = m_icons[IconsIndexes_Outdated_BothCheckout];
-					csTooltipText.LoadString( k_resourceIDs[IconsIndexes_Outdated_BothCheckout].uiToolTipID );
+					csTooltipText = k_tooltipText[IconsIndexes_Outdated_BothCheckout];
 				}
 				else if ( (fileStatus & FileStatus_OtherCheckout) && (fileStatus & FileStatus_LocalEdit) )
 				{
 					hIcon = m_icons[IconsIndexes_BothCheckout];
-					csTooltipText.LoadString( k_resourceIDs[IconsIndexes_BothCheckout].uiToolTipID );
+					csTooltipText = k_tooltipText[IconsIndexes_BothCheckout];
 				}
 				else if ( (fileStatus & FileStatus_OtherCheckout) && (fileStatus & FileStatus_Outdated) )
 				{
 					hIcon = m_icons[IconsIndexes_Outdated_OtherCheckout];
-					csTooltipText.LoadString( k_resourceIDs[IconsIndexes_Outdated_OtherCheckout].uiToolTipID );
+					csTooltipText = k_tooltipText[IconsIndexes_Outdated_OtherCheckout];
 				}
 				else if ( fileStatus & FileStatus_OtherCheckout )
 				{
 					hIcon = m_icons[IconsIndexes_OtherCheckout];
-					csTooltipText.LoadString( k_resourceIDs[IconsIndexes_OtherCheckout].uiToolTipID );
+					csTooltipText = k_tooltipText[IconsIndexes_OtherCheckout];
 				}
 				else if ( (fileStatus & FileStatus_LocalEdit) && (fileStatus & FileStatus_Outdated) )
 				{
 					hIcon = m_icons[IconsIndexes_Outdated_CheckOut];
-					csTooltipText.LoadString( k_resourceIDs[IconsIndexes_Outdated_CheckOut].uiToolTipID );
+					csTooltipText = k_tooltipText[IconsIndexes_Outdated_CheckOut];
 				}
 				else if ( fileStatus & FileStatus_LocalEdit )
 				{
 					hIcon = m_icons[IconsIndexes_CheckOut];
-					csTooltipText.LoadString( k_resourceIDs[IconsIndexes_CheckOut].uiToolTipID );
+					csTooltipText = k_tooltipText[IconsIndexes_CheckOut];
 				}
 				else if ( (fileStatus & FileStatus_OnServer) && (fileStatus & FileStatus_Outdated) )
 				{
 					hIcon = m_icons[IconsIndexes_Outdated_NotCheckOut];
-					csTooltipText.LoadString( k_resourceIDs[IconsIndexes_Outdated_NotCheckOut].uiToolTipID );
+					csTooltipText = k_tooltipText[IconsIndexes_Outdated_NotCheckOut];
 				}
 				else if ( fileStatus & FileStatus_Added || fileStatus & FileStatus_MoveAdd )
 				{
 					hIcon = m_icons[IconsIndexes_Added];
-					csTooltipText.LoadString( k_resourceIDs[IconsIndexes_Added].uiToolTipID );
+					csTooltipText = k_tooltipText[IconsIndexes_Added];
 				}
 				else if ( fileStatus & FileStatus_OnServer )
 				{
 					hIcon = m_icons[IconsIndexes_NotCheckOut];
-					csTooltipText.LoadString( k_resourceIDs[IconsIndexes_NotCheckOut].uiToolTipID );
+					csTooltipText = k_tooltipText[IconsIndexes_NotCheckOut];
 				}
 
 				FilenameToIconMapItem iconItem = { hIcon, csTooltipText.AllocSysString() };
@@ -959,8 +958,8 @@ AK::Wwise::ISourceControl::IOperationResult* PerforceSourceControl::Delete( cons
 		CString csCaption;
 		CString csMessage;
 
-		csCaption.LoadString( IDS_DELETE_CONFIRMATION_CAPTION );
-		csMessage.LoadString( IDS_DELETE_CONFIRMATION );
+		csCaption = _T( "Delete confirmation" );
+		csMessage = _T( "Are you sure you want to delete the selected file(s)?" );
 
 		if( m_pUtilities->MessageBox( NULL, csMessage, csCaption, MB_YESNO ) != IDYES )
 			return NULL;
@@ -997,7 +996,7 @@ AK::Wwise::ISourceControl::IOperationResult* PerforceSourceControl::Delete( cons
 				(fileStatus & FileStatus_MoveDelete))
 			{
 				CString csMessage;
-				csMessage.FormatMessage( IDS_PERFORCE_CANT_DELETE_OPENED, csFilename );
+				csMessage.FormatMessage( _T("File '%1' is opened.  Can not delete a file that is currently opened."), csFilename );
 				m_pUtilities->GetProgressDialog()->AddLogMessage( csMessage );
 				result = OperationResult_Failed;
 			}
@@ -1065,12 +1064,12 @@ AK::Wwise::ISourceControl::IOperationResult* PerforceSourceControl::Delete( cons
 
 					if ( bSuccess )
 					{
-						csMessage.Format( IDS_PERFORCE_DELETE_SUCCESS, csFilename );
+						csMessage.Format( _T("Successfully deleted local file %s"), csFilename );
 						pResult->AddFile( csFilename );
 					}
 					else
 					{
-						csMessage.Format( IDS_PERFORCE_DELETE_ERROR, csFilename, SourceControlHelpers::GetLastErrorString() );
+						csMessage.Format( _T("Error deleting local file %s (%s)"), csFilename, SourceControlHelpers::GetLastErrorString() );
 					}
 
 					m_pUtilities->GetProgressDialog()->AddLogMessage( csMessage );
@@ -1139,7 +1138,7 @@ AK::Wwise::ISourceControl::IOperationResult* PerforceSourceControl::Move( const 
 	CString csRoot( szRootPath );
 
 	CString csPrompt;
-	csPrompt.LoadStringW( IDS_SELECT_MOVE_FOLDER );
+	csPrompt = _T("Choose the destination folder for the Move operation.");
 
 	wchar_t szDestinationDir[MAX_PATH] = {0};
 	if ( m_pUtilities->ShowBrowseForFolderDialog(
@@ -1153,7 +1152,8 @@ AK::Wwise::ISourceControl::IOperationResult* PerforceSourceControl::Move( const 
 
 		std::vector<CString> newPaths;
 		bool bCanProceed = SourceControlHelpers::CanProceedWithMove( in_rFilenameList, szDestinationDir, newPaths, m_pUtilities,
-			IDS_MOVE_FAILED_FILE_ALREADY_EXIST, IDS_MOVE_FAILED_NAME_CONFLICT );
+			_T("Error: The following file already exist in the destination directory: %1"),
+			_T("Error: Multiple files with the same name can't be moved at the same destination (%1).") );
 
 		if( bCanProceed )
 		{
@@ -1213,12 +1213,12 @@ void PerforceSourceControl::Move(
 
 		if ( ::MoveFile( in_csFrom, in_csTo ) )
 		{
-			csMessage.Format( IDS_PERFORCE_MOVE_SUCCESS, (LPCTSTR)in_csFrom, (LPCTSTR)in_csTo );
+			csMessage.Format( _T("Successfully moved local file %s to %s"), (LPCTSTR)in_csFrom, (LPCTSTR)in_csTo );
 			io_pResult->AddMovedFile( in_csFrom, in_csTo );
 		}
 		else
 		{
-			csMessage.Format( IDS_PERFORCE_MOVE_ERROR, (LPCTSTR)in_csFrom, SourceControlHelpers::GetLastErrorString() );
+			csMessage.Format( _T("Error moving local file %s (%s)"), (LPCTSTR)in_csFrom, SourceControlHelpers::GetLastErrorString() );
 		}
 
 		m_pUtilities->GetProgressDialog()->AddLogMessage( csMessage );
@@ -1235,7 +1235,7 @@ void PerforceSourceControl::Move(
 		{
 			// Failed, name conflict
 			CString csMsg;
-			csMsg.Format( IDS_PERFORCE_RENAME_FILE_EXIST, in_csFrom, in_csTo );
+			csMsg.Format( _T("Can't rename %s to %s, file already exists"), in_csFrom, in_csTo );
 
 			m_pUtilities->GetProgressDialog()->AddLogMessage( csMsg );
 		}
@@ -1268,8 +1268,8 @@ void PerforceSourceControl::Revert( const CStringList& in_rFilenameList )
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
 	CString csCaption, csMessage;
-	csCaption.LoadString( IDS_PERFORCE_MESSAGEBOX_CAPTION );
-	csMessage.LoadString( IDS_PERFORCE_REVERT_CONFIRMATION_QUESTION );
+	csCaption = _T("Perforce plug-in");
+	csMessage = _T("Are you sure you want to revert the selected item(s)? You will lose all changes since the last update.");
 
 	if( m_pUtilities->MessageBox( NULL, csMessage, csCaption, MB_YESNO ) == IDYES )
 	{
@@ -1312,8 +1312,8 @@ void PerforceSourceControl::Diff( const CStringList& in_rFilenameList )
 		CString csCaption;
 		CString csMessage;
 
-		csCaption.LoadString( IDS_PERFORCE_MESSAGEBOX_CAPTION );
-		csMessage.LoadString( IDS_PERFORCE_DIFF_FILES_IDENTICAL_MESSAGE );
+		csCaption = _T("Perforce plug-in");
+		csMessage = _T("Files are identical");
 
 		m_pUtilities->MessageBox( NULL, csMessage, csCaption, MB_OK | MB_ICONINFORMATION );
 	}

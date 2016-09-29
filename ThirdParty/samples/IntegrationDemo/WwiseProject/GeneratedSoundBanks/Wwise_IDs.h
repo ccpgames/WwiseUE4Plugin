@@ -27,6 +27,7 @@ namespace AK
         static const AkUniqueID IM_START = 3952084898U;
         static const AkUniqueID IM_THEYAREHOSTILE = 2841817544U;
         static const AkUniqueID IM_WINTHEFIGHT = 1133905385U;
+        static const AkUniqueID METRONOME_POSTMIDI = 2710399919U;
         static const AkUniqueID PAUSE_ALL = 3864097025U;
         static const AkUniqueID PAUSE_ALL_GLOBAL = 3493516265U;
         static const AkUniqueID PLAY_ENGINE = 639345804U;
@@ -226,6 +227,7 @@ namespace AK
         static const AkUniqueID INTERACTIVEMUSIC = 2279279248U;
         static const AkUniqueID MARKERTEST = 2309453583U;
         static const AkUniqueID METAL = 2473969246U;
+        static const AkUniqueID METRONOME = 3537469747U;
         static const AkUniqueID MICROPHONE = 2872041301U;
         static const AkUniqueID MOTION = 2012559111U;
         static const AkUniqueID MUSICCALLBACKS = 4146461094U;

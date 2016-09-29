@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<WwiseDocument Type="WorkUnit" ID="{DF1211E0-7B41-4179-B2A5-64F8AF3E6CC2}" SchemaVersion="70">
+<WwiseDocument Type="WorkUnit" ID="{DF1211E0-7B41-4179-B2A5-64F8AF3E6CC2}" SchemaVersion="72">
 	<AudioObjects>
 		<WorkUnit Name="Car Engine" ID="{DF1211E0-7B41-4179-B2A5-64F8AF3E6CC2}" PersistMode="Standalone">
 			<ChildrenList>

@@ -14,12 +14,6 @@
 #include <string.h>
 #endif
 
-// Plugin mechanism. Parameter node create function to be registered to the FX manager.
-AK::IAkPluginParam * CreateAudioInputSourceParams( AK::IAkPluginMemAlloc * in_pAllocator )
-{
-	return AK_PLUGIN_NEW( in_pAllocator, CAkFxSrcAudioInputParams() );
-}
-
 // Constructor.
 CAkFxSrcAudioInputParams::CAkFxSrcAudioInputParams()
 {

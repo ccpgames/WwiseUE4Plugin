@@ -370,7 +370,7 @@ AKRESULT CAkUnrealIOHookDeferred::Close(
 	return AK_Success;
 }
 
-void CAkUnrealIOHookDeferred::GlobalCallback( bool in_bLastCall )
+void CAkUnrealIOHookDeferred::GlobalCallback(AK::IAkGlobalPluginContext * in_pContext, AkGlobalCallbackLocation in_eLocation, void * in_pCookie)
 {
 	// Loop through all our pending transfers to see if some are done.
 	FScopeLock ScopeLock( g_lowLevelIO.CriticalSection );
@@ -385,11 +385,6 @@ void CAkUnrealIOHookDeferred::GlobalCallback( bool in_bLastCall )
 			// Release the slot for this transfer. We are done for now.
 			CAkUnrealIOHookDeferred::aPendingTransfers[i].Counter.Set(-1);
 		}
-	}
-
-	if ( in_bLastCall )
-	{
-		g_lowLevelIO.m_bCallbackRegistered = false;
 	}
 }
 

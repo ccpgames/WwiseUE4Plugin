@@ -281,6 +281,7 @@ copy /Y "%(FullPath)" "$(Outdir)"</Command>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Sink.cpp" />
+    <ClCompile Include="SinkPlugin.cpp" />
     <ClCompile Include="stdafx.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -289,6 +290,7 @@ copy /Y "%(FullPath)" "$(Outdir)"</Command>
   <ItemGroup>
     <ClInclude Include="Help\TopicAlias.h" />
     <ClInclude Include="Sink.h" />
+    <ClInclude Include="SinkPlugin.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -13,11 +13,6 @@
 #include <math.h>
 #include "AkDelayFXParams.h"
 
-/// Plugin mechanism. Instantiation method that must be registered to the plug-in manager.
-AK::IAkPluginParam * CreateDelayFXParams( AK::IAkPluginMemAlloc * in_pAllocator )
-{
-    return AK_PLUGIN_NEW( in_pAllocator, CAkDelayFXParams( ) );
-}
 
 // Constructor.
 CAkDelayFXParams::CAkDelayFXParams( )

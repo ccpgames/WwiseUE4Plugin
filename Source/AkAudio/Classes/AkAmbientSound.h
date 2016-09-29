@@ -60,8 +60,6 @@ class AKAUDIO_API AAkAmbientSound : public AActor
 	UFUNCTION(BlueprintCallable, Category="Audiokinetic|AkAmbientSound")
 	void StopAmbientSound();
 
-	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
-
 
 #if CPP
 public:
@@ -75,13 +73,6 @@ public:
 	 * Stop the ambience playback
 	 */
 	void StopPlaying();
-
-	/**
-	 * Set whether this ambient sound is playing
-	 *
-	 * @param in_IsPlaying		New playback status
-	 */
-	void Playing( bool in_IsPlaying );
 
 	/**
 	 * Is whether this ambient sound currently playing

@@ -18,13 +18,6 @@ using namespace Wwise;
 
 namespace
 {
-	// Structure used to pair 'Icon ID' with 'ToolTip text ID'
-	struct ResourceIDPair
-	{
-		UINT uiIconID;
-		UINT uiToolTipID;
-	};
-
 	// Icon indexes in the ResourceIDPair list
 	enum IconIndex
 	{
@@ -35,8 +28,11 @@ namespace
 	};
 
 	// The list of all icons/tooltip
-	const static ResourceIDPair s_resourceIDs[] = { { IDI_ICON1, IDS_ICONS_ICON1 }, 
-													{ IDI_ICON2, IDS_ICONS_ICON2 } };
+	const static UINT s_iconIDs[] = { IDI_ICON1,
+												IDI_ICON2 };
+
+	const static CString s_tooltipText[] = { _T("Icon 1"),
+											_T("Icon 2") };
 }
 
 SamplePlugin::SamplePlugin()
@@ -46,7 +42,7 @@ SamplePlugin::SamplePlugin()
 
 	for ( unsigned int i=0 ; i<IconIndex_Count ; ++i )
 	{
-		m_icons[i] = ::LoadIcon( AfxGetStaticModuleState()->m_hCurrentResourceHandle, MAKEINTRESOURCE( s_resourceIDs[i].uiIconID ) );
+		m_icons[i] = ::LoadIcon( AfxGetStaticModuleState()->m_hCurrentResourceHandle, MAKEINTRESOURCE( s_iconIDs[i] ) );
 	}
 }
 
@@ -61,7 +57,7 @@ void SamplePlugin::GetPluginInfo( PluginInfo& out_rPluginInfo )
 
 	// Plug-in name and version
 	CString csName;
-	csName.LoadString( IDS_PLUGIN_NAME );
+	csName = _T("Sample Plugin");
 
 	out_rPluginInfo.m_bstrName = csName.AllocSysString();
 	out_rPluginInfo.m_uiVersion = 1;
@@ -191,8 +187,8 @@ ISourceControl::OperationResult SamplePlugin::GetFileStatus( const StringList& i
 	SourceControlContainers::AkPos filePos = in_rFilenameList.GetHeadPosition();
 
 	CString csStatus, csOwner;
-	csStatus.LoadString( IDS_FILESTATUS_STATUS_DEFAULT );
-	csOwner.LoadString( IDS_FILESTATUS_OWNER_DEFAULT );
+	csStatus = _T("normal status");
+	csOwner = _T("no owner");
 
 	while ( filePos )
 	{
@@ -225,7 +221,7 @@ ISourceControl::OperationResult SamplePlugin::GetFileStatusIcons( const StringLi
 	while( filePos )
 	{
 		CString csToolTipText;
-		csToolTipText.LoadString( s_resourceIDs[uiIndex].uiToolTipID );
+		csToolTipText = s_tooltipText[uiIndex];
 		FilenameToIconMapItem iconItem = { m_icons[uiIndex], csToolTipText.AllocSysString() };
 
 		out_rFileIconsMap.SetAt( in_rFilenameList.GetAt( filePos ), iconItem );
@@ -292,7 +288,7 @@ void SamplePlugin::DoOperation1( const StringList& in_rFilenameList )
 
 	// Print a message
 	CString csMessage;
-	csMessage.LoadString( IDS_OPERATION1_MESSAGE );
+	csMessage = _T("Operation 1 done.");
 
 	pProgressDialog->AddLogMessage( csMessage );
 
@@ -313,7 +309,7 @@ void SamplePlugin::DoOperation2( const StringList& in_rFilenameList )
 
 	// Print a message
 	CString csMessage;
-	csMessage.LoadString( IDS_OPERATION2_MESSAGE );
+	csMessage = _T("Operation 2 done.");
 
 	pProgressDialog->AddLogMessage( csMessage );
 

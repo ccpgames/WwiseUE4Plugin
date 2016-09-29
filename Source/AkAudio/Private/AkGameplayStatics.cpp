@@ -123,11 +123,11 @@ void UAkGameplayStatics::PostEventAtLocation( class UAkAudioEvent* in_pAkEvent, 
 	{
 		if (in_pAkEvent != NULL)
 		{
-			AkAudioDevice->PostEventAtLocation(in_pAkEvent, Location, Orientation.Vector(), GEngine->GetWorldFromContextObject(WorldContextObject));
+			AkAudioDevice->PostEventAtLocation(in_pAkEvent, Location, Orientation, GEngine->GetWorldFromContextObject(WorldContextObject));
 		}
 		else
 		{
-			AkAudioDevice->PostEventAtLocation(EventName, Location, Orientation.Vector(), GEngine->GetWorldFromContextObject(WorldContextObject));
+			AkAudioDevice->PostEventAtLocation(EventName, Location, Orientation, GEngine->GetWorldFromContextObject(WorldContextObject));
 		}
 	}
 }
@@ -138,7 +138,7 @@ void UAkGameplayStatics::PostEventAtLocationByName( const FString& EventName, FV
 	UWorld* CurrentWorld = GEngine->GetWorldFromContextObject(WorldContextObject);
 	if( CurrentWorld->AllowAudioPlayback() && AkAudioDevice )
 	{
-		AkAudioDevice->PostEventAtLocation(EventName, Location, Orientation.Vector(), GEngine->GetWorldFromContextObject(WorldContextObject) );
+		AkAudioDevice->PostEventAtLocation(EventName, Location, Orientation, GEngine->GetWorldFromContextObject(WorldContextObject) );
 	}
 }
 
@@ -217,6 +217,25 @@ void UAkGameplayStatics::UseReverbVolumes(bool inUseReverbVolumes, class AActor*
 		if( ComponentToSet != NULL )
 		{
 			ComponentToSet->UseReverbVolumes(inUseReverbVolumes);
+		}
+	}
+}
+
+void UAkGameplayStatics::SetOutputBusVolume(float BusVolume, class AActor* Actor)
+{
+	if (Actor == NULL)
+	{
+		UE_LOG(LogScript, Warning, TEXT("UAkGameplayStatics::SetOutputBusVolume: NULL Actor specified!"));
+		return;
+	}
+
+	FAkAudioDevice * AudioDevice = FAkAudioDevice::Get();
+	if (AudioDevice)
+	{
+		UAkComponent * ComponentToSet = AudioDevice->GetAkComponent(Actor->GetRootComponent(), FName(), NULL, EAttachLocation::KeepRelativeOffset);
+		if (ComponentToSet != NULL)
+		{
+			ComponentToSet->SetOutputBusVolume(BusVolume);
 		}
 	}
 }
@@ -315,20 +334,6 @@ void UAkGameplayStatics::ClearBanks()
 	}
 }
 
-bool UAkGameplayStatics::IsBankLoaded(class UAkAudioBank* Bank)
-{
-    FAkAudioDevice * AudioDevice = FAkAudioDevice::Get();
-    if (AudioDevice)
-    {
-        FAkBankManager* BankManager = AudioDevice->GetAkBankManager();
-        if (BankManager)
-        {
-            return BankManager->IsBankLoaded(Bank);
-        }
-    }
-    return false;
-}
-
 void UAkGameplayStatics::LoadBank(UAkAudioBank * bank, const FString& BankName)
 {
 	if ( bank )
@@ -340,16 +345,6 @@ void UAkGameplayStatics::LoadBank(UAkAudioBank * bank, const FString& BankName)
 		LoadBankByName(BankName);
 	}
 }
-
-
-void UAkGameplayStatics::LoadBankAsync(UAkAudioBank * bank)
-{
-    if (bank)
-    {
-        bank->LoadAsync(nullptr, nullptr);
-    }
-}
-
 
 void UAkGameplayStatics::LoadBankByName(const FString& BankName)
 {

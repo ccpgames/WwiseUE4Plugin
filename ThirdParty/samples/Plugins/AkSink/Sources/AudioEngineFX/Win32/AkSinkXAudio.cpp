@@ -7,13 +7,23 @@
 //////////////////////////////////////////////////////////////////////
 
 #include "AkSinkXAudio.h"
+#include "SinkPluginParams.h"
 #include <AK/SoundEngine/Common/AkSimd.h>
+#include <AK/AkWwiseSDKVersion.h>
 
 AK::IAkPlugin* CreateSink( AK::IAkPluginMemAlloc * in_pAllocator )
 {
 	AKASSERT( in_pAllocator != NULL );
 	return AK_PLUGIN_NEW( in_pAllocator, AkSinkXAudio() );
 }
+
+AK::IAkPluginParam* CreateSinkParams(AK::IAkPluginMemAlloc * in_pAllocator)
+{
+	AKASSERT(in_pAllocator != NULL);
+	return AK_PLUGIN_NEW( in_pAllocator, SinkPluginParams() );
+}
+
+AK::PluginRegistration AkSinkRegistration(AkPluginTypeSink, AKCOMPANYID_AUDIOKINETIC, 152, CreateSink, CreateSinkParams);
 
 #if defined AK_CPU_X86 || defined AK_CPU_X86_64
 static const AKSIMD_V4F32 vkMin = { (AkReal32) INT_MIN, (AkReal32) INT_MIN, (AkReal32) INT_MIN, (AkReal32) INT_MIN };
@@ -27,7 +37,7 @@ static const DirectX::XMVECTORF32 vkMax = { (AkReal32) INT_MAX, (AkReal32) INT_M
 
 AkSinkXAudio::AkSinkXAudio()
 	: m_pSinkPluginContext( NULL )
-	, m_speakerConfig( 0 )
+	, m_pParams( NULL )
 	, m_pXAudio2( NULL )
 	, m_pMasteringVoice( NULL )
 	, m_pSourceVoice( NULL )
@@ -51,9 +61,11 @@ AkSinkXAudio::~AkSinkXAudio()
 AKRESULT AkSinkXAudio::Init( 
 	AK::IAkPluginMemAlloc *	in_pAllocator,				// Interface to memory allocator to be used by the effect.
 	AK::IAkSinkPluginContext *	in_pSinkPluginContext,	// Interface to sink plug-in's context.
+	AK::IAkPluginParam *		in_pParams,				// Interface to plug-in parameters.
 	AkAudioFormat &			io_rFormat					// Audio data format of the input signal. 
 	)
 {
+	m_pParams = (SinkPluginParams*)in_pParams;
 	m_pSinkPluginContext = in_pSinkPluginContext;
 
 	// Create XAudio2 engine with default options
@@ -104,7 +116,7 @@ AKRESULT AkSinkXAudio::Init(
 	
 	m_usBlockAlign = (AkUInt16) ( m_speakerConfig.uNumChannels * sizeof(AkReal32) );
 
-	AkUInt32 uBufferBytes = in_pSinkPluginContext->GetMaxBufferLength() * m_usBlockAlign;
+	AkUInt32 uBufferBytes = in_pSinkPluginContext->GlobalContext()->GetMaxBufferLength() * m_usBlockAlign;
 
 	// Allocate ring buffer 
 	m_pvAudioBuffer = AK_PLUGIN_ALLOC( in_pAllocator, NUM_VOICE_BUFFERS * uBufferBytes );
@@ -203,6 +215,7 @@ AKRESULT AkSinkXAudio::GetPluginInfo(
 	out_rPluginInfo.eType			= AkPluginTypeSink;
 	out_rPluginInfo.bIsInPlace		= false;
 	out_rPluginInfo.bIsAsynchronous	= false;
+	out_rPluginInfo.uBuildVersion = AK_WWISESDK_VERSION_COMBINED;
 	return AK_Success;
 }
 
@@ -213,6 +226,13 @@ void AkSinkXAudio::Consume(
 {
 	if ( in_pInputBuffer->uValidFrames > 0 )
 	{
+		if (m_pParams)
+		{
+			// Simply demonstrating a usage for the sample plug-in property value.
+			// This additional gain is not accurate but is there to add au auditive cue so we know this parameter gets updated live.
+			in_gain.fPrev *= m_pParams->GetCurrentParams().fDirectGain;
+			in_gain.fNext *= m_pParams->GetCurrentParams().fDirectGain;
+		}
 		// Do final pass on data (interleave, format conversion, and the like) before presenting to sink.
 		
 		AkUInt32 uNumFrames = in_pInputBuffer->uValidFrames;
@@ -248,7 +268,7 @@ void AkSinkXAudio::Consume(
 				if ( bExistsInInput )
 				{
 					// Copy, apply gain and interleave.
-					AkReal32 * pIn = in_pInputBuffer->GetChannel( AkAudioBuffer::StandardToPipelineIndex( in_pInputBuffer->GetChannelConfig().uChannelMask, uChanIn ) );
+					AkReal32 * pIn = in_pInputBuffer->GetChannel( AkAudioBuffer::StandardToPipelineIndex( in_pInputBuffer->GetChannelConfig(), uChanIn ) );
 					AkReal32 * pEnd = pIn + uNumFrames;
 					while ( pIn < pEnd )
 					{
@@ -310,7 +330,7 @@ void AkSinkXAudio::OnFrameEnd()
 	{
 		// Frame has occurred with ConsumeBuffer() being called with data. Pass silence.
 		void* pvBuffer = m_ppvRingBuffer[m_uWriteBufferIndex];
-		AkUInt32 uNumBytes = m_pSinkPluginContext->GetMaxBufferLength() * m_speakerConfig.uNumChannels * sizeof( AkReal32 );
+		AkUInt32 uNumBytes = m_pSinkPluginContext->GlobalContext()->GetMaxBufferLength() * m_speakerConfig.uNumChannels * sizeof(AkReal32);
 		memset( pvBuffer, 0, uNumBytes );
 
 		++m_uWriteBufferIndex;
@@ -330,7 +350,7 @@ void AkSinkXAudio::SubmitPacketRB( )
 {
 	// Build and submit the packet
 	XAUDIO2_BUFFER XAudio2Buffer = { 0 };
-	XAudio2Buffer.AudioBytes = m_pSinkPluginContext->GetMaxBufferLength() * m_usBlockAlign;
+	XAudio2Buffer.AudioBytes = m_pSinkPluginContext->GlobalContext()->GetMaxBufferLength() * m_usBlockAlign;
 	XAudio2Buffer.pAudioData = (BYTE*)( m_ppvRingBuffer[m_uReadBufferIndex] );
 	++m_uReadBufferIndex;
 
@@ -347,7 +367,11 @@ void AkSinkXAudio::SubmitPacketRB( )
 
 AKRESULT AkSinkXAudio::IsDataNeeded( AkUInt32 & out_uBuffersNeeded )
 {
-	out_uBuffersNeeded = NUM_VOICE_BUFFERS - m_uNbBuffersRB;
+	if (m_uNbBuffersRB < NUM_VOICE_BUFFERS)
+		out_uBuffersNeeded = NUM_VOICE_BUFFERS - m_uNbBuffersRB;
+	else
+		out_uBuffersNeeded = 0;
+
 	return m_bCriticalError ? AK_Fail : AK_Success;
 }
 

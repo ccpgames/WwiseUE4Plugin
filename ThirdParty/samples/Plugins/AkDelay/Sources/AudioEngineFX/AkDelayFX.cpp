@@ -10,12 +10,21 @@
 
 #include "AkDelayFX.h"
 #include <AK/Tools/Common/AkAssert.h>
+#include <AK/AkWwiseSDKVersion.h>
 
-/// Plugin mechanism. Instanciation method that must be registered to the plug-in manager.
-AK::IAkPlugin* CreateDelayFX( AK::IAkPluginMemAlloc * in_pAllocator )
+/// Plugin mechanism. Instantiation method that must be registered to the plug-in manager.
+AK::IAkPlugin* CreateAkDelayFX( AK::IAkPluginMemAlloc * in_pAllocator )
 {
 	return AK_PLUGIN_NEW( in_pAllocator, CAkDelayFX( ) );
 }
+
+/// Plugin mechanism. Instantiation method that must be registered to the plug-in manager.
+AK::IAkPluginParam * CreateAkDelayFXParams(AK::IAkPluginMemAlloc * in_pAllocator)
+{
+	return AK_PLUGIN_NEW(in_pAllocator, CAkDelayFXParams());
+}
+
+AK_IMPLEMENT_PLUGIN_FACTORY(AkDelayFX, AkPluginTypeEffect, 0, 106)
 
 /// Constructor.
 CAkDelayFX::CAkDelayFX()
@@ -75,6 +84,7 @@ AKRESULT CAkDelayFX::GetPluginInfo( AkPluginInfo & out_rPluginInfo )
 #else
 	out_rPluginInfo.bIsAsynchronous = false;
 #endif
+	out_rPluginInfo.uBuildVersion = AK_WWISESDK_VERSION_COMBINED;
 	return AK_Success;
 }
 

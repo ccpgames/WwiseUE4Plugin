@@ -224,95 +224,95 @@ IDI_PERFORCE_STATUS_OUTDATED_BOTH_CHECKOUT ICON                    "PerforceStat
 // String Table
 //
 
-STRINGTABLE 
-BEGIN
-    IDS_PERFORCE_ICONS_TOOLTIP_NOT_CHECKED_OUT "Not checked out"
-    IDS_PERFORCE_ICONS_TOOLTIP_CHECKED_OUT "Checked out"
-    IDS_PERFORCE_ICONS_TOOLTIP_ADDED "Added"
-    IDS_PERFORCE_OPERATION_UPDATEALL "Get Latest"
-    IDS_PERFORCE_ICONS_TOOLTIP_OTHER_CHECKOUT "Checked out by someone else"
-    IDS_PERFORCE_OPERATION_GETLATESTVERSION "Get Latest Version"
-    IDS_PERFORCE_OPERATION_SUBMIT "Submit Changes"
-    IDS_PERFORCE_OPERATION_CHECKOUT "Check Out"
-    IDS_PERFORCE_OPERATION_ADD "Mark for Add"
-    IDS_PERFORCE_OPERATION_DELETE "Mark for Delete"
-    IDS_PERFORCE_OPERATION_RENAME "Rename"
-    IDS_PERFORCE_OPERATION_REVERT "Revert Changes"
-    IDS_PERFORCE_ICONS_TOOLTIP_BOTH_CHECKOUT 
-                            "Checked out by you and someone else"
-END
+//STRINGTABLE 
+//BEGIN
+    //IDS_PERFORCE_ICONS_TOOLTIP_NOT_CHECKED_OUT //"Not checked out"
+    //IDS_PERFORCE_ICONS_TOOLTIP_CHECKED_OUT //"Checked out"
+    //IDS_PERFORCE_ICONS_TOOLTIP_ADDED //"Added"
+    //IDS_PERFORCE_OPERATION_UPDATEALL //"Get Latest"
+    //IDS_PERFORCE_ICONS_TOOLTIP_OTHER_CHECKOUT //"Checked out by someone else"
+    //IDS_PERFORCE_OPERATION_GETLATESTVERSION //"Get Latest Version"
+    //IDS_PERFORCE_OPERATION_SUBMIT //"Submit Changes"
+    //IDS_PERFORCE_OPERATION_CHECKOUT //"Check Out"
+    //IDS_PERFORCE_OPERATION_ADD //"Mark for Add"
+    //IDS_PERFORCE_OPERATION_DELETE //"Mark for Delete"
+    //IDS_PERFORCE_OPERATION_RENAME //"Rename"
+    //IDS_PERFORCE_OPERATION_REVERT //"Revert Changes"
+    //IDS_PERFORCE_ICONS_TOOLTIP_BOTH_CHECKOUT 
+                            //"Checked out by you and someone else"//
+//END
 
-STRINGTABLE 
-BEGIN
-    IDS_PERFORCE_ICONS_TOOLTIP_OUTDATED_NOT_CHECKED_OUT 
-                            "Outdated, Not checked out"
-    IDS_PERFORCE_ICONS_TOOLTIP_OUTDATED_CHECKED_OUT "Outdated, Checked out"
-    IDS_PERFORCE_ICONS_TOOLTIP_OUTDATED_BOTH_CHECKOUT 
-                            "Outdated, Checked out by you and someone else"
-    IDS_PERFORCE_ICONS_TOOLTIP_OUTDATED_OTHER_CHECKOUT 
-                            "Outdated, Checked out by someone else"
-END
+//STRINGTABLE 
+//BEGIN
+    //IDS_PERFORCE_ICONS_TOOLTIP_OUTDATED_NOT_CHECKED_OUT 
+                            //"Outdated, Not checked out"
+    //IDS_PERFORCE_ICONS_TOOLTIP_OUTDATED_CHECKED_OUT //"Outdated, Checked out"
+    //IDS_PERFORCE_ICONS_TOOLTIP_OUTDATED_BOTH_CHECKOUT 
+                            //"Outdated, Checked out by you and someone else"
+    //IDS_PERFORCE_ICONS_TOOLTIP_OUTDATED_OTHER_CHECKOUT 
+                            //"Outdated, Checked out by someone else"//
+//END
 
-STRINGTABLE 
-BEGIN
-    IDS_PERFORCE_NAME       "Perforce"
-    IDS_PERFORCE_LOGIN_CAPTION "Perforce Login"
-    IDS_PERFORCE_OPERATION_MOVE "Move"
-    IDS_PERFORCE_CANT_DELETE_OPENED 
-                            "File '%1' is opened.  Can not delete a file that is currently opened."
-    IDS_PERFORCE_MOVE_ERROR "Error moving local file %s (%s)"
-    IDS_PERFORCE_MOVE_SUCCESS "Successfully moved local file %s to %s"
-    IDS_PERFORCE_STATUS_MODIFIED "modified"
-    IDS_PERFORCE_STATUS_LOCAL_ONLY "local only"
-    IDS_PERFORCE_STATUS_ONSERVER "normal"
-    IDS_PERFORCE_DELETE_ERROR "Error deleting local file %s (%s)"
-    IDS_PERFORCE_STATUS_ALREADY_ON_SERVER "already on server"
-    IDS_PERFORCE_DELETE_SUCCESS "Successfully deleted local file %s"
-    IDS_PERFORCE_RENAME_ERROR "Error renaming local file %s"
-    IDS_PERFORCE_RENAME_SUCCESS "Successfully renamed local file %s to %s"
-    IDS_PERFORCE_RENAME_FILE_EXIST 
-                            "Can't rename %s to %s, file already exists"
-    IDS_PERFORCE_STATUS_OUTDATED "outdated"
-END
+//STRINGTABLE 
+//BEGIN
+    //IDS_PERFORCE_NAME       //"Perforce"
+    //IDS_PERFORCE_LOGIN_CAPTION //"Perforce Login"
+    //IDS_PERFORCE_OPERATION_MOVE //"Move"
+    //IDS_PERFORCE_CANT_DELETE_OPENED 
+                            //"File '%1' is opened.  Can not delete a file that is currently opened."
+    //IDS_PERFORCE_MOVE_ERROR //"Error moving local file %s (%s)"
+    //IDS_PERFORCE_MOVE_SUCCESS //"Successfully moved local file %s to %s"
+    //IDS_PERFORCE_STATUS_MODIFIED //"modified"
+    //IDS_PERFORCE_STATUS_LOCAL_ONLY //"local only"
+    //IDS_PERFORCE_STATUS_ONSERVER //"normal"
+    //IDS_PERFORCE_DELETE_ERROR //"Error deleting local file %s (%s)"
+    //IDS_PERFORCE_STATUS_ALREADY_ON_SERVER //"already on server"
+    //IDS_PERFORCE_DELETE_SUCCESS //"Successfully deleted local file %s"
+    //IDS_PERFORCE_RENAME_ERROR //"Error renaming local file %s"
+    //IDS_PERFORCE_RENAME_SUCCESS //"Successfully renamed local file %s to %s"
+    //IDS_PERFORCE_RENAME_FILE_EXIST 
+                            //"Can't rename %s to %s, file already exists"
+    //IDS_PERFORCE_STATUS_OUTDATED //"outdated"//
+//END
 
-STRINGTABLE 
-BEGIN
-    IDS_PERFORCE_STATUS_UNRESOLVED "unresolved"
-    IDS_PERFORCE_STATUS_LOCK "lock"
-    IDS_PERFORCE_OPERATION_HISTORY "File History"
-    IDS_PERFORCE_STATUS_MISSING "missing"
-    IDS_PERFORCE_REVERT_CONFIRMATION_QUESTION 
-                            "Are you sure you want to revert the selected item(s)? You will lose all changes since the last update."
-    IDS_PERFORCE_ERROR_MESSAGE "Perforce command failed:\n""%s"""
-    IDS_PERFORCE_OPERATION_LOCK "Lock"
-    IDS_PERFORCE_OPERATION_UNLOCK "Unlock"
-    IDS_PERFORCE_OPERATION_DIFF "Diff"
-    IDS_PERFORCE_OPERATION_RESOLVE "Resolve"
-    IDS_PERFORCE_DIFF_FILES_IDENTICAL_MESSAGE "Files are identical"
-    IDS_PERFORCE_RESOLVE_ACCEPT_CAPTION "Perforce plug-in"
-    IDS_PERFORCE_DESCRIPTION_MESSAGE "The description is invalid"
-END
+//STRINGTABLE 
+//BEGIN
+    //IDS_PERFORCE_STATUS_UNRESOLVED //"unresolved"
+    //IDS_PERFORCE_STATUS_LOCK //"lock"
+    //IDS_PERFORCE_OPERATION_HISTORY //"File History"
+    //IDS_PERFORCE_STATUS_MISSING //"missing"
+    //IDS_PERFORCE_REVERT_CONFIRMATION_QUESTION 
+                            //"Are you sure you want to revert the selected item(s)? You will lose all changes since the last update."
+    //IDS_PERFORCE_ERROR_MESSAGE //"Perforce command failed:\n""%s"""
+    //IDS_PERFORCE_OPERATION_LOCK //"Lock"
+    //IDS_PERFORCE_OPERATION_UNLOCK //"Unlock"
+    //IDS_PERFORCE_OPERATION_DIFF //"Diff"
+    //IDS_PERFORCE_OPERATION_RESOLVE //"Resolve"
+    //IDS_PERFORCE_DIFF_FILES_IDENTICAL_MESSAGE //"Files are identical"
+    //IDS_PERFORCE_RESOLVE_ACCEPT_CAPTION //"Perforce plug-in"
+    //IDS_PERFORCE_DESCRIPTION_MESSAGE //"The description is invalid"//
+//END
 
-STRINGTABLE 
-BEGIN
-    IDS_PERFORCE_RENAME_MESSAGE "The file name is invalid"
-    IDS_PERFORCE_RENAME_CAPTION "Rename"
-    IDS_PERFORCE_RESOLVE_ACCEPT_MESSAGE 
-                            "Replace the current file with the merged result file?"
-    IDS_PERFORCE_RESOLVE_ERROR_MERGE_CAPTION "Perforce plug-in"
-    IDS_PERFORCE_RESOLVE_ERROR_MERGE_MESSAGE 
-                            "An error occurred launching merge tool"
-    IDS_PERFORCE_MESSAGEBOX_CAPTION "Perforce plug-in"
-    IDS_PERFORCE_CONFIG_MESSAGE "One or more required fields are empty"
-    IDS_PERFORCE_DIFF_ERROR_MESSAGE "An error occurred launching diff tool"
-    IDS_DELETE_CONFIRMATION "Are you sure you want to delete the selected file(s)?"
-    IDS_DELETE_CONFIRMATION_CAPTION "Delete confirmation"
-    IDS_MOVE_FAILED_FILE_ALREADY_EXIST 
-                            "Error: The following file already exist in the destination directory: %1"
-    IDS_MOVE_FAILED_NAME_CONFLICT 
-                            "Error: Multiple files with the same name can't be moved at the same destination (%1)."
-    IDS_SELECT_MOVE_FOLDER  "Choose the destination folder for the Move operation."
-END
+//STRINGTABLE 
+//BEGIN
+    //IDS_PERFORCE_RENAME_MESSAGE //"The file name is invalid"
+    //IDS_PERFORCE_RENAME_CAPTION //"Rename"
+    //IDS_PERFORCE_RESOLVE_ACCEPT_MESSAGE 
+                            //"Replace the current file with the merged result file?"
+    //IDS_PERFORCE_RESOLVE_ERROR_MERGE_CAPTION //"Perforce plug-in"
+    //IDS_PERFORCE_RESOLVE_ERROR_MERGE_MESSAGE 
+                            //"An error occurred launching merge tool"
+    //IDS_PERFORCE_MESSAGEBOX_CAPTION //"Perforce plug-in"
+    //IDS_PERFORCE_CONFIG_MESSAGE //"One or more required fields are empty"
+    //IDS_PERFORCE_DIFF_ERROR_MESSAGE //"An error occurred launching diff tool"
+    //IDS_DELETE_CONFIRMATION //"Are you sure you want to delete the selected file(s)?"
+    //IDS_DELETE_CONFIRMATION_CAPTION //"Delete confirmation"
+    //IDS_MOVE_FAILED_FILE_ALREADY_EXIST 
+                            //"Error: The following file already exist in the destination directory: %1"
+    //IDS_MOVE_FAILED_NAME_CONFLICT 
+                            //"Error: Multiple files with the same name can't be moved at the same destination (%1)."
+    //IDS_SELECT_MOVE_FOLDER  //"Choose the destination folder for the Move operation."//
+//END
 
 #endif    // English (U.S.) resources
 /////////////////////////////////////////////////////////////////////////////

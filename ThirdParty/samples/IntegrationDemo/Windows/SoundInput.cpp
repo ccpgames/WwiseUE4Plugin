@@ -6,7 +6,6 @@
 
 #include "stdafx.h"
 
-#include <AK/Plugin/AkAudioInputSourceFactory.h>
 #include <math.h>
 
 #include "SoundInput.h"
@@ -183,7 +182,7 @@ bool SoundInput::InputOff()
 	// Free the recording buffers
 	if( m_WaveHeader[0].lpData )
 	{
- 		VirtualFree (m_WaveHeader[0].lpData, (m_WaveHeader[0].dwBufferLength << 1), MEM_RELEASE); 
+ 		VirtualFree (m_WaveHeader[0].lpData, 0, MEM_RELEASE); 
 		m_WaveHeader[0].lpData = NULL;
 	}
 
@@ -371,7 +370,7 @@ void SoundInput::GetFormatCallback(
 {
     io_AudioFormat.SetAll(
             48000,// Sample rate
-            AK_SPEAKER_SETUP_MONO,
+            AkChannelConfig(1, AK_SPEAKER_SETUP_MONO),
             16,						// Bits per samples
             2,						// 2 bytes per samples
             AK_INT,					// feeding integers(signed)

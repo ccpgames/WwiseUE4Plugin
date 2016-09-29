@@ -2,22 +2,22 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="include">
-      <UniqueIdentifier>{01A63F21-1031-1A4F-94B2-18368112E7C1}</UniqueIdentifier>
+      <UniqueIdentifier>{9393BBC8-3B68-DA49-830C-0491F06F5345}</UniqueIdentifier>
     </Filter>
     <Filter Include="include\AK">
-      <UniqueIdentifier>{FD82301E-E857-DE45-8773-46241CA2D76D}</UniqueIdentifier>
+      <UniqueIdentifier>{F74CE112-F036-8B49-971F-FA1F4D6610CE}</UniqueIdentifier>
     </Filter>
     <Filter Include="include\AK\Plugin">
-      <UniqueIdentifier>{FED9A89A-44A9-8948-BE6C-3044E6FD5D85}</UniqueIdentifier>
+      <UniqueIdentifier>{9AE6D84A-9B38-8342-B746-6B82DEB2188E}</UniqueIdentifier>
     </Filter>
     <Filter Include="include\AK\DSP">
-      <UniqueIdentifier>{30B98880-72FF-0E42-97A6-85E4431ADCE7}</UniqueIdentifier>
+      <UniqueIdentifier>{3B4DF233-722E-9844-843E-0E04AD7501D2}</UniqueIdentifier>
     </Filter>
     <Filter Include="include\AK\Plugin\PluginServices">
-      <UniqueIdentifier>{85B6E1C1-CB0E-4B4B-A654-0EBCBA77A2CF}</UniqueIdentifier>
+      <UniqueIdentifier>{343CA647-162F-DF45-84AE-2C47414FBFD3}</UniqueIdentifier>
     </Filter>
     <Filter Include="DSP">
-      <UniqueIdentifier>{C7F784FD-F54A-294F-9E23-0A524B2D398A}</UniqueIdentifier>
+      <UniqueIdentifier>{3C9D9EC1-39FB-694F-AD7C-34164159EAB6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

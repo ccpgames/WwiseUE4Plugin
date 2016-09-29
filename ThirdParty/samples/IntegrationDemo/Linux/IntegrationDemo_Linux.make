@@ -26,12 +26,12 @@ ifeq ($(config),debug)
   TARGETDIR  = ../../../Linux_$(AK_LINUX_ARCH)/Debug/bin
   TARGET     = $(TARGETDIR)/IntegrationDemo
   DEFINES   += -D_DEBUG
-  INCLUDES  += -I../../../include -I../../SoundEngine/Common -I../../SoundEngine/POSIX -I. -I../Common -I../MenuSystem -I../DemoPages
+  INCLUDES  += -I../../../include -I../../SoundEngine/Common -I../../SoundEngine/POSIX -I. -I../Common -I../MenuSystem -I../DemoPages -I../FreetypeRenderer
   CPPFLAGS  += -MMD -MP $(DEFINES) $(INCLUDES)
   CFLAGS    += $(CPPFLAGS) $(ARCH) -g -fPIC -fvisibility=hidden
   CXXFLAGS  += $(CFLAGS) -Wno-invalid-offsetof -fno-rtti -fno-exceptions
   LDFLAGS   += -L../../../Linux_$(AK_LINUX_ARCH)/Debug/lib
-  LIBS      += -lAkSoundSeedWind -lAkSoundSeedImpactFX -lAkMeterFX -lAkMatrixReverbFX -lAkSoundEngine -lAkSineSource -lAkSilenceSource -lMcDSPFutzBoxFX -lAkPeakLimiterFX -lAkRoomVerbFX -lAkSoundSeedWoosh -lAkParametricEQFX -lAkVorbisDecoder -lAkHarmonizerFX -lAkToneSource -lAkSynthOne -lAkGainFX -lAkConvolutionReverbFX -lAkCompressorFX -lAkPitchShifterFX -lAkExpanderFX -lAkGuitarDistortionFX -lAkMusicEngine -lAkTimeStretchFX -lMcDSPLimiterFX -lAkStreamMgr -lAkDelayFX -lAkFlangerFX -lAkAudioInputSource -lAkStereoDelayFX -lAkMemoryMgr -lAkTremoloFX -lSDL2 -lncurses -lpthread -lCommunicationCentral
+  LIBS      += -lAkMeterFX -lAkSoundEngine -lAkPeakLimiterFX -liZTrashBoxModelerFX -lAkSynthOne -liZTrashDistortionFX -lAkGainFX -lAkStereoDelayFX -lAkMusicEngine -lAkTimeStretchFX -lMcDSPLimiterFX -lAkConvolutionReverbFX -lAkCompressorFX -lAkFlangerFX -lAkPitchShifterFX -liZTrashDelayFX -liZTrashFiltersFX -lAkSoundSeedImpactFX -lMcDSPFutzBoxFX -lAkRoomVerbFX -lAkSineSource -lAkSilenceSource -lAkParametricEQFX -lAkVorbisDecoder -lAkToneSource -liZTrashDynamicsFX -liZHybridReverbFX -liZTrashMultibandDistortionFX -lAkExpanderFX -lAkGuitarDistortionFX -lAkSoundSeedWoosh -lAkMatrixReverbFX -lAkSoundSeedWind -lAkStreamMgr -lAkTremoloFX -lAkRecorderFX -lAkAudioInputSource -lAkHarmonizerFX -lAkMemoryMgr -lAkDelayFX -lSDL2 -ldl -lpthread -lCommunicationCentral
   RESFLAGS  += $(DEFINES) $(INCLUDES) 
   LDDEPS    += 
   LINKCMD    = $(CXX) -o $(TARGET) $(OBJECTS) $(LDFLAGS) $(RESOURCES) $(ARCH) -Wl,--start-group $(LIBS) -Wl,--end-group
@@ -50,36 +50,12 @@ ifeq ($(config),profile)
   TARGETDIR  = ../../../Linux_$(AK_LINUX_ARCH)/Profile/bin
   TARGET     = $(TARGETDIR)/IntegrationDemo
   DEFINES   += -DNDEBUG
-  INCLUDES  += -I../../../include -I../../SoundEngine/Common -I../../SoundEngine/POSIX -I. -I../Common -I../MenuSystem -I../DemoPages
+  INCLUDES  += -I../../../include -I../../SoundEngine/Common -I../../SoundEngine/POSIX -I. -I../Common -I../MenuSystem -I../DemoPages -I../FreetypeRenderer
   CPPFLAGS  += -MMD -MP $(DEFINES) $(INCLUDES)
   CFLAGS    += $(CPPFLAGS) $(ARCH) -g -O3 -fPIC -fvisibility=hidden
   CXXFLAGS  += $(CFLAGS) -Wno-invalid-offsetof -fno-rtti -fno-exceptions
   LDFLAGS   += -L../../../Linux_$(AK_LINUX_ARCH)/Profile/lib
-  LIBS      += -lAkSoundSeedWind -lAkSoundSeedImpactFX -lAkMeterFX -lAkMatrixReverbFX -lAkSoundEngine -lAkSineSource -lAkSilenceSource -lMcDSPFutzBoxFX -lAkPeakLimiterFX -lAkRoomVerbFX -lAkSoundSeedWoosh -lAkParametricEQFX -lAkVorbisDecoder -lAkHarmonizerFX -lAkToneSource -lAkSynthOne -lAkGainFX -lAkConvolutionReverbFX -lAkCompressorFX -lAkPitchShifterFX -lAkExpanderFX -lAkGuitarDistortionFX -lAkMusicEngine -lAkTimeStretchFX -lMcDSPLimiterFX -lAkStreamMgr -lAkDelayFX -lAkFlangerFX -lAkAudioInputSource -lAkStereoDelayFX -lAkMemoryMgr -lAkTremoloFX -lSDL2 -lncurses -lpthread -lCommunicationCentral
-  RESFLAGS  += $(DEFINES) $(INCLUDES) 
-  LDDEPS    += 
-  LINKCMD    = $(CXX) -o $(TARGET) $(OBJECTS) $(LDFLAGS) $(RESOURCES) $(ARCH) -Wl,--start-group $(LIBS) -Wl,--end-group
-  define PREBUILDCMDS
-  endef
-  define PRELINKCMDS
-  endef
-  define POSTBUILDCMDS
-  endef
-endif
-
-ifeq ($(config),profile_enableasserts)
-  PREMAKE4_PLATFORM_NAME = Native
-  PREMAKE4_BUILDTARGET_BASENAME = IntegrationDemo
-  OBJDIR     = ../../../Linux_$(AK_LINUX_ARCH)/Profile_EnableAsserts/obj/$(PREMAKE4_BUILDTARGET_BASENAME)
-  TARGETDIR  = ../../../Linux_$(AK_LINUX_ARCH)/Profile_EnableAsserts/bin
-  TARGET     = $(TARGETDIR)/IntegrationDemo
-  DEFINES   += -DNDEBUG -DAK_ENABLE_ASSERTS
-  INCLUDES  += -I../../../include -I../../SoundEngine/Common -I../../SoundEngine/POSIX -I. -I../Common -I../MenuSystem -I../DemoPages
-  CPPFLAGS  += -MMD -MP $(DEFINES) $(INCLUDES)
-  CFLAGS    += $(CPPFLAGS) $(ARCH) -g -O3 -fPIC -fvisibility=hidden
-  CXXFLAGS  += $(CFLAGS) -Wno-invalid-offsetof -fno-rtti -fno-exceptions
-  LDFLAGS   += -L../../../Linux_$(AK_LINUX_ARCH)/Profile/lib
-  LIBS      += -lAkSoundSeedWind -lAkSoundSeedImpactFX -lAkMeterFX -lAkMatrixReverbFX -lAkSoundEngine -lAkSineSource -lAkSilenceSource -lMcDSPFutzBoxFX -lAkPeakLimiterFX -lAkRoomVerbFX -lAkSoundSeedWoosh -lAkParametricEQFX -lAkVorbisDecoder -lAkHarmonizerFX -lAkToneSource -lAkSynthOne -lAkGainFX -lAkConvolutionReverbFX -lAkCompressorFX -lAkPitchShifterFX -lAkExpanderFX -lAkGuitarDistortionFX -lAkMusicEngine -lAkTimeStretchFX -lMcDSPLimiterFX -lAkStreamMgr -lAkDelayFX -lAkFlangerFX -lAkAudioInputSource -lAkStereoDelayFX -lAkMemoryMgr -lAkTremoloFX -lSDL2 -lncurses -lpthread -lCommunicationCentral
+  LIBS      += -lAkMeterFX -lAkSoundEngine -lAkPeakLimiterFX -liZTrashBoxModelerFX -lAkSynthOne -liZTrashDistortionFX -lAkGainFX -lAkStereoDelayFX -lAkMusicEngine -lAkTimeStretchFX -lMcDSPLimiterFX -lAkConvolutionReverbFX -lAkCompressorFX -lAkFlangerFX -lAkPitchShifterFX -liZTrashDelayFX -liZTrashFiltersFX -lAkSoundSeedImpactFX -lMcDSPFutzBoxFX -lAkRoomVerbFX -lAkSineSource -lAkSilenceSource -lAkParametricEQFX -lAkVorbisDecoder -lAkToneSource -liZTrashDynamicsFX -liZHybridReverbFX -liZTrashMultibandDistortionFX -lAkExpanderFX -lAkGuitarDistortionFX -lAkSoundSeedWoosh -lAkMatrixReverbFX -lAkSoundSeedWind -lAkStreamMgr -lAkTremoloFX -lAkRecorderFX -lAkAudioInputSource -lAkHarmonizerFX -lAkMemoryMgr -lAkDelayFX -lSDL2 -ldl -lpthread -lCommunicationCentral
   RESFLAGS  += $(DEFINES) $(INCLUDES) 
   LDDEPS    += 
   LINKCMD    = $(CXX) -o $(TARGET) $(OBJECTS) $(LDFLAGS) $(RESOURCES) $(ARCH) -Wl,--start-group $(LIBS) -Wl,--end-group
@@ -98,12 +74,12 @@ ifeq ($(config),release)
   TARGETDIR  = ../../../Linux_$(AK_LINUX_ARCH)/Release/bin
   TARGET     = $(TARGETDIR)/IntegrationDemo
   DEFINES   += -DNDEBUG -DAK_OPTIMIZED
-  INCLUDES  += -I../../../include -I../../SoundEngine/Common -I../../SoundEngine/POSIX -I. -I../Common -I../MenuSystem -I../DemoPages
+  INCLUDES  += -I../../../include -I../../SoundEngine/Common -I../../SoundEngine/POSIX -I. -I../Common -I../MenuSystem -I../DemoPages -I../FreetypeRenderer
   CPPFLAGS  += -MMD -MP $(DEFINES) $(INCLUDES)
   CFLAGS    += $(CPPFLAGS) $(ARCH) -g -O3 -fPIC -fvisibility=hidden
   CXXFLAGS  += $(CFLAGS) -Wno-invalid-offsetof -fno-rtti -fno-exceptions
   LDFLAGS   += -L../../../Linux_$(AK_LINUX_ARCH)/Release/lib
-  LIBS      += -lAkSoundSeedWind -lAkSoundSeedImpactFX -lAkMeterFX -lAkMatrixReverbFX -lAkSoundEngine -lAkSineSource -lAkSilenceSource -lMcDSPFutzBoxFX -lAkPeakLimiterFX -lAkRoomVerbFX -lAkSoundSeedWoosh -lAkParametricEQFX -lAkVorbisDecoder -lAkHarmonizerFX -lAkToneSource -lAkSynthOne -lAkGainFX -lAkConvolutionReverbFX -lAkCompressorFX -lAkPitchShifterFX -lAkExpanderFX -lAkGuitarDistortionFX -lAkMusicEngine -lAkTimeStretchFX -lMcDSPLimiterFX -lAkStreamMgr -lAkDelayFX -lAkFlangerFX -lAkAudioInputSource -lAkStereoDelayFX -lAkMemoryMgr -lAkTremoloFX -lSDL2 -lncurses -lpthread
+  LIBS      += -lAkMeterFX -lAkSoundEngine -lAkPeakLimiterFX -liZTrashBoxModelerFX -lAkSynthOne -liZTrashDistortionFX -lAkGainFX -lAkStereoDelayFX -lAkMusicEngine -lAkTimeStretchFX -lMcDSPLimiterFX -lAkConvolutionReverbFX -lAkCompressorFX -lAkFlangerFX -lAkPitchShifterFX -liZTrashDelayFX -liZTrashFiltersFX -lAkSoundSeedImpactFX -lMcDSPFutzBoxFX -lAkRoomVerbFX -lAkSineSource -lAkSilenceSource -lAkParametricEQFX -lAkVorbisDecoder -lAkToneSource -liZTrashDynamicsFX -liZHybridReverbFX -liZTrashMultibandDistortionFX -lAkExpanderFX -lAkGuitarDistortionFX -lAkSoundSeedWoosh -lAkMatrixReverbFX -lAkSoundSeedWind -lAkStreamMgr -lAkTremoloFX -lAkRecorderFX -lAkAudioInputSource -lAkHarmonizerFX -lAkMemoryMgr -lAkDelayFX -lSDL2 -ldl -lpthread
   RESFLAGS  += $(DEFINES) $(INCLUDES) 
   LDDEPS    += 
   LINKCMD    = $(CXX) -o $(TARGET) $(OBJECTS) $(LDFLAGS) $(RESOURCES) $(ARCH) -Wl,--start-group $(LIBS) -Wl,--end-group
@@ -116,12 +92,14 @@ ifeq ($(config),release)
 endif
 
 OBJECTS := \
+	$(OBJDIR)/FreetypeGraphicRenderer.o \
 	$(OBJDIR)/Helpers.o \
 	$(OBJDIR)/SoundInputMgrBase.o \
 	$(OBJDIR)/SoundInputBase.o \
 	$(OBJDIR)/stdafx.o \
 	$(OBJDIR)/IntegrationDemo.o \
 	$(OBJDIR)/DemoDynamicDialogue.o \
+	$(OBJDIR)/DemoMIDIMetronome.o \
 	$(OBJDIR)/DemoMusicCallbacks.o \
 	$(OBJDIR)/DemoBGM.o \
 	$(OBJDIR)/DemoRTPCCarEngine.o \
@@ -133,6 +111,7 @@ OBJECTS := \
 	$(OBJDIR)/DemoMotion.o \
 	$(OBJDIR)/DemoMarkers.o \
 	$(OBJDIR)/BaseMenuPage.o \
+	$(OBJDIR)/DemoPositioningMenu.o \
 	$(OBJDIR)/DemoDialogueMenu.o \
 	$(OBJDIR)/DemoPositioning.o \
 	$(OBJDIR)/ToggleControl.o \
@@ -214,6 +193,9 @@ $(GCH): $(PCH)
 	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 endif
 
+$(OBJDIR)/FreetypeGraphicRenderer.o: ../FreetypeRenderer/FreetypeGraphicRenderer.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 $(OBJDIR)/Helpers.o: ../Common/Helpers.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
@@ -230,6 +212,9 @@ $(OBJDIR)/IntegrationDemo.o: ../Common/IntegrationDemo.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 $(OBJDIR)/DemoDynamicDialogue.o: ../DemoPages/DemoDynamicDialogue.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+$(OBJDIR)/DemoMIDIMetronome.o: ../DemoPages/DemoMIDIMetronome.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 $(OBJDIR)/DemoMusicCallbacks.o: ../DemoPages/DemoMusicCallbacks.cpp
@@ -263,6 +248,9 @@ $(OBJDIR)/DemoMarkers.o: ../DemoPages/DemoMarkers.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 $(OBJDIR)/BaseMenuPage.o: ../DemoPages/BaseMenuPage.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+$(OBJDIR)/DemoPositioningMenu.o: ../DemoPages/DemoPositioningMenu.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 $(OBJDIR)/DemoDialogueMenu.o: ../DemoPages/DemoDialogueMenu.cpp

@@ -11,6 +11,8 @@
 
 #include <sampleutil/system.h>
 #include "SampleApplication.h"
+#include <libsysmodule.h>
+#include <move.h>
 
 extern PS4SampleApplication g_application;
 
@@ -30,6 +32,7 @@ bool InputMgr::Init(
 {	
 	m_pUInput = new UniversalInput;
 	
+	sceSysmoduleLoadModule(SCE_SYSMODULE_MOVE);
 	
 	for (int i = 0; i < SCE_USER_SERVICE_MAX_LOGIN_USERS; i++)
 	{
@@ -37,6 +40,7 @@ bool InputMgr::Init(
 	}
 
 	AKVERIFY( scePadInit() == SCE_OK);
+	int err = sceMoveInit();
 	AKVERIFY( sceUserServiceInitialize(NULL) == SCE_OK);
 	SceUserServiceLoginUserIdList list;
 	AKVERIFY( sceUserServiceGetLoginUserIdList(&list) ==SCE_OK );
@@ -47,7 +51,7 @@ bool InputMgr::Init(
 		{
 			AddDevice(i, list.userId[i]);
 		}
-	}
+	}	
 
 	return true;
 }
@@ -210,10 +214,17 @@ int InputMgr::AddDevice( int index, SceUserServiceUserId in_guidInstance )
 	m_LoggedUserId[index] = in_guidInstance; 
 
 	int handle = scePadOpen(in_guidInstance, SCE_PAD_PORT_TYPE_STANDARD, 0, NULL);
-
 	if ( ! m_pUInput->AddDevice( index+1, UGDeviceType_GAMEPAD, (void *)(int64_t)handle ) )
 	{
 		return 0;
+	}
+
+	int move = sceMoveOpen(in_guidInstance, 0, 0);
+	if(move > 0)
+	{
+		m_pUInput->AddDevice(index + 2, UGDeviceType_GAMEPAD, (void *)(int64_t)move);
+		UGStickState dummy;
+		const_cast<UniversalGamepad*>(m_pUInput->GetGamepad(index + 2))->SetState(true, 0, &dummy);
 	}
 
 	return handle;

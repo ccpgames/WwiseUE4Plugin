@@ -71,8 +71,8 @@ bool CDlgRename::OnBnClickedOk( HWND in_hWnd )
 		CString csMessage;
 		CString csCaption;
 
-		csMessage.LoadString( IDS_PERFORCE_RENAME_MESSAGE );
-		csCaption.LoadString( IDS_PERFORCE_RENAME_CAPTION );
+		csMessage = _T("The file name is invalid");
+		csCaption = _T("Rename");
 
 		m_pUtilities->MessageBox( in_hWnd, csMessage, csCaption, MB_OK );
 

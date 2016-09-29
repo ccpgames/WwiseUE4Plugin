@@ -12,42 +12,15 @@
 #include "resource.h"
 #include "SinePlugin.h"
 #include "TopicAlias.h"
-#include <AK\Plugin\AkSineSourceFactory.h>
 
 using namespace AK;
 using namespace Wwise;
-
-// These IDs must be the same as those specified in the plug-in's XML definition file.
-// Note that there are restrictions on the values you can use for CompanyID, and PluginID
-// must be unique for the specified CompanyID. Furthermore, these IDs are persisted
-// in project files. NEVER CHANGE THEM or existing projects will not recognize this Plug-in.
-// Be sure to read the SDK documentation regarding Plug-ins XML definition files.
-const short SinePlugin::CompanyID = AKCOMPANYID_AUDIOKINETIC;
-const short SinePlugin::PluginID = AKSOURCEID_SINE;
 
 // Delay property names
 static LPCWSTR szSineFrequency = L"SineFrequency";
 static LPCWSTR szSineGain = L"SineGain";
 static LPCWSTR szSineDuration = L"SineDuration";
 static LPCWSTR szChannelMask = L"ChannelMask";
-
-// Table of display name resources ( one for each property )
-struct DisplayNameInfo
-{
-	LPCWSTR wszPropName;
-	UINT    uiDisplayName;
-};
-
-// A table binding property to display names for convenience
-static DisplayNameInfo g_DisplayNames[] = 
-{
-	{ szSineFrequency, IDS_SINEFREQ },
-	{ szSineGain, IDS_SINEGAIN },
-	{ szSineDuration, IDS_SINEDURATION },
-	{ szChannelMask, IDS_OUTPUTCHANNEL },
-	{ NULL, NULL }
-};
-
 
 // Constructor
 SinePlugin::SinePlugin()
@@ -118,24 +91,6 @@ bool SinePlugin::GetBankParameters( const GUID & in_guidPlatform, AK::Wwise::IWr
 	return true;
 }
 
-// Allow Wwise to retrieve a user friendly name for that property (e.g. Undo etc.).
-bool SinePlugin::DisplayNameForProp( LPCWSTR in_szPropertyName, LPWSTR out_szDisplayName, UINT in_unCharCount ) const
-{
-	for ( DisplayNameInfo * pDisplayNameInfo = g_DisplayNames; pDisplayNameInfo->wszPropName; pDisplayNameInfo++ )
-	{
-		if ( !wcscmp( in_szPropertyName, pDisplayNameInfo->wszPropName ) )
-		{
-			// Get resource handle
-			HINSTANCE hInst = AfxGetStaticModuleState()->m_hCurrentResourceHandle;
-			::LoadString( hInst, pDisplayNameInfo->uiDisplayName, out_szDisplayName, in_unCharCount );
-			return true;
-		}
-	}
-
-	AKASSERT( !"Need display name for property" );
-	return false;
-}
-
 // Implement online help when the user clicks on the "?" icon .
 bool SinePlugin::Help( HWND in_hWnd, eDialog in_eDialog, LPCWSTR in_szLanguageCode ) const
 {
@@ -146,6 +101,25 @@ bool SinePlugin::Help( HWND in_hWnd, eDialog in_eDialog, LPCWSTR in_szLanguageCo
 		dwTopic = ONLINEHELP::Sound_Object_Sine;
 
 	::SendMessage( in_hWnd, WM_AK_PRIVATE_SHOW_HELP_TOPIC, dwTopic, 0 );
+
+	return true;
+}
+
+bool SinePlugin::GetSourceDuration( double& out_dblMinDuration, double& out_dblMaxDuration ) const
+{
+	AKASSERT( m_pPSet );
+
+	if( m_pPSet == nullptr || m_pPSet->PropertyHasRTPC( szSineDuration ) )
+	{
+		out_dblMinDuration = 0.f;
+		out_dblMaxDuration = FLT_MAX;
+		return false;
+	}
+
+	CComVariant varProp;
+	m_pPSet->GetValue( m_pPSet->GetCurrentPlatform(), szSineDuration, varProp );
+	out_dblMinDuration = varProp.fltVal;
+	out_dblMaxDuration = varProp.fltVal;
 
 	return true;
 }

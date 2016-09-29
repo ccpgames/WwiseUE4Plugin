@@ -226,11 +226,6 @@ class FAudiokineticToolsModule : public IAudiokineticTools
 			PackagingSettings->UpdateDefaultConfigFile();
 		}
 
-		if(GUnrealEd != NULL)
-		{
-			GUnrealEd->RegisterComponentVisualizer(UAkComponent::StaticClass()->GetFName(), MakeShareable(new FAkComponentVisualizer));
-		}
-
 		FGlobalTabmanager::Get()->RegisterNomadTabSpawner(SWwisePicker::WwisePickerTabName, FOnSpawnTab::CreateRaw(this, &FAudiokineticToolsModule::CreateWwisePickerWindow))
 			.SetGroup(WorkspaceMenu::GetMenuStructure().GetLevelEditorCategory());
 
@@ -347,6 +342,12 @@ void VerifyAkSettings()
 			}
 		}
 	}
+
+	if (GUnrealEd != NULL)
+	{
+		GUnrealEd->RegisterComponentVisualizer(UAkComponent::StaticClass()->GetFName(), MakeShareable(new FAkComponentVisualizer));
+	}
+
 }
 
 #undef LOCTEXT_NAMESPACE

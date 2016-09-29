@@ -14,10 +14,10 @@
 #ifndef _AKFXSRC_SINEPARAMS_H_
 #define _AKFXSRC_SINEPARAMS_H_
 
-#include <AK/Plugin/AkSineSourceFactory.h>
 #include <AK/Tools/Common/AkAssert.h>
 #include <AK/Plugin/PluginServices/AkFXParameterChangeHandler.h>
 #include <math.h>
+#include <AK/SoundEngine/Common/IAkPlugin.h>
 
 // Parameters IDs.
 static const AkPluginParamID AK_SINE_FXPARAM_FREQ_ID			= 0;

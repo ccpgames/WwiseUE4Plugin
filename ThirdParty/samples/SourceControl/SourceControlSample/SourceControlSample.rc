@@ -115,25 +115,25 @@ IDI_ICON2               ICON                    "icon2.ico"
 // String Table
 //
 
-STRINGTABLE 
-BEGIN
-    IDS_PLUGIN_NAME         "Sample Plugin"
-    IDS_UPDATEALL_NAME      "Update"
-    IDS_UPDATEALL_MESSAGE   "Update done"
-    IDS_OPERATION1_NAME     "Operation 1"
-    IDS_OPERATION2_NAME     "Operation 2"
-    IDS_OPERATION1_MESSAGE  "Operation 1 done."
-    IDS_OPERATION2_MESSAGE  "Operation 2 done."
-    IDS_FILESTATUS_STATUS_DEFAULT "normal status"
-    IDS_FILESTATUS_OWNER_DEFAULT "no owner"
-    IDS_CONFIGURATION_COMBO_TEXT1 "Combo item 1"
-    IDS_CONFIGURATION_COMBO_TEXT2 "Combo item 2"
-    IDS_CONFIGURATION_CAPTION_TEXT "Caption text"
-    IDS_CONFIGURATION_MESSAGEBOX_MESSAGE "OK button pressed"
-    IDS_CONFIGURATION_MESSAGEBOX_CAPTION "Configuration"
-    IDS_ICONS_ICON1         "Icon 1"
-    IDS_ICONS_ICON2         "Icon 2"
-END
+//STRINGTABLE 
+//BEGIN
+    //IDS_PLUGIN_NAME         //"Sample Plugin"
+    //IDS_UPDATEALL_NAME      //"Update"
+    //IDS_UPDATEALL_MESSAGE   //"Update done"
+    //IDS_OPERATION1_NAME     //"Operation 1"
+    //IDS_OPERATION2_NAME     //"Operation 2"
+    //IDS_OPERATION1_MESSAGE  //"Operation 1 done."
+    //IDS_OPERATION2_MESSAGE  //"Operation 2 done."
+    //IDS_FILESTATUS_STATUS_DEFAULT //"normal status"
+    //IDS_FILESTATUS_OWNER_DEFAULT //"no owner"
+    //IDS_CONFIGURATION_COMBO_TEXT1 //"Combo item 1"
+    //IDS_CONFIGURATION_COMBO_TEXT2 //"Combo item 2"
+    //IDS_CONFIGURATION_CAPTION_TEXT //"Caption text"
+    //IDS_CONFIGURATION_MESSAGEBOX_MESSAGE //"OK button pressed"
+    //IDS_CONFIGURATION_MESSAGEBOX_CAPTION //"Configuration"
+    //IDS_ICONS_ICON1         //"Icon 1"
+    //IDS_ICONS_ICON2         //"Icon 2"//
+//END
 
 #endif    // English (U.S.) resources
 /////////////////////////////////////////////////////////////////////////////

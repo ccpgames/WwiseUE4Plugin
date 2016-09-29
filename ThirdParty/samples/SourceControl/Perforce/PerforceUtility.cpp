@@ -9,6 +9,8 @@
 #include "Perforce.h"
 #include "Resource.h"
 
+#include <AK/AkWwiseSDKVersion.h>
+
 #ifdef _DEBUG
 	#define new DEBUG_NEW
 #endif
@@ -42,6 +44,9 @@ ISourceControl::OperationResult PerforceSourceControl::RunCommand( const char* i
 
 		InitClientFromRegistry( *m_pClient, m_pUtilities );
 		InitClientFromRegistry( *m_pClientTag, m_pUtilities );
+
+		m_pClient->SetProg("Wwise Perforce Plug-in");
+		m_pClientTag->SetProg("Wwise Perforce Plug-in");
 
 		m_pClientTag->SetProtocol("tag","");
 		
@@ -124,6 +129,7 @@ ISourceControl::OperationResult PerforceSourceControl::RunCommand( const char* i
 				// Login
 				Operation operation( this, OperationID_Login );
 
+				pClient->SetVersion(AK_WWISESDK_VERSIONNAME);
 				pClient->SetArgv( 0, NULL );
 				pClient->SetVar("enableStreams");
 				pClient->Run( "login", this );
@@ -132,6 +138,7 @@ ISourceControl::OperationResult PerforceSourceControl::RunCommand( const char* i
 			m_bRetryUnicodeServer = false;
 
 			// Run the operation
+			pClient->SetVersion(AK_WWISESDK_VERSIONNAME);
 			pClient->SetArgv(uiArgc, asArgv);
 			pClient->SetVar("enableStreams");
 			pClient->Run(in_acOperation, this);
@@ -249,8 +256,8 @@ void PerforceSourceControl::DisplayErrorMessageBox( Error* in_pError )
 
 			in_pError->Fmt( &errorMsg, EF_PLAIN );
 
-			csCaption.LoadString( IDS_PERFORCE_MESSAGEBOX_CAPTION );
-			csMessage.Format( IDS_PERFORCE_ERROR_MESSAGE, CString( CA2W( errorMsg.Text(), CP_UTF8 ) ) );
+			csCaption = _T("Perforce plug-in");
+			csMessage.Format( _T("Perforce command failed:\n\"%s\""), CString( CA2W( errorMsg.Text(), CP_UTF8 ) ) );
 
 			if ( m_pUtilities && m_pUtilities->MessageBox( NULL, csMessage, csCaption, MB_OKCANCEL | MB_ICONERROR ) == IDCANCEL )
 			{

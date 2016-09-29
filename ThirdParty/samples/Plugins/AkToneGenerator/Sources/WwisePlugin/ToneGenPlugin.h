@@ -32,6 +32,12 @@ static LPCWSTR szSustainLevel = L"SustainLevel";
 static LPCWSTR szReleaseTime = L"ReleaseTime";
 static LPCWSTR szChannelMask = L"ChannelMask";
 
+enum DurMode
+{
+	DurMode_Fixed = 0,
+	DurMode_Envelope
+};
+
 class ToneGenPlugin : public AK::Wwise::DefaultAudioPluginImplementation
 {
 public:
@@ -49,14 +55,8 @@ public:
 	virtual bool GetDialog( eDialog in_eDialog, UINT & out_uiDialogID, AK::Wwise::PopulateTableItem *& out_pTable ) const;
 	virtual bool WindowProc( eDialog in_eDialog, HWND in_hWnd, UINT in_message, WPARAM in_wParam, LPARAM in_lParam, LRESULT & out_lResult );
     virtual bool GetBankParameters( const GUID & in_guidPlatform, AK::Wwise::IWriteData* in_pDataWriter ) const;
-	virtual bool DisplayNameForProp( LPCWSTR in_szPropertyName, LPWSTR out_szDisplayName, UINT in_unCharCount ) const;
 	virtual bool Help( HWND in_hWnd, eDialog in_eDialog, LPCWSTR in_szLanguageCode ) const;
-
-	static const short CompanyID;
-	static const short PluginID;
-
-	//If the same class is used to generate motion data, it needs a separate ID
-	static const short MotionPluginID;
+	virtual bool GetSourceDuration( double& out_dblMinDuration, double& out_dblMaxDuration ) const;
 
 private:
 

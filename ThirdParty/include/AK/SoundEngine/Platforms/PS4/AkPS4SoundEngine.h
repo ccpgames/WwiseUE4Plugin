@@ -36,28 +36,25 @@ struct AkPlatformInitSettings
 	AkThreadProperties  threadMonitor;			///< Monitor threading properties (its default priority is AK_THREAD_PRIORITY_ABOVENORMAL). This parameter is not used in Release build.
 };
 
-///< API used for audio output
-///< Use with AkInitSettings to select the API used for audio output.
-///< \sa AK::SoundEngine::Init
-enum AkAudioAPI
-{
-	AkAPI_Default = 1 << 0,		///< Default audio subsystem
-	AkAPI_Dummy = 1 << 2,		///< Dummy output, simply eats the audio stream and outputs nothing.
-};
-
 ///< Used with \ref AK::SoundEngine::AddSecondaryOutput to specify the type of secondary output.
 enum AkAudioOutputType
 {
-	AkOutput_Dummy = 1 << 2,		///< Dummy output, simply eats the audio stream and outputs nothing.
-	AkOutput_MergeToMain = 1 << 3,	///< This output will mix back its content to the main output, after the master mix.
-	AkOutput_Main = 1 << 4,			///< Main output.  This cannot be used with AddSecondaryOutput, but can be used to query information about the main output (GetSpeakerConfiguration for example).	
-	AkOutput_Voice = 1 << 5,		///< Use the PS4 voice channel.
-	AkOutput_Personal = 1 << 6,		///< Use the Personal channel (headset).
-	AkOutput_PAD = 1 << 7,			///< Use the controller speaker channel.
-	AkOutput_BGM = 1 << 8,			///< Output to background music port.	
-	AkOutput_Aux = 1 << 9,			///< Output to the auxiliary port of the PS4.
-	AkOutput_NumOutputs = 1 << 10,	///< Do not use.
-	AkOutput_OptionNotRecordable = 1 << 11, ///< This is an optional flag to tell that this output should not be recorded by the internal DVR.  OR-it with the other output values.
+	AkOutput_None = 0,		///< Used for uninitialized type, do not use.
+	AkOutput_Dummy,			///< Dummy output, simply eats the audio stream and outputs nothing.
+	AkOutput_MergeToMain,	///< This output will mix back its content to the main output, after the master mix.
+	AkOutput_Main,			///< Main output.  This cannot be used with AddSecondaryOutput, but can be used to query information about the main output (GetSpeakerConfiguration for example).	
+	AkOutput_Voice,			///< Use the PS4 voice channel.
+	AkOutput_Personal,		///< Use the Personal channel (headset).
+	AkOutput_PAD,			///< Use the controller speaker channel.
+	AkOutput_BGM,			///< Output to background music port.	
+	AkOutput_Aux,			///< Output to the auxiliary port of the PS4.
+	AkOutput_NumBuiltInOutputs,		///< Do not use.
+	AkOutput_Plugin			///< Specify if using Audio Device Plugin Sink.
+};
+
+enum AkAudioOutputFlags
+{
+	AkAudioOutputFlags_OptionNotRecordable = 1 << 0 ///< This is an optional flag to tell that this output should not be recorded by the internal DVR.  OR-it with the other flags.
 };
 
 namespace AK

@@ -21,7 +21,7 @@ class FileOperationResult : public AK::Wwise::ISourceControl::IFileOperationResu
 {
 public:
 	FileOperationResult();
-	~FileOperationResult();
+	virtual ~FileOperationResult();
 	
 	virtual AK::Wwise::ISourceControl::OperationResult GetOperationResult();
 	virtual void Destroy();

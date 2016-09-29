@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<WwiseDocument Type="Project" SchemaVersion="70">
+<WwiseDocument Type="Project" SchemaVersion="72" WwiseVersion="v2016.1" WwiseBuild="5753">
 	<ProjectInfo>
 		<Project Name="CarSim_WwiseProject" ID="{034B3F82-FF95-4A46-88D2-EC7478371454}">
 			<Platforms>
@@ -159,7 +159,7 @@
 						</Property>
 					</PropertyList>
 				</SharedPropertyList>
-				<SharedPropertyList ClassName="AstoundSound RTI Legacy" PluginType="3" CompanyID="260" PluginID="0">
+				<SharedPropertyList ClassName="" PluginType="3" CompanyID="260" PluginID="0">
 					<PropertyList>
 						<Property Name="Apply attenuation" Type="bool">
 							<ValueList>
@@ -648,7 +648,7 @@
 						</Property>
 					</PropertyList>
 				</SharedPropertyList>
-				<SharedPropertyList ClassName="AstoundSound Expander" PluginType="3" CompanyID="260" PluginID="1">
+				<SharedPropertyList ClassName="" PluginType="3" CompanyID="260" PluginID="1">
 					<PropertyList>
 						<Property Name="Enable expander" Type="bool">
 							<ValueList>
@@ -764,7 +764,7 @@
 						</Property>
 					</PropertyList>
 				</SharedPropertyList>
-				<SharedPropertyList ClassName="AstoundSound Folddown" PluginType="3" CompanyID="260" PluginID="2">
+				<SharedPropertyList ClassName="" PluginType="3" CompanyID="260" PluginID="2">
 					<PropertyList>
 						<Property Name="Distance" Type="Real32">
 							<ValueList>
@@ -1104,7 +1104,7 @@
 						</Property>
 					</PropertyList>
 				</SharedPropertyList>
-				<SharedPropertyList ClassName="AstoundSound RTI" PluginType="6" CompanyID="260" PluginID="3">
+				<SharedPropertyList ClassName="" PluginType="6" CompanyID="260" PluginID="3">
 					<PropertyList>
 						<Property Name="Apply attenuation" Type="bool">
 							<ValueList>
@@ -1212,6 +1212,7 @@
 						</Property>
 					</PropertyList>
 				</SharedPropertyList>
+				<SharedPropertyList ClassName="Event" PluginType="0" CompanyID="1" PluginID="4"/>
 				<SharedPropertyList ClassName="iZotope Trash Delay" PluginType="3" CompanyID="259" PluginID="4">
 					<PropertyList>
 						<Property Name="DelayType" Type="int32">
@@ -1266,7 +1267,7 @@
 						</Property>
 					</PropertyList>
 				</SharedPropertyList>
-				<SharedPropertyList ClassName="AttachableMixerInput" PluginType="3" CompanyID="260" PluginID="4">
+				<SharedPropertyList ClassName="" PluginType="3" CompanyID="260" PluginID="4">
 					<PropertyList>
 						<Property Name="Apply attenuation" Type="bool">
 							<ValueList>
@@ -1527,6 +1528,11 @@
 							</ValueList>
 						</Property>
 						<Property Name="Lowpass" Type="int16">
+							<ValueList>
+								<Value>0</Value>
+							</ValueList>
+						</Property>
+						<Property Name="MakeUpGain" Type="Real64">
 							<ValueList>
 								<Value>0</Value>
 							</ValueList>
@@ -3272,6 +3278,11 @@
 						<Property Name="PanY" Type="Real64">
 							<ValueList>
 								<Value>35</Value>
+							</ValueList>
+						</Property>
+						<Property Name="PanZ" Type="Real64">
+							<ValueList>
+								<Value>0</Value>
 							</ValueList>
 						</Property>
 						<Property Name="PlayMechanismLoop" Type="bool">
@@ -7614,7 +7625,7 @@
 						</Property>
 					</PropertyList>
 				</SharedPropertyList>
-				<SharedPropertyList ClassName="Wii High-Quality Reverb" PluginType="3" CompanyID="0" PluginID="111">
+				<SharedPropertyList ClassName="" PluginType="3" CompanyID="0" PluginID="111">
 					<PropertyList>
 						<Property Name="Coloration" Type="Real32">
 							<ValueList>
@@ -7643,7 +7654,7 @@
 						</Property>
 					</PropertyList>
 				</SharedPropertyList>
-				<SharedPropertyList ClassName="Wii Standard Reverb" PluginType="3" CompanyID="0" PluginID="112">
+				<SharedPropertyList ClassName="" PluginType="3" CompanyID="0" PluginID="112">
 					<PropertyList>
 						<Property Name="Coloration" Type="Real32">
 							<ValueList>
@@ -7667,7 +7678,7 @@
 						</Property>
 					</PropertyList>
 				</SharedPropertyList>
-				<SharedPropertyList ClassName="Wii Chorus" PluginType="3" CompanyID="0" PluginID="113">
+				<SharedPropertyList ClassName="" PluginType="3" CompanyID="0" PluginID="113">
 					<PropertyList>
 						<Property Name="BaseDelay" Type="Real32">
 							<ValueList>
@@ -7686,7 +7697,7 @@
 						</Property>
 					</PropertyList>
 				</SharedPropertyList>
-				<SharedPropertyList ClassName="Wii Delay" PluginType="3" CompanyID="0" PluginID="114">
+				<SharedPropertyList ClassName="" PluginType="3" CompanyID="0" PluginID="114">
 					<PropertyList>
 						<Property Name="Delay" Type="Real32">
 							<ValueList>
@@ -8887,6 +8898,11 @@
 				</SharedPropertyList>
 				<SharedPropertyList ClassName="Wwise Meter" PluginType="3" CompanyID="0" PluginID="129">
 					<PropertyList>
+						<Property Name="ApplyDownstreamVolume" Type="bool">
+							<ValueList>
+								<Value>False</Value>
+							</ValueList>
+						</Property>
 						<Property Name="AttackTime" Type="Real32">
 							<ValueList>
 								<Value>0</Value>
@@ -9002,8 +9018,18 @@
 						</Property>
 					</PropertyList>
 				</SharedPropertyList>
-				<SharedPropertyList ClassName="" PluginType="3" CompanyID="0" PluginID="132">
+				<SharedPropertyList ClassName="Wwise Recorder" PluginType="3" CompanyID="0" PluginID="132">
 					<PropertyList>
+						<Property Name="ApplyDownstreamVolume" Type="bool">
+							<ValueList>
+								<Value>False</Value>
+							</ValueList>
+						</Property>
+						<Property Name="AuthoringFilename" Type="string">
+							<ValueList>
+								<Value>Recorder.wav</Value>
+							</ValueList>
+						</Property>
 						<Property Name="Center" Type="Real32">
 							<ValueList>
 								<Value>-6</Value>
@@ -9014,14 +9040,34 @@
 								<Value>True</Value>
 							</ValueList>
 						</Property>
-						<Property Name="Filename" Type="string">
+						<Property Name="Format" Type="int16">
 							<ValueList>
-								<Value>Recorder.wav</Value>
+								<Value>0</Value>
+							</ValueList>
+						</Property>
+						<Property Name="Front" Type="Real32">
+							<ValueList>
+								<Value>0</Value>
+							</ValueList>
+						</Property>
+						<Property Name="GameFilename" Type="string">
+							<ValueList>
+								<Value></Value>
+							</ValueList>
+						</Property>
+						<Property Name="LFE" Type="Real32">
+							<ValueList>
+								<Value>-96.3</Value>
 							</ValueList>
 						</Property>
 						<Property Name="Rear" Type="Real32">
 							<ValueList>
 								<Value>-96.3</Value>
+							</ValueList>
+						</Property>
+						<Property Name="Surround" Type="Real32">
+							<ValueList>
+								<Value>-3</Value>
 							</ValueList>
 						</Property>
 					</PropertyList>
@@ -10032,6 +10078,57 @@
 						</Property>
 					</PropertyList>
 				</SharedPropertyList>
+				<SharedPropertyList ClassName="SCE Audio3d Object Panner" PluginType="6" CompanyID="0" PluginID="149">
+					<PropertyList>
+						<Property Name="Bypass object panning" Type="bool">
+							<ValueList>
+								<Value>False</Value>
+							</ValueList>
+						</Property>
+					</PropertyList>
+				</SharedPropertyList>
+				<SharedPropertyList ClassName="AttachableMixerInput" PluginType="3" CompanyID="0" PluginID="150">
+					<PropertyList>
+						<Property Name="Bypass object panning" Type="bool">
+							<ValueList>
+								<Value>False</Value>
+							</ValueList>
+						</Property>
+						<Property Name="Passthrough" Type="bool">
+							<ValueList>
+								<Value>False</Value>
+							</ValueList>
+						</Property>
+					</PropertyList>
+				</SharedPropertyList>
+				<SharedPropertyList ClassName="SCE Audio3d Bed Output" PluginType="7" CompanyID="0" PluginID="151">
+					<PropertyList>
+						<Property Name="ChannelConfig" Type="int32">
+							<ValueList>
+								<Value>6549768</Value>
+							</ValueList>
+						</Property>
+						<Property Name="Reverb" Type="Real32">
+							<ValueList>
+								<Value>0</Value>
+							</ValueList>
+						</Property>
+					</PropertyList>
+				</SharedPropertyList>
+				<SharedPropertyList ClassName="SCE Audio3d Global Settings" PluginType="3" CompanyID="0" PluginID="165">
+					<PropertyList>
+						<Property Name="Passthrough" Type="bool">
+							<ValueList>
+								<Value>False</Value>
+							</ValueList>
+						</Property>
+						<Property Name="Scale" Type="Real32">
+							<ValueList>
+								<Value>1</Value>
+							</ValueList>
+						</Property>
+					</PropertyList>
+				</SharedPropertyList>
 				<SharedPropertyList ClassName="Wwise Audio Input" PluginType="2" CompanyID="0" PluginID="200">
 					<PropertyList>
 						<Property Name="AudioInputGain" Type="Real32">
@@ -10041,7 +10138,7 @@
 						</Property>
 					</PropertyList>
 				</SharedPropertyList>
-				<SharedPropertyList ClassName="Wwise MP3 Input" PluginType="2" CompanyID="0" PluginID="201">
+				<SharedPropertyList ClassName="" PluginType="2" CompanyID="0" PluginID="201">
 					<PropertyList>
 						<Property Name="Token" Type="int32">
 							<ValueList>
@@ -10688,6 +10785,11 @@
 								<Value>0</Value>
 							</ValueList>
 						</Property>
+						<Property Name="Reverb" Type="bool">
+							<ValueList>
+								<Value>True</Value>
+							</ValueList>
+						</Property>
 						<Property Name="Reverb_alpha" Type="Real32">
 							<ValueList>
 								<Value>0.5</Value>
@@ -11000,6 +11102,9 @@
 				</PhysicalFolder>
 				<PhysicalFolder Path="Attenuations">
 					<WorkUnit Name="Attenuations" ID="{017BDDA0-1BB1-4CE1-8077-79594EC4585C}" PersistMode="Standalone"/>
+				</PhysicalFolder>
+				<PhysicalFolder Path="Audio Devices">
+					<WorkUnit Name="Audio Devices" ID="{27092F88-225A-1154-6725-C8A34F3D4482}" PersistMode="Standalone"/>
 				</PhysicalFolder>
 				<PhysicalFolder Path="Control Surface Sessions">
 					<WorkUnit Name="Control Surface Sessions" ID="{1751E4CD-8018-4E2C-9A8A-C77764D1D653}" PersistMode="Standalone"/>

@@ -4,5 +4,5 @@ Event	ID	Name			Wwise Object Path	Notes
 	3493516265	Pause_All_Global			\Default Work Unit\Pause_All_Global	
 
 In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
-	306982885	Hello	C:\Jenkins\workspace\Wwise_2015.1\Wwise\SDK\samples\IntegrationDemo\WwiseProject\.cache\Linux\Voices\French(Canada)\Hello_E843A46D.wem		\Actor-Mixer Hierarchy\Default Work Unit\Hello		13763
+	306982885	Hello	C:\Jenkins\ws\wwise_v2016.1\Wwise\SDK\samples\IntegrationDemo\WwiseProject\.cache\Linux\Voices\French(Canada)\Hello_E843A46D.wem		\Actor-Mixer Hierarchy\Default Work Unit\Hello		13763
 

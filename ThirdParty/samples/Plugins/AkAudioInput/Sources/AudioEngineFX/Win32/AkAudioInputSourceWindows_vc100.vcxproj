@@ -305,12 +305,12 @@
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <AdditionalIncludeDirectories>.;..;..\..\..\..\..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_DEBUG;WIN32;AUDIOKINETIC;AKSOUNDENGINE_EXPORTS;AKSOUNDENGINE_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;WIN32;AUDIOKINETIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader></PrecompiledHeader>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions</EnableEnhancedInstructionSet>
     </ClCompile>
     <ResourceCompile>
-      <PreprocessorDefinitions>_DEBUG;WIN32;AUDIOKINETIC;AKSOUNDENGINE_EXPORTS;AKSOUNDENGINE_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;WIN32;AUDIOKINETIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>.;..;..\..\..\..\..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
   <Lib>
@@ -328,11 +328,11 @@
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <AdditionalIncludeDirectories>.;..;..\..\..\..\..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_DEBUG;WIN64;AUDIOKINETIC;AKSOUNDENGINE_EXPORTS;AKSOUNDENGINE_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;WIN64;AUDIOKINETIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader></PrecompiledHeader>
     </ClCompile>
     <ResourceCompile>
-      <PreprocessorDefinitions>_DEBUG;WIN64;AUDIOKINETIC;AKSOUNDENGINE_EXPORTS;AKSOUNDENGINE_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;WIN64;AUDIOKINETIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>.;..;..\..\..\..\..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
   <Lib>
@@ -350,12 +350,12 @@
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <AdditionalIncludeDirectories>.;..;..\..\..\..\..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_DEBUG;WIN32;AUDIOKINETIC;AKSOUNDENGINE_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;WIN32;AUDIOKINETIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader></PrecompiledHeader>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions</EnableEnhancedInstructionSet>
     </ClCompile>
     <ResourceCompile>
-      <PreprocessorDefinitions>_DEBUG;WIN32;AUDIOKINETIC;AKSOUNDENGINE_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;WIN32;AUDIOKINETIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>.;..;..\..\..\..\..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
   <Lib>
@@ -373,11 +373,11 @@
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <AdditionalIncludeDirectories>.;..;..\..\..\..\..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_DEBUG;WIN64;AUDIOKINETIC;AKSOUNDENGINE_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;WIN64;AUDIOKINETIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader></PrecompiledHeader>
     </ClCompile>
     <ResourceCompile>
-      <PreprocessorDefinitions>_DEBUG;WIN64;AUDIOKINETIC;AKSOUNDENGINE_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;WIN64;AUDIOKINETIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>.;..;..\..\..\..\..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
   <Lib>
@@ -395,12 +395,12 @@
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <AdditionalIncludeDirectories>.;..;..\..\..\..\..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>NDEBUG;WIN32;AUDIOKINETIC;AKSOUNDENGINE_EXPORTS;AKSOUNDENGINE_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;WIN32;AUDIOKINETIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader></PrecompiledHeader>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions</EnableEnhancedInstructionSet>
     </ClCompile>
     <ResourceCompile>
-      <PreprocessorDefinitions>NDEBUG;WIN32;AUDIOKINETIC;AKSOUNDENGINE_EXPORTS;AKSOUNDENGINE_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;WIN32;AUDIOKINETIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>.;..;..\..\..\..\..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
   <Lib>
@@ -418,11 +418,11 @@
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <AdditionalIncludeDirectories>.;..;..\..\..\..\..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>NDEBUG;WIN64;AUDIOKINETIC;AKSOUNDENGINE_EXPORTS;AKSOUNDENGINE_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;WIN64;AUDIOKINETIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader></PrecompiledHeader>
     </ClCompile>
     <ResourceCompile>
-      <PreprocessorDefinitions>NDEBUG;WIN64;AUDIOKINETIC;AKSOUNDENGINE_EXPORTS;AKSOUNDENGINE_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;WIN64;AUDIOKINETIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>.;..;..\..\..\..\..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
   <Lib>
@@ -440,12 +440,12 @@
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <AdditionalIncludeDirectories>.;..;..\..\..\..\..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>NDEBUG;WIN32;AK_ENABLE_ASSERTS;AUDIOKINETIC;AKSOUNDENGINE_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;WIN32;AK_ENABLE_ASSERTS;AUDIOKINETIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader></PrecompiledHeader>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions</EnableEnhancedInstructionSet>
     </ClCompile>
     <ResourceCompile>
-      <PreprocessorDefinitions>NDEBUG;WIN32;AK_ENABLE_ASSERTS;AUDIOKINETIC;AKSOUNDENGINE_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;WIN32;AK_ENABLE_ASSERTS;AUDIOKINETIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>.;..;..\..\..\..\..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
   <Lib>
@@ -463,11 +463,11 @@
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <AdditionalIncludeDirectories>.;..;..\..\..\..\..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>NDEBUG;WIN64;AK_ENABLE_ASSERTS;AUDIOKINETIC;AKSOUNDENGINE_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;WIN64;AK_ENABLE_ASSERTS;AUDIOKINETIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader></PrecompiledHeader>
     </ClCompile>
     <ResourceCompile>
-      <PreprocessorDefinitions>NDEBUG;WIN64;AK_ENABLE_ASSERTS;AUDIOKINETIC;AKSOUNDENGINE_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;WIN64;AK_ENABLE_ASSERTS;AUDIOKINETIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>.;..;..\..\..\..\..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
   <Lib>
@@ -485,12 +485,12 @@
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <AdditionalIncludeDirectories>.;..;..\..\..\..\..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>NDEBUG;WIN32;AUDIOKINETIC;AKSOUNDENGINE_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;WIN32;AUDIOKINETIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader></PrecompiledHeader>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions</EnableEnhancedInstructionSet>
     </ClCompile>
     <ResourceCompile>
-      <PreprocessorDefinitions>NDEBUG;WIN32;AUDIOKINETIC;AKSOUNDENGINE_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;WIN32;AUDIOKINETIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>.;..;..\..\..\..\..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
   <Lib>
@@ -508,11 +508,11 @@
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <AdditionalIncludeDirectories>.;..;..\..\..\..\..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>NDEBUG;WIN64;AUDIOKINETIC;AKSOUNDENGINE_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;WIN64;AUDIOKINETIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader></PrecompiledHeader>
     </ClCompile>
     <ResourceCompile>
-      <PreprocessorDefinitions>NDEBUG;WIN64;AUDIOKINETIC;AKSOUNDENGINE_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;WIN64;AUDIOKINETIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>.;..;..\..\..\..\..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
   <Lib>
@@ -530,12 +530,12 @@
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <AdditionalIncludeDirectories>.;..;..\..\..\..\..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>NDEBUG;WIN32;AK_ENABLE_ASSERTS;AUDIOKINETIC;AKSOUNDENGINE_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;WIN32;AK_ENABLE_ASSERTS;AUDIOKINETIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader></PrecompiledHeader>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions</EnableEnhancedInstructionSet>
     </ClCompile>
     <ResourceCompile>
-      <PreprocessorDefinitions>NDEBUG;WIN32;AK_ENABLE_ASSERTS;AUDIOKINETIC;AKSOUNDENGINE_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;WIN32;AK_ENABLE_ASSERTS;AUDIOKINETIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>.;..;..\..\..\..\..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
   <Lib>
@@ -553,11 +553,11 @@
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <AdditionalIncludeDirectories>.;..;..\..\..\..\..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>NDEBUG;WIN64;AK_ENABLE_ASSERTS;AUDIOKINETIC;AKSOUNDENGINE_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;WIN64;AK_ENABLE_ASSERTS;AUDIOKINETIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader></PrecompiledHeader>
     </ClCompile>
     <ResourceCompile>
-      <PreprocessorDefinitions>NDEBUG;WIN64;AK_ENABLE_ASSERTS;AUDIOKINETIC;AKSOUNDENGINE_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;WIN64;AK_ENABLE_ASSERTS;AUDIOKINETIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>.;..;..\..\..\..\..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
   <Lib>
@@ -575,12 +575,12 @@
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <AdditionalIncludeDirectories>.;..;..\..\..\..\..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>NDEBUG;AK_OPTIMIZED;WIN32;AUDIOKINETIC;AKSOUNDENGINE_EXPORTS;AKSOUNDENGINE_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;AK_OPTIMIZED;WIN32;AUDIOKINETIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader></PrecompiledHeader>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions</EnableEnhancedInstructionSet>
     </ClCompile>
     <ResourceCompile>
-      <PreprocessorDefinitions>NDEBUG;AK_OPTIMIZED;WIN32;AUDIOKINETIC;AKSOUNDENGINE_EXPORTS;AKSOUNDENGINE_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;AK_OPTIMIZED;WIN32;AUDIOKINETIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>.;..;..\..\..\..\..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
   <Lib>
@@ -598,11 +598,11 @@
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <AdditionalIncludeDirectories>.;..;..\..\..\..\..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>NDEBUG;AK_OPTIMIZED;WIN64;AUDIOKINETIC;AKSOUNDENGINE_EXPORTS;AKSOUNDENGINE_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;AK_OPTIMIZED;WIN64;AUDIOKINETIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader></PrecompiledHeader>
     </ClCompile>
     <ResourceCompile>
-      <PreprocessorDefinitions>NDEBUG;AK_OPTIMIZED;WIN64;AUDIOKINETIC;AKSOUNDENGINE_EXPORTS;AKSOUNDENGINE_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;AK_OPTIMIZED;WIN64;AUDIOKINETIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>.;..;..\..\..\..\..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
   <Lib>
@@ -620,12 +620,12 @@
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <AdditionalIncludeDirectories>.;..;..\..\..\..\..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>NDEBUG;AK_OPTIMIZED;WIN32;AUDIOKINETIC;AKSOUNDENGINE_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;AK_OPTIMIZED;WIN32;AUDIOKINETIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader></PrecompiledHeader>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions</EnableEnhancedInstructionSet>
     </ClCompile>
     <ResourceCompile>
-      <PreprocessorDefinitions>NDEBUG;AK_OPTIMIZED;WIN32;AUDIOKINETIC;AKSOUNDENGINE_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;AK_OPTIMIZED;WIN32;AUDIOKINETIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>.;..;..\..\..\..\..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
   <Lib>
@@ -643,11 +643,11 @@
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <AdditionalIncludeDirectories>.;..;..\..\..\..\..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>NDEBUG;AK_OPTIMIZED;WIN64;AUDIOKINETIC;AKSOUNDENGINE_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;AK_OPTIMIZED;WIN64;AUDIOKINETIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader></PrecompiledHeader>
     </ClCompile>
     <ResourceCompile>
-      <PreprocessorDefinitions>NDEBUG;AK_OPTIMIZED;WIN64;AUDIOKINETIC;AKSOUNDENGINE_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;AK_OPTIMIZED;WIN64;AUDIOKINETIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>.;..;..\..\..\..\..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
   <Lib>

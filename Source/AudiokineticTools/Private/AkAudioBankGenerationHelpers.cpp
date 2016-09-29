@@ -49,6 +49,7 @@ FString GetWwiseApplicationPath()
         ApplicationToRun.ReplaceInline(TEXT("/"), TEXT("\\"));
 #elif PLATFORM_MAC
         ApplicationToRun += TEXT("Contents/Tools/WwiseCLI.sh");
+        ApplicationToRun = TEXT("\"") + ApplicationToRun + TEXT("\"");
 #endif
 	}
 
@@ -332,6 +333,10 @@ void CreateGenerateSoundBankWindow(TArray<TWeakObjectPtr<UAkAudioBank>>* pSoundB
 		.FocusWhenFirstShown(true);
 
 	TSharedRef<SGenerateSoundBanks> WindowContent = SNew(SGenerateSoundBanks, pSoundBanks);
+	if (!WindowContent->ShouldDisplayWindow())
+	{
+		return;
+	}
 
 	// Add our SGenerateSoundBanks to the window
 	WidgetWindow->SetContent( WindowContent );

@@ -17,12 +17,52 @@
 #include "AkAudioClasses.h"
 #include "EditorSupportDelegates.h"
 #include "ISettingsModule.h"
+#include "IPluginManager.h"
+#include "Runtime/Launch/Resources/Version.h"
+#if PLATFORM_ANDROID
+#include "AndroidApplication.h"
+#endif
 
-#include <AK/Plugin/AllPluginsRegistrationHelpers.h>
+// Register plugins that are static linked in this DLL.
+#include <AK/Plugin/AkVorbisDecoderFactory.h>
+#include <AK/Plugin/AkSilenceSourceFactory.h>
+#include <AK/Plugin/AkSineSourceFactory.h>
+#include <AK/Plugin/AkToneSourceFactory.h>
+#include <AK/Plugin/AkPeakLimiterFXFactory.h>
+#include <AK/Plugin/AkMatrixReverbFXFactory.h>
+#include <AK/Plugin/AkParametricEQFXFactory.h>
+#include <AK/Plugin/AkDelayFXFactory.h>
+#include <AK/Plugin/AkExpanderFXFactory.h>
+#include <AK/Plugin/AkFlangerFXFactory.h>
+#include <AK/Plugin/AkCompressorFXFactory.h>
+#include <AK/Plugin/AkGainFXFactory.h>
+#include <AK/Plugin/AkHarmonizerFXFactory.h>
+#include <AK/Plugin/AkTimeStretchFXFactory.h>
+#include <AK/Plugin/AkPitchShifterFXFactory.h>
+#include <AK/Plugin/AkStereoDelayFXFactory.h>
+#include <AK/Plugin/AkMeterFXFactory.h>
+#include <AK/Plugin/AkGuitarDistortionFXFactory.h>
+#include <AK/Plugin/AkTremoloFXFactory.h>
+#include <AK/Plugin/AkRoomVerbFXFactory.h>
+#include <AK/Plugin/AkAudioInputSourceFactory.h>
+#include <AK/Plugin/AkSynthOneFactory.h>
+#include <AK/Plugin/AkConvolutionReverbFXFactory.h>
+#include <AK/Plugin/AkRecorderFXFactory.h>
 
-#pragma region Oculus Wwise integration
-#include "OculusSpatializer.h"
-#pragma endregion Oculus Wwise integration
+#if PLATFORM_MAC || PLATFORM_IOS
+#include <AK/Plugin/AkAACFactory.h>
+#endif
+
+#if PLATFORM_PS4
+#include <AK/Plugin/AkATRAC9Factory.h>
+#endif
+
+// Add additional plug-ins here.
+	
+// OCULUS_START
+#include "Runtime/HeadMountedDisplay/Public/IHeadMountedDisplayModule.h"
+// OCULUS_END
+
 
 #if PLATFORM_XBOXONE
 	#include <apu.h>
@@ -160,17 +200,13 @@ bool FAkAudioDevice::Init( void )
 	}
 #endif
 
-	FWorldDelegates::LevelRemovedFromWorld.AddRaw(this, &FAkAudioDevice::OnLevelRemoved);
-
+	// OCULUS_START - vhamm - suspend audio when not in focus
+	m_isSuspended = false;
+	// OCULUS_END
 
 	UE_LOG(LogInit, Log, TEXT("Audiokinetic Audio Device initialized."));
 
 	return 1;
-}
-
-void FAkAudioDevice::OnLevelRemoved(ULevel* InLevel, UWorld* InWorld)
-{
-	Flush(NULL);
 }
 
 /**
@@ -181,9 +217,32 @@ bool FAkAudioDevice::Update( float DeltaTime )
 {
 	if ( m_bSoundEngineInitialized )
 	{
+		// OCULUS_START - vhamm - suspend audio when not in focus
+		if (FApp::UseVRFocus())
+		{
+			if (FApp::HasVRFocus())
+			{
+				if (m_isSuspended)
+				{
+					AK::SoundEngine::WakeupFromSuspend();
+					m_isSuspended = false;
+				}
+			}
+			else
+			{
+				if (!m_isSuspended)
+				{
+					AK::SoundEngine::Suspend(true);
+					m_isSuspended = true;
+				}
+			}
+		}
+		// OCULUS_END
+
 		AK::SoundEngine::RenderAudio();
 		UpdateListeners();
 	}
+
 
 	return true;
 }
@@ -211,6 +270,8 @@ void FAkAudioDevice::Teardown()
 			}
 			delete AkBankManager;
 		}
+
+		AK::Monitor::SetLocalOutput(0, NULL);
 
 #ifndef AK_OPTIMIZED
 #if !PLATFORM_LINUX
@@ -329,13 +390,16 @@ void FAkAudioDevice::SetListener( int32 PlayerCharacterIndex, const FVector& Loc
 	}
 
 	m_listenerPositions[PlayerCharacterIndex] = Location;
-	FVectorToAKVector( Location, position.Position );
-	FVectorToAKVector( Front, position.OrientationFront );
-	FVectorToAKVector( Up, position.OrientationTop );
+	FVectorsToAKTransform(Location, Front, Up, position);
 
-	if ( position.OrientationFront.X == 0.0 && position.OrientationFront.Y == 0.0 && position.OrientationFront.Z == 0.0 )
+	if (Front.X == 0.0 && Front.Y == 0.0 && Front.Z == 0.0)
 	{
-		UE_LOG(LogAkAudio, Fatal, TEXT("Orientation Front vector invalid!") );
+		UE_LOG(LogAkAudio, Fatal, TEXT("Orientation Front vector invalid!"));
+	}
+
+	if (Up.X == 0.0 && Up.Y == 0.0 && Up.Z == 0.0)
+	{
+		UE_LOG(LogAkAudio, Fatal, TEXT("Orientation Up vector invalid!"));
 	}
 
 	if ( m_bSoundEngineInitialized )
@@ -346,8 +410,7 @@ void FAkAudioDevice::SetListener( int32 PlayerCharacterIndex, const FVector& Loc
 		if ( GIsEditor && PlayerCharacterIndex == 0)
 		{
 			AkSoundPosition sound_position;
-			FVectorToAKVector( Location, sound_position.Position );
-			FVectorToAKVector( Front, sound_position.Orientation );
+			FVectorsToAKTransform(Location, Front, Up, sound_position);
 			AK::SoundEngine::SetPosition( DUMMY_GAMEOBJ, sound_position );
 		}
 	}
@@ -779,11 +842,16 @@ AkPlayingID FAkAudioDevice::PostEvent(
 	if ( m_bSoundEngineInitialized )
 	{
 		// PostEvent must be bound to a game object. Passing DUMMY_GAMEOBJ as default game object.
-		AkGameObjectID GameObjID = DUMMY_GAMEOBJ;
-		if( GetGameObjectID( in_pActor, GameObjID, in_bStopWhenOwnerDestroyed ) == AK_Success )
+		UAkComponent * pComponent = (UAkComponent*) DUMMY_GAMEOBJ;
+		if (in_pActor)
 		{
-			playingID = PostEventInternal( *in_EventName, (UAkComponent *)GameObjID, in_uFlags, in_pfnCallback, in_pCookie );
+			pComponent = GetAkComponent(in_pActor->GetRootComponent(), FName(), NULL, EAttachLocation::KeepRelativeOffset);
+			if (pComponent && pComponent != (UAkComponent*)DUMMY_GAMEOBJ)
+			{
+				pComponent->StopWhenOwnerDestroyed = in_bStopWhenOwnerDestroyed;
+			}
 		}
+		playingID = PostEventInternal( in_EventName, pComponent, in_uFlags, in_pfnCallback, in_pCookie );
 	}
 	return playingID;
 }
@@ -793,7 +861,7 @@ AkPlayingID FAkAudioDevice::PostEvent(
  * @param							Loc	Location at which to find Reverb Volumes
  * @param FoundVolumes		Array containing all found volumes at this location
  */
-void FindAkReverbVolumesAtLocation(FVector Loc, TArray<AAkReverbVolume*>& FoundVolumes, const UWorld* World)
+void FindAkReverbVolumesAtLocation(FVector Loc, TArray<AAkReverbVolume*>& FoundVolumes, const UWorld* in_World)
 {
 	FAkAudioDevice* AkAudioDevice = FAkAudioDevice::Get();
 	FoundVolumes.Empty();
@@ -801,7 +869,7 @@ void FindAkReverbVolumesAtLocation(FVector Loc, TArray<AAkReverbVolume*>& FoundV
 	if( AkAudioDevice )
 	{
 		uint32 NumVolumesAdded = 0;
-		AAkReverbVolume** TopVolume = AkAudioDevice->HighestPriorityAkReverbVolumeMap.Find(World);
+		AAkReverbVolume** TopVolume = AkAudioDevice->HighestPriorityAkReverbVolumeMap.Find(in_World);
 
 		if( TopVolume )
 		{
@@ -822,8 +890,8 @@ void FindAkReverbVolumesAtLocation(FVector Loc, TArray<AAkReverbVolume*>& FoundV
 /** Add a AkReverbVolume in the active volumes linked list. */
 void FAkAudioDevice::AddAkReverbVolumeInList(class AAkReverbVolume* in_VolumeToAdd)
 {
-	UWorld* World = in_VolumeToAdd->GetWorld();
-	AAkReverbVolume*& HighestPriorityAkReverbVolume = HighestPriorityAkReverbVolumeMap.FindOrAdd(World);
+	UWorld* CurrentWorld = in_VolumeToAdd->GetWorld();
+	AAkReverbVolume*& HighestPriorityAkReverbVolume = HighestPriorityAkReverbVolumeMap.FindOrAdd(CurrentWorld);
 
 	if( HighestPriorityAkReverbVolume == NULL )
 	{
@@ -876,8 +944,8 @@ void FAkAudioDevice::AddAkReverbVolumeInList(class AAkReverbVolume* in_VolumeToA
 /** Remove a AkReverbVolume from the active volumes linked list. */
 void FAkAudioDevice::RemoveAkReverbVolumeFromList(class AAkReverbVolume* in_VolumeToRemove)
 {
-	UWorld* World = in_VolumeToRemove->GetWorld();
-	AAkReverbVolume** HighestPriorityAkReverbVolume = HighestPriorityAkReverbVolumeMap.Find(World);
+	UWorld* CurrentWorld = in_VolumeToRemove->GetWorld();
+	AAkReverbVolume** HighestPriorityAkReverbVolume = HighestPriorityAkReverbVolumeMap.Find(CurrentWorld);
 
 	if( HighestPriorityAkReverbVolume )
 	{
@@ -910,7 +978,7 @@ void FAkAudioDevice::RemoveAkReverbVolumeFromList(class AAkReverbVolume* in_Volu
 
 		if( *HighestPriorityAkReverbVolume == NULL )
 		{
-			HighestPriorityAkReverbVolumeMap.Remove(World);
+			HighestPriorityAkReverbVolumeMap.Remove(CurrentWorld);
 		}
 	}
 }
@@ -921,11 +989,11 @@ void FAkAudioDevice::RemoveAkReverbVolumeFromList(class AAkReverbVolume* in_Volu
  * @param					Loc	Location at which to find Reverb Volumes
  * @param AkReverbVolumes	Array of AkAuxSendValue at this location
  */
-void GetReverbVolumesOnTempEvent(FVector Loc, TArray<AkAuxSendValue>& AkReverbVolumes, const UWorld* World)
+void GetReverbVolumesOnTempEvent(FVector Loc, TArray<AkAuxSendValue>& AkReverbVolumes, const UWorld* in_World)
 {
 	// Check if there are AkReverbVolumes at this location
 	TArray<AAkReverbVolume*> FoundVolumes;
-	FindAkReverbVolumesAtLocation(Loc, FoundVolumes, World);
+	FindAkReverbVolumesAtLocation(Loc, FoundVolumes, in_World);
 
 	// Sort the found Volumes
 	if(FoundVolumes.Num() > 1 )
@@ -967,14 +1035,14 @@ void GetReverbVolumesOnTempEvent(FVector Loc, TArray<AkAuxSendValue>& AkReverbVo
 AkPlayingID FAkAudioDevice::PostEventAtLocation(
 	UAkAudioEvent * in_pEvent,
 	FVector in_Location,
-	FVector in_Orientation,
-	UWorld* World )
+	FRotator in_Orientation,
+	UWorld* in_World)
 {
 	AkPlayingID playingID = AK_INVALID_PLAYING_ID;
 
 	if ( in_pEvent )
 	{
-		playingID = PostEventAtLocation(in_pEvent->GetName(), in_Location, in_Orientation, World);
+		playingID = PostEventAtLocation(in_pEvent->GetName(), in_Location, in_Orientation, in_World);
 	}
 
 	return playingID;
@@ -990,8 +1058,8 @@ AkPlayingID FAkAudioDevice::PostEventAtLocation(
 AkPlayingID FAkAudioDevice::PostEventAtLocation(
 	const FString& in_EventName,
 	FVector in_Location,
-	FVector in_Orientation,
-	UWorld* World)
+	FRotator in_Orientation,
+	UWorld* in_World)
 {
 	AkPlayingID playingID = AK_INVALID_PLAYING_ID;
 
@@ -1006,17 +1074,12 @@ AkPlayingID FAkAudioDevice::PostEventAtLocation(
 #endif // AK_OPTIMIZED
 
 		TArray<AkAuxSendValue> AkReverbVolumes;
-		GetReverbVolumesOnTempEvent(in_Location, AkReverbVolumes, World);
+		GetReverbVolumesOnTempEvent(in_Location, AkReverbVolumes, in_World);
 		SetAuxSends(objId, AkReverbVolumes);
 
 		AkSoundPosition soundpos;
-		FVectorToAKVector( in_Location, soundpos.Position );
-		FVectorToAKVector( in_Orientation, soundpos.Orientation );
-
-		if ( soundpos.Orientation.X == 0.0 && soundpos.Orientation.Y == 0.0 && soundpos.Orientation.Z == 0.0 )
-		{
-			UE_LOG(LogAkAudio, Error, TEXT("Orientation Front vector invalid!") );
-		}
+		FQuat tempQuat(in_Orientation);
+		FVectorsToAKTransform(in_Location, tempQuat.GetForwardVector(), tempQuat.GetUpVector(), soundpos);
 
 		AK::SoundEngine::SetPosition( objId, soundpos );
 
@@ -1032,17 +1095,26 @@ AkPlayingID FAkAudioDevice::PostEventAtLocation(
 	return playingID;
 }
 
-UAkComponent* FAkAudioDevice::SpawnAkComponentAtLocation( class UAkAudioEvent* in_pAkEvent, FVector Location, FRotator Orientation, bool AutoPost, const FString& EventName, bool AutoDestroy, UWorld* World )
+UAkComponent* FAkAudioDevice::SpawnAkComponentAtLocation( class UAkAudioEvent* in_pAkEvent, FVector Location, FRotator Orientation, bool AutoPost, const FString& EventName, bool AutoDestroy, UWorld* in_World)
 {
-	UAkComponent * AkComponent = NewObject<UAkComponent>(World->GetWorldSettings());
+	UAkComponent * AkComponent = NULL;
+	if (in_World)
+	{
+		AkComponent = NewObject<UAkComponent>(in_World->GetWorldSettings());
+	}
+	else
+	{
+		AkComponent = NewObject<UAkComponent>();
+	}
+
 	if( AkComponent )
 	{
 		AkComponent->AkAudioEvent = in_pAkEvent;
 		AkComponent->EventName = EventName;
 		AkComponent->SetWorldLocationAndRotation(Location, Orientation.Quaternion());
-		if(World)
+		if(in_World)
 		{
-			AkComponent->RegisterComponentWithWorld(World);
+			AkComponent->RegisterComponentWithWorld(in_World);
 		}
 
 		AkComponent->SetAutoDestroy(AutoDestroy);
@@ -1220,7 +1292,27 @@ AKRESULT FAkAudioDevice::SetAuxSends(
 	AKRESULT eResult = AK_Success;
 	if ( m_bSoundEngineInitialized )
 	{
-		eResult = AK::SoundEngine::SetGameObjectAuxSendValues( in_GameObjId, in_AuxSendValues.GetData(), in_AuxSendValues.Num() );
+		eResult = AK::SoundEngine::SetGameObjectAuxSendValues(in_GameObjId, in_AuxSendValues.GetData(), in_AuxSendValues.Num());
+	}
+
+	return eResult;
+}
+
+AKRESULT FAkAudioDevice::SetGameObjectOutputBusVolume(
+	const UAkComponent* in_pAkComponent,
+	float in_fControlValue	
+	)
+{
+	AKRESULT eResult = AK_Success;
+	AkGameObjectID gameObjId = DUMMY_GAMEOBJ;
+	if (in_pAkComponent)
+	{
+		gameObjId = (AkGameObjectID)in_pAkComponent;
+	}
+
+	if (m_bSoundEngineInitialized)
+	{
+		eResult = AK::SoundEngine::SetGameObjectOutputBusVolume(gameObjId, in_fControlValue);
 	}
 
 	return eResult;
@@ -1318,7 +1410,9 @@ UAkComponent* FAkAudioDevice::GetAkComponent( class USceneComponent* AttachToCom
 	check( AttachToComponent );
 
 	UAkComponent* AkComponent = NULL;
-
+#if ENGINE_MAJOR_VERSION == 4 && ENGINE_MINOR_VERSION >= 12
+	FAttachmentTransformRules AttachRules = FAttachmentTransformRules::KeepRelativeTransform;
+#endif
 	if( GEngine && AK::SoundEngine::IsInitialized())
 	{
 		AActor * Actor = AttachToComponent->GetOwner();
@@ -1353,11 +1447,17 @@ UAkComponent* FAkAudioDevice::GetAkComponent( class USceneComponent* AttachToCom
 					{
 						if (LocationType == EAttachLocation::KeepWorldPosition)
 						{
+#if ENGINE_MAJOR_VERSION == 4 && ENGINE_MINOR_VERSION >= 12
+							AttachRules = FAttachmentTransformRules::KeepWorldTransform;
+#endif
 							if ( !FVector::PointsAreSame(*Location, pCompI->GetComponentLocation()) )
 								continue;
 						}
 						else
 						{
+#if ENGINE_MAJOR_VERSION == 4 && ENGINE_MINOR_VERSION >= 12
+							AttachRules = FAttachmentTransformRules::KeepRelativeTransform;
+#endif
 							if ( !FVector::PointsAreSame(*Location, pCompI->RelativeLocation) )
 								continue;
 						}
@@ -1371,11 +1471,14 @@ UAkComponent* FAkAudioDevice::GetAkComponent( class USceneComponent* AttachToCom
 		else
 		{
 			// Try to find if there is an AkComponent attached to AttachToComponent (will be the case if AttachToComponent has no owner)
-			const TArray<USceneComponent*>& Children = AttachToComponent->GetAttachChildren();
-			for(auto& Child : Children)
+#if ENGINE_MAJOR_VERSION == 4 && ENGINE_MINOR_VERSION >= 12
+			const TArray<USceneComponent*> AttachChildren = AttachToComponent->GetAttachChildren();
+#else
+			const TArray<USceneComponent*> AttachChildren = AttachToComponent->AttachChildren;
+#endif
+			for(int32 CompIdx = 0; CompIdx < AttachChildren.Num(); CompIdx++)
 			{
-				UAkComponent* pCompI = Cast<UAkComponent>(Child);
-
+				UAkComponent* pCompI = Cast<UAkComponent>(AttachChildren[CompIdx]);
 				if ( pCompI && pCompI->IsRegistered() )
 				{
 					// There is an associated AkComponent to AttachToComponent, no need to add another one.
@@ -1402,19 +1505,26 @@ UAkComponent* FAkAudioDevice::GetAkComponent( class USceneComponent* AttachToCom
 		{
 			if (LocationType == EAttachLocation::KeepWorldPosition)
 			{
+#if ENGINE_MAJOR_VERSION == 4 && ENGINE_MINOR_VERSION >= 12
+				AttachRules = FAttachmentTransformRules::KeepWorldTransform;
+#endif
 				AkComponent->SetWorldLocation(*Location);
 			}
 			else
 			{
+#if ENGINE_MAJOR_VERSION == 4 && ENGINE_MINOR_VERSION >= 12
+				AttachRules = FAttachmentTransformRules::KeepRelativeTransform;
+#endif
 				AkComponent->SetRelativeLocation(*Location);
 			}
 		}
 
 		AkComponent->RegisterComponentWithWorld(AttachToComponent->GetWorld());
-		
-		FAttachmentTransformRules AttachmentRules(EAttachmentRule::KeepRelative, false);
-		USceneComponent::ConvertAttachLocation(LocationType, AttachmentRules.LocationRule, AttachmentRules.RotationRule, AttachmentRules.ScaleRule);
-		AkComponent->AttachToComponent(AttachToComponent, AttachmentRules,  AttachPointName);
+#if ENGINE_MAJOR_VERSION == 4 && ENGINE_MINOR_VERSION >= 12
+		AkComponent->AttachToComponent(AttachToComponent, AttachRules, AttachPointName);
+#else
+		AkComponent->AttachTo(AttachToComponent, AttachPointName, LocationType);
+#endif
 	}
 
 	return( AkComponent );
@@ -1568,14 +1678,6 @@ bool FAkAudioDevice::EnsureInitialized()
 		return true;
 	}
 
-#if PLATFORM_WINDOWS 
-#if PLATFORM_64BITS
-	// Work around the fact the x64 version of XAudio2_7.dll does not properly ref count
-	// by forcing it to be always loaded
-	LoadLibraryA( "XAudio2_7.dll" );
-#endif	//PLATFORM_64BITS
-#endif	//PLATFORM_WINDOWS
-
 #if PLATFORM_XBOXONE
 #ifndef AK_OPTIMIZED
 	try
@@ -1633,7 +1735,11 @@ bool FAkAudioDevice::EnsureInitialized()
 	AkPlatformInitSettings platformInitSettings;
 	AK::SoundEngine::GetDefaultInitSettings( initSettings );
 	AK::SoundEngine::GetDefaultPlatformInitSettings( platformInitSettings );
-
+#if PLATFORM_ANDROID
+	extern JavaVM* GJavaVM;
+	platformInitSettings.pJavaVM = GJavaVM;
+	platformInitSettings.jNativeActivity = FAndroidApplication::GetGameActivityThis();
+#endif
 #if defined AK_WIN
 	// Make the sound to not be audible when the game is minimized.
 
@@ -1643,6 +1749,25 @@ bool FAkAudioDevice::EnsureInitialized()
 		platformInitSettings.hWnd = (HWND)GameEngine->GameViewportWindow.Pin()->GetNativeWindow()->GetOSWindowHandle();
 		platformInitSettings.bGlobalFocus = false;
 	}
+
+	// OCULUS_START vhamm audio redirect with build of wwise >= 2015.1.5
+	if (IHeadMountedDisplayModule::IsAvailable())
+	{
+		FString AudioOutputDevice;
+#if ENGINE_MAJOR_VERSION == 4 && ENGINE_MINOR_VERSION >= 12
+		IHeadMountedDisplayModule& Hmd = IHeadMountedDisplayModule::Get();
+		AudioOutputDevice = Hmd.GetAudioOutputDevice();
+#elif ENGINE_MAJOR_VERSION == 4 && ENGINE_MINOR_VERSION == 11 && ENGINE_PATCH_VERSION >= 1
+		FHeadMountedDisplayModuleExt* const HmdEx = FHeadMountedDisplayModuleExt::GetExtendedInterface(&IHeadMountedDisplayModule::Get());
+		AudioOutputDevice = HmdEx ? HmdEx->GetAudioOutputDevice() : FString();
+#endif
+
+		if(!AudioOutputDevice.IsEmpty())
+		{
+			platformInitSettings.idAudioDevice = AK::GetDeviceIDFromName((wchar_t*) *AudioOutputDevice);
+		}
+	}
+	// OCULUS_END
 
 #endif
 
@@ -1686,21 +1811,6 @@ bool FAkAudioDevice::EnsureInitialized()
 	}
 #endif
 #endif // AK_OPTIMIZED
-
-	// Register built-in plug-ins.
-	AK::SoundEngine::RegisterAllBuiltInPlugins();
-
-	// Plug-ins which require additional license.
-	AK::SoundEngine::RegisterConvolutionReverbPlugin();
-	// AK::SoundEngine::RegisterSoundSeedPlugins();
-	// AK::SoundEngine::RegisterMcDSPPlugins();
-	// AK::SoundEngine::RegisterAstoundSoundPlugins();
-	// AK::SoundEngine::RegisteriZotopePlugins();
-	// AK::SoundEngine::RegisterCrankcaseAudioPlugins();
-
-#pragma region Oculus Wwise integration
-	RegisterSpatialiserPlugins();
-#pragma endregion Oculus Wwise integration
 
 	//
 	// Setup banks path
@@ -1791,69 +1901,6 @@ void FAkAudioDevice::SetBankDirectory()
 	AK::StreamMgr::SetCurrentLanguage( AKTEXT("English(US)") );
 }
 
-#pragma region Oculus Wwise integration
-void FAkAudioDevice::RegisterSpatialiserPlugins()
-{
-#if PLATFORM_WINDOWS
-	// Load Oculus Spatializer dll plug-in
-	HMODULE OculusSpatializerLibrary = LoadLibrary(L"OculusSpatializer.dll");
-
-	// Successful?
-	if (OculusSpatializerLibrary)
-	{
-		typedef bool(__stdcall *AkGetSoundEngineCallbacksType)
-			(unsigned short in_usCompanyID,
-				unsigned short in_usPluginID,
-				AkCreatePluginCallback& out_funcEffect,
-				AkCreateParamCallback&  out_funcParam);
-
-		AkGetSoundEngineCallbacksType AkGetSoundEngineCallbacks =
-			(AkGetSoundEngineCallbacksType)(void*)GetProcAddress(OculusSpatializerLibrary, "AkGetSoundEngineCallbacks");
-
-		if (AkGetSoundEngineCallbacks)
-		{
-			AkCreatePluginCallback CreateOculusFX;
-			AkCreateParamCallback  CreateOculusFXParams;
-
-			// Register plugin effect
-			if (AkGetSoundEngineCallbacks(AKEFFECTID_OCULUS, AKEFFECTID_OCULUS_SPATIALIZER, CreateOculusFX, CreateOculusFXParams))
-			{
-				if (AK::SoundEngine::RegisterPlugin(AkPluginTypeMixer, AKEFFECTID_OCULUS, AKEFFECTID_OCULUS_SPATIALIZER, CreateOculusFX, CreateOculusFXParams) != AK_Success)
-				{
-					printf("Failed to register OculusSpatializer plugin.");
-				}
-			}
-			else
-			{
-				printf("Failed call to AkGetSoundEngineCallbacks in OculusSpatializer.dll");
-			}
-
-			// Register plugin attachment (for data attachment on individual sounds, like frequency hints etc.)
-			if (AkGetSoundEngineCallbacks(AKEFFECTID_OCULUS, AKEFFECTID_OCULUS_SPATIALIZER_ATTACHMENT, CreateOculusFX, CreateOculusFXParams))
-			{
-				if (AK::SoundEngine::RegisterPlugin(AkPluginTypeEffect, AKEFFECTID_OCULUS, AKEFFECTID_OCULUS_SPATIALIZER_ATTACHMENT, NULL, CreateOculusFXParams) != AK_Success)
-				{
-					printf("Failed to register OculusSpatializer attachment.");
-				}
-			}
-			else
-			{
-				printf("Failed call to AkGetSoundEngineCallbacks in OculusSpatializer.dll");
-			}
-		}
-		else
-		{
-			printf("Failed to load functions AkGetSoundEngineCallbacks in OculusSpatializer.dll");
-		}
-	}
-	else
-	{
-		printf("Failed to load OculusSpatializer.dll");
-	}
-#endif // PLATFORM_WINDOWS
-}
-#pragma endregion Oculus Wwise integration
-
 /**
  * Allocates memory from permanent pool. This memory will NEVER be freed.
  *
@@ -1867,7 +1914,7 @@ void* FAkAudioDevice::AllocatePermanentMemory( int32 Size, bool& AllocatedInPool
 }
 
 AkPlayingID FAkAudioDevice::PostEventInternal(
-		const TCHAR * in_pszEvent, 
+		const FString& in_szEvent, 
 		class UAkComponent* in_pAkComponent, 
 		AkUInt32 in_uFlags /*= 0*/,					///< Bitmask: see \ref AkCallbackType
 		AkCallbackFunc in_pfnCallback /*= NULL*/,	///< Callback function
@@ -1886,12 +1933,20 @@ AkPlayingID FAkAudioDevice::PostEventInternal(
 			}
 		}
 
+		if (in_pAkComponent == (UAkComponent*)DUMMY_GAMEOBJ)
+		{
 #ifndef AK_SUPPORT_WCHAR
-		ANSICHAR* szEvent = TCHAR_TO_ANSI(in_pszEvent);
+			ANSICHAR* szEvent = TCHAR_TO_ANSI(*in_szEvent);
 #else
-		const WIDECHAR * szEvent = in_pszEvent;
+			const WIDECHAR * szEvent = *in_szEvent;
 #endif
-		return AK::SoundEngine::PostEvent( szEvent, GameObjID, in_uFlags, in_pfnCallback, in_pCookie );
+			return AK::SoundEngine::PostEvent(szEvent, GameObjID, in_uFlags, in_pfnCallback, in_pCookie);
+		}
+		else
+		{
+
+			return in_pAkComponent->PostAkEventByNameWithCallback(in_szEvent, in_uFlags, in_pfnCallback, in_pCookie);
+		}
 	}
 	else
 	{

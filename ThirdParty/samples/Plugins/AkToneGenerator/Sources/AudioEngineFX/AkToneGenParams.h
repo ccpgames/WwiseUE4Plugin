@@ -11,9 +11,9 @@
 #ifndef _AK_TONEGENPARAMS_H_
 #define _AK_TONEGENPARAMS_H_
 
-#include <AK/Plugin/AkToneSourceFactory.h>
 #include <AK/Tools/Common/AkAssert.h>
 #include <math.h>
+#include <AK/SoundEngine/Common/IAkPlugin.h>
 
 // Parameters IDs for the Wwise or RTPC.
 static const AkPluginParamID AK_TONEGEN_FXPARAM_GAIN_ID				= 0;	// RTPCable

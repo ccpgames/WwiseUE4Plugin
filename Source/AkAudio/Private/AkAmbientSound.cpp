@@ -12,18 +12,6 @@
 	AAkAmbientSound
 ------------------------------------------------------------------------------------*/
 
-/**
- * Static callback for ambient sounds
- */
-static void AkAmbientSoundCallback( AkCallbackType in_eType, AkCallbackInfo* in_pCallbackInfo )
-{
-	AAkAmbientSound * pObj = ( (AAkAmbientSound *) in_pCallbackInfo->pCookie );
-	if( pObj && pObj->IsValidLowLevelFast(false) )
-	{
-		pObj->Playing( false );
-	}
-}
-
 AAkAmbientSound::AAkAmbientSound(const class FObjectInitializer& ObjectInitializer) :
 Super(ObjectInitializer)
 {
@@ -60,19 +48,6 @@ void AAkAmbientSound::PostInitializeComponents()
 	AkComponent->UpdateAkReverbVolumeList(AkComponent->GetComponentLocation());
 }
 
-void AAkAmbientSound::EndPlay(const EEndPlayReason::Type EndPlayReason)
-{
-	FAkAudioDevice * AkAudioDevice = FAkAudioDevice::Get();
-	if( AkAudioDevice )
-	{
-		// We're about to get destroyed, cancel our callbacks...
-		AkAudioDevice->CancelEventCallbackCookie(this);
-	}
-
-	Super::EndPlay(EndPlayReason);
-}
-
-
 #if WITH_EDITOR
 void AAkAmbientSound::CheckForErrors()
 {
@@ -105,17 +80,18 @@ void AAkAmbientSound::StopAmbientSound()
 
 void AAkAmbientSound::StartPlaying()
 {
-	if( !IsCurrentlyPlaying() && AkComponent->AkAudioEvent )
+	if( !IsCurrentlyPlaying() )
 	{
 		FAkAudioDevice * AkAudioDevice = FAkAudioDevice::Get();
 		if( AkAudioDevice )
 		{
-			Playing( true );
 			AkAudioDevice->SetAttenuationScalingFactor(this, AkComponent->AttenuationScalingFactor);
-			if (AkAudioDevice->PostEvent( AkComponent->AkAudioEvent, this, AK_EndOfEvent, &AkAmbientSoundCallback, this, StopWhenOwnerIsDestroyed ) == AK_INVALID_PLAYING_ID)
+			FString EventName = AkComponent->EventName;
+			if (AkComponent->AkAudioEvent != NULL)
 			{
-				Playing( false );
+				EventName = AkComponent->AkAudioEvent->GetName();
 			}
+			AkAudioDevice->PostEvent(EventName, this, 0, NULL, NULL, StopWhenOwnerIsDestroyed );
 		}
 	}
 }
@@ -129,14 +105,13 @@ void AAkAmbientSound::StopPlaying()
 	}
 }
 
-void AAkAmbientSound::Playing( bool in_IsPlaying )
-{
-	FScopeLock Lock(&PlayingCriticalSection);
-	CurrentlyPlaying = in_IsPlaying;
-}
-
 bool AAkAmbientSound::IsCurrentlyPlaying()
 {
-	FScopeLock Lock(&PlayingCriticalSection);
-	return CurrentlyPlaying;
+	bool ret = false;
+	if (AkComponent)
+	{
+		ret = AkComponent->NumActiveEvents.GetValue() != 0;
+	}
+
+	return ret;
 }

@@ -17,7 +17,11 @@ AAkReverbVolume::AAkReverbVolume(const class FObjectInitializer& ObjectInitializ
 {
 	// Property initialization
 	static FName CollisionProfileName(TEXT("OverlapAll"));
-	BrushComponent->SetCollisionProfileName(CollisionProfileName);
+	UBrushComponent* BrushComp = GetBrushComponent();
+	if (BrushComp)
+	{
+		BrushComp->SetCollisionProfileName(CollisionProfileName);
+	}
 
 	bColored = true;
 	BrushColor = FColor(0, 255, 255, 255);

@@ -12,9 +12,11 @@
 #define GAME_OBJECT_NON_RECORDABLE 20
 
 #if defined AK_PS4 || defined AK_XBOXONE
-#define BGM_OUTPUT_TYPE (AkAudioOutputType)(AkOutput_BGM | AkOutput_OptionNotRecordable)
+#define BGM_OUTPUT_TYPE ((AkAudioOutputType)( AkOutput_BGM ))
+#define BGM_OUTPUT_FLAGS AkAudioOutputFlags_OptionNotRecordable
 #else
 #define BGM_OUTPUT_TYPE AkOutput_MergeToMain
+#define BGM_OUTPUT_FLAGS 0
 #endif
 
 
@@ -30,7 +32,7 @@ DemoBGMusic::DemoBGMusic( Menu& in_ParentMenu ) : Page( in_ParentMenu, "Backgrou
 /// \return True if successful and False otherwise.
 bool DemoBGMusic::Init()
 {
-	AkBankID bankID; // Not used
+		AkBankID bankID; // Not used
 	if ( AK::SoundEngine::LoadBank( "BGM.bnk", AK_DEFAULT_POOL_ID, bankID ) != AK_Success )
 	{
 		SetLoadFileErrorMessage( "BGM.bnk" );
@@ -39,7 +41,7 @@ bool DemoBGMusic::Init()
 
 	//Add a secondary output tied to the BGM endpoint of the console.
 	//This output will be tied to listener #8 (any can be used, as long as no other output uses it)
-	AK::SoundEngine::AddSecondaryOutput(0 /*Ignored for BGM*/, BGM_OUTPUT_TYPE, 0x80 /*Use the listener #8 (bit mask)*/);
+	AK::SoundEngine::AddSecondaryOutput(0 /*Ignored for BGM*/, BGM_OUTPUT_TYPE, 0x80 /*Use the listener #8 (bit mask)*/, BGM_OUTPUT_FLAGS);
 
 	// In order to show the difference between a recordable sound and a non-recordable sound, let's set up 2 game objects.
 	// Register the "Recordable music object" game object.  

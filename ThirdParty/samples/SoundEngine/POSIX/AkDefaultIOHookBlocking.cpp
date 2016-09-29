@@ -149,7 +149,7 @@ AKRESULT CAkDefaultIOHookBlocking::Read(
     AkIOTransferInfo &		io_transferInfo		// Synchronous data transfer info. 
     )
 {
-#ifdef AK_QNX
+#if defined( AK_QNX ) || defined (AK_EMSCRIPTEN)
 	if( !fseeko( in_fileDesc.hFile, io_transferInfo.uFilePosition, SEEK_SET ) )
 #else
 	#if defined AK_LINUX

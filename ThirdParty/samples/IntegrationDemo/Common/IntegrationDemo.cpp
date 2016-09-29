@@ -8,7 +8,6 @@
 #include "AkFilePackageLowLevelIOBlocking.h"		// Low level io
 
 #include "IntegrationDemo.h"
-#include <AK/Plugin/AllPluginsRegistrationHelpers.h>	// Plug-ins
 #ifdef AK_MOTION
 #include <AK/MotionEngine/Common/AkMotionEngine.h>	// Motion Engine (required only for playback of Motion objects)
 #endif // AK_MOTION
@@ -17,6 +16,7 @@
 #include "InputMgr.h"
 #include "Menu.h"
 #include "../WwiseProject/GeneratedSoundBanks/Wwise_IDs.h"
+#include <AK/Plugin/AllPluginsFactories.h>
 
 using namespace AKPLATFORM;
 
@@ -98,12 +98,15 @@ bool IntegrationDemo::Init(
 
 	// Set the path to the SoundBank Files.
 	m_pLowLevelIO->SetBasePath( SOUND_BANK_PATH );
+#if defined(AK_IOS)
+	m_pLowLevelIO->AddBasePath( DOCUMENTS_PATH );
+#endif
 	
 	// Set global language. Low-level I/O devices can use this string to find language-specific assets.
 	if ( AK::StreamMgr::SetCurrentLanguage( AKTEXT( "English(US)" ) ) != AK_Success )
 	{
 		goto cleanup;
-	}
+	}	
 	
 	// Initialize the Menu System object
 	basePage = new BaseMenuPage( *m_pMenu );
@@ -115,9 +118,7 @@ bool IntegrationDemo::Init(
 				  *basePage );
 
 	// Initialize the timing variables
-	m_LastFrameDuration = 0;
 	PerformanceFrequency( &m_PerfFreq );
-	PerformanceCounter( &m_LastFrameStart );
 
 	return true;
 
@@ -154,16 +155,24 @@ void IntegrationDemo::OnBack()
 
 void IntegrationDemo::Render()
 {
+	if(m_bGamePaused)
+		return;
+#ifdef __EMSCRIPTEN__
+	// With EMSCRIPTEN, our frame rate is higher and it brings video rendering performances issues, Make it skip some frames so it is fluid and more like others platforms
+	static int iFrameCounter = -1; //init -1 so first frame is 0.
+	++iFrameCounter;
+	if (iFrameCounter % 3 == 0)
+#endif
+	{
 	m_pMenu->Draw();
+	}
+	
 	AK::SoundEngine::RenderAudio();
 }
 
 void IntegrationDemo::EndFrame()
 {
-	AkInt32 iSleepTime;
-	
-	iSleepTime = CalculateSleepTime();
-	m_LastFrameStart = m_FrameStartPerf;
+	AkInt32 iSleepTime = CalculateSleepTime();
 	AkSleep( iSleepTime );
 }
 
@@ -247,6 +256,9 @@ bool IntegrationDemo::InitWwise(
     
     // CAkFilePackageLowLevelIOBlocking::Init() creates a streaming device
     // in the Stream Manager, and registers itself as the File Location Resolver.
+	in_deviceSettings.bUseStreamCache = true;
+	in_deviceSettings.uIOMemoryAlignment = 4096;
+	in_deviceSettings.uGranularity = 512 * 1024;
 	res = m_pLowLevelIO->Init( in_deviceSettings );
 	if ( res != AK_Success )
 	{
@@ -290,17 +302,7 @@ bool IntegrationDemo::InitWwise(
 	{
 		__AK_OSCHAR_SNPRINTF( in_szErrorBuffer, in_unErrorBufferCharCount, AKTEXT("AK::Comm::Init() returned AKRESULT %d. Communication between the Wwise authoring application and the game will not be possible."), res );
 	}
-#endif // AK_OPTIMIZED
-	
-	//
-	// Register plugins
-	/// Note: This a convenience method for rapid prototyping. 
-	/// To reduce executable code size register/link only the plug-ins required by your game 
-	res = AK::SoundEngine::RegisterAllPlugins();
-	if ( res != AK_Success )
-	{
-		__AK_OSCHAR_SNPRINTF( in_szErrorBuffer, in_unErrorBufferCharCount, AKTEXT("AK::SoundEngine::RegisterAllPlugins() returned AKRESULT %d."), res );
-	}	
+#endif // AK_OPTIMIZED	
    
     return true;
 }
@@ -336,37 +338,17 @@ void IntegrationDemo::TermWwise()
 	}
 }
 
-AkUInt32 IntegrationDemo::CalculateSleepTime()
+AkInt32 IntegrationDemo::CalculateSleepTime()
 {
 	AkInt64  iFrameEndPerf;	  // Performance counter at the end of the current frame
-	AkUInt32 iSleepTime;      // Value to be returned
-	AkReal32 dblCurrFrameDur; // How long the current frame has lasted
-	AkReal32 dblPauseTime;    // Inactive time between frames
-	AkReal32 dblRound;        // Temporary storage of return value for rounding
-
-	// Calculate the inactive time between the end of the previous frame and the start of the current
-	dblPauseTime = ( (AkReal32)( m_FrameStartPerf - m_LastFrameStart ) * 1000 / (AkReal32)m_PerfFreq ) - m_LastFrameDuration;
-	
-	// Calculate how long the current frame has lasted so far
 	PerformanceCounter( &iFrameEndPerf );
-	dblCurrFrameDur = ( (AkReal32)( iFrameEndPerf - m_FrameStartPerf ) * 1000 / (AkReal32)m_PerfFreq );
 
-	dblRound = MS_PER_FRAME - ( dblPauseTime + ( (AkReal32)( iFrameEndPerf - m_FrameStartPerf ) * 1000 / (AkReal32)m_PerfFreq ) );
+	// Calculate how long the current frame has lasted so far
+	AkReal64 dblCurrFrameDur = ( (AkReal64)( iFrameEndPerf - m_FrameStartPerf ) * 1000 / (AkReal64)m_PerfFreq );
 
-	if ( dblRound <= 0 )
-	{
-		// This frame itteration took longer than the desired time for a frame, do not sleep!
-		iSleepTime = 0;
-	}
-	else
-	{
-		// Round the amount of time to sleep to a whole number
-		iSleepTime = (AkUInt32)( dblRound + 0.5f );
-	}
-
-	// Record this frame's total duration
-	m_LastFrameDuration = dblCurrFrameDur + iSleepTime;
-
+	// We want sleep the remainder to get to a duration of MS_PER_FRAME
+	AkInt32 iSleepTime = AkMax( 0, (AkInt32)(MS_PER_FRAME - dblCurrFrameDur));
+	
 	return iSleepTime;	 
 }
 

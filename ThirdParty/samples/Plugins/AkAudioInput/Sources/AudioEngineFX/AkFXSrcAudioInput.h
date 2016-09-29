@@ -13,6 +13,8 @@
 
 #include "AkFXSrcAudioInputParams.h"
 #include <AK/Plugin/PluginServices/AkValueRamp.h>
+#include <AK/Plugin/AkAudioInputPlugin.h>
+
 
 //-----------------------------------------------------------------------------
 // Name: class CAkFXSrcAudioInput

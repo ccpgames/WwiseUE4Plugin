@@ -46,17 +46,14 @@ void CDlgPerforceConfig::OnInitDialog( HWND in_hWnd )
 	SetDlgItemText( in_hWnd, IDC_EDIT_HOST, CString( client.GetHost().Text() ) );
 	SetDlgItemText( in_hWnd, IDC_EDIT_USER, CString( client.GetUser().Text() ) );
 
-	CRegKey regKey;
-	regKey.Create( HKEY_CURRENT_USER, m_pUtilities->GetRegistryPath() + k_csRegFolder );
-	
-	TCHAR szDiffCommand[MAX_PATH] = {0};
+	WCHAR szDiffCommand[MAX_PATH] = {0};
 	ULONG uSize = ARRAYSIZE( szDiffCommand );
-	regKey.QueryStringValue( k_csRegKeyDiffCommand, szDiffCommand, &uSize );
+	m_pUtilities->GetUserPreferenceString( k_csRegFolder + k_csRegKeyDiffCommand, szDiffCommand, uSize );
 
 	SetDlgItemText( in_hWnd, IDC_DIFF_TOOL, szDiffCommand );
 
 	DWORD dwUseAKWaveViewerForDiff = 1;
-	regKey.QueryDWORDValue( k_csUseAKWaveViewerForDiff, dwUseAKWaveViewerForDiff );
+	m_pUtilities->GetUserPreferenceDword( k_csRegFolder + k_csUseAKWaveViewerForDiff, dwUseAKWaveViewerForDiff );
 
 	CheckDlgButton( in_hWnd, IDC_WAVEVIEWER_DIFF_CHECK, dwUseAKWaveViewerForDiff ? BST_CHECKED : BST_UNCHECKED );
 }
@@ -88,8 +85,8 @@ bool CDlgPerforceConfig::OnBnClickedOk( HWND in_hWnd )
 		CString csMessage;
 		CString csCaption;
 
-		csMessage.LoadString( IDS_PERFORCE_CONFIG_MESSAGE );
-		csCaption.LoadString( IDS_PERFORCE_MESSAGEBOX_CAPTION );
+		csMessage = _T("One or more required fields are empty");
+		csCaption = _T("Perforce plug-in");
 
 		m_pUtilities->MessageBox( in_hWnd, csMessage, csCaption, MB_OK );
 
@@ -102,17 +99,14 @@ bool CDlgPerforceConfig::OnBnClickedOk( HWND in_hWnd )
 		CW2A strHost( csHost );
 		CW2A strUser( csUser );
 
-		CRegKey regKey;
-		regKey.Create( HKEY_CURRENT_USER, m_pUtilities->GetRegistryPath() + k_csRegFolder );
+		m_pUtilities->SetUserPreferenceString( k_csRegFolder + k_csRegKeyClient, csClient );
+		m_pUtilities->SetUserPreferenceString( k_csRegFolder + k_csRegKeyServer, csServer );		
+		m_pUtilities->SetUserPreferenceString( k_csRegFolder + k_csRegKeyPort, csPort );
+		m_pUtilities->SetUserPreferenceString( k_csRegFolder + k_csRegKeyHost, csHost );
+		m_pUtilities->SetUserPreferenceString( k_csRegFolder + k_csRegKeyUser, csUser );
+		m_pUtilities->SetUserPreferenceString( k_csRegFolder + k_csRegKeyDiffCommand, csDiffCommand );
 
-		regKey.SetStringValue( k_csRegKeyClient, csClient );
-		regKey.SetStringValue( k_csRegKeyServer, csServer );		
-		regKey.SetStringValue( k_csRegKeyPort, csPort );
-		regKey.SetStringValue( k_csRegKeyHost, csHost );
-		regKey.SetStringValue( k_csRegKeyUser, csUser );
-		regKey.SetStringValue( k_csRegKeyDiffCommand, csDiffCommand );
-
-		regKey.SetDWORDValue( k_csUseAKWaveViewerForDiff, IsDlgButtonChecked( in_hWnd, IDC_WAVEVIEWER_DIFF_CHECK ) == BST_CHECKED );
+		m_pUtilities->SetUserPreferenceDword( k_csRegFolder + k_csUseAKWaveViewerForDiff, IsDlgButtonChecked( in_hWnd, IDC_WAVEVIEWER_DIFF_CHECK ) == BST_CHECKED );
 	}
 
 	return bReturn;

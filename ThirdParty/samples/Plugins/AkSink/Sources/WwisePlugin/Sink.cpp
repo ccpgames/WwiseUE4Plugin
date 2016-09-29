@@ -9,7 +9,7 @@
 
 #include "stdafx.h"
 #include "Sink.h"
-#include <AK/Plugin/AkSinkFactory.h>
+#include "SinkPlugin.h"
 #include <AK/Wwise/Utilities.h>
 #include <AK/Wwise/AudioPlugin.h>
 #include <AK/Tools/Common/AkAssert.h>
@@ -64,27 +64,16 @@ CAkSinkApp theApp;
 BOOL CAkSinkApp::InitInstance()
 {
 	CWinApp::InitInstance();
-
+	AK::Wwise::RegisterWwisePlugin();
 	return TRUE;
 }
 
 AK::Wwise::IPluginBase* __stdcall AkCreatePlugin( unsigned short in_usCompanyID, unsigned short in_usPluginID )
 {
-	return NULL;
-}
-
-bool __stdcall AkGetSoundEngineCallbacks( unsigned short in_usCompanyID, unsigned short in_usPluginID, AkCreatePluginCallback & out_funcEffect, AkCreateParamCallback & out_funcParam )
-{
-	if( in_usCompanyID == AKCOMPANYID_AUDIOKINETIC )
-	{
-		if ( in_usPluginID == AKEFFECTID_SINK )
-		{
-			out_funcEffect = CreateSink;
-			out_funcParam = NULL;
-		}
-	}
-	return true;
+	return new AkSinkPlugin();
 }
 
 /// Dummy assert hook for Wwise plug-ins using AKASSERT (cassert used by default).
 DEFINEDUMMYASSERTHOOK;
+DEFINE_PLUGIN_REGISTER_HOOK
+

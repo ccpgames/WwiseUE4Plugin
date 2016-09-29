@@ -1198,6 +1198,14 @@
 			RelativePath="AkSinkXAudio.h"
 			>
 		</File>
+		<File
+			RelativePath="SinkPluginParams.cpp"
+			>
+		</File>
+		<File
+			RelativePath="SinkPluginParams.h"
+			>
+		</File>
 		<Filter
 			Name="include"
 			Filter=""

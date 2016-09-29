@@ -11,7 +11,6 @@
 #include "stdafx.h"
 #include "AudioInput.h"
 #include <AK/Wwise/Utilities.h>
-#include <AK/Plugin/AkAudioInputSourceFactory.h>
 #include "AudioInputPlugin.h"
 #include "SoundInputMgr.h"
 
@@ -64,8 +63,8 @@ CAudioInputApp theApp;
 // CAudioInputApp initialization
 BOOL CAudioInputApp::InitInstance()
 {
-	CWinApp::InitInstance();
-
+	AK::Wwise::RegisterWwisePlugin();
+	CWinApp::InitInstance();	
 	SoundInputMgr::Instance().Initialize();
 	
 	return TRUE;
@@ -83,24 +82,9 @@ int CAudioInputApp::ExitInstance()
 // Plugin creation
 AK::Wwise::IPluginBase* __stdcall AkCreatePlugin( unsigned short in_usCompanyID, unsigned short in_usPluginID )
 {
-	if ( in_usCompanyID == AudioInputPlugin::CompanyID && in_usPluginID == AudioInputPlugin::PluginID )
-		return new AudioInputPlugin;
-
-	return NULL;
-}
-
-// Sound Engine callbacks
-bool __stdcall AkGetSoundEngineCallbacks( unsigned short in_usCompanyID, unsigned short in_usPluginID, AkCreatePluginCallback & out_funcEffect, AkCreateParamCallback & out_funcParam )
-{
-	if ( in_usCompanyID == AudioInputPlugin::CompanyID && in_usPluginID == AudioInputPlugin::PluginID )
-	{
-		out_funcEffect = CreateAudioInputSource;
-		out_funcParam = CreateAudioInputSourceParams;
-		return true;
-	}
-
-	return false;
+	return new AudioInputPlugin;
 }
 
 /// Dummy assert hook for Wwise plug-ins using AKASSERT (cassert used by default).
 DEFINEDUMMYASSERTHOOK;
+DEFINE_PLUGIN_REGISTER_HOOK;

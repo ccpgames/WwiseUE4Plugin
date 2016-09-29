@@ -47,8 +47,8 @@ bool CDlgPerforceDescription::OnBnClickedOk( HWND in_hWnd )
 		CString csMessage;
 		CString csCaption;
 
-		csMessage.LoadString( IDS_PERFORCE_DESCRIPTION_MESSAGE );
-		csCaption.LoadString( IDS_PERFORCE_MESSAGEBOX_CAPTION );
+		csMessage= _T("The description is invalid");
+		csCaption= _T("Perforce plug-in");
 
 		m_pUtilities->MessageBox( in_hWnd, csMessage, csCaption, MB_OK );
 

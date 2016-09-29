@@ -7,6 +7,8 @@
 #pragma once
 
 #include <AK/SoundEngine/Common/AkTypes.h>
+#include <AK/SoundEngine/Common/IAkPlugin.h>
+
 
 // Forward definition
 struct AkAudioFormat;

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<WwiseDocument Type="WorkUnit" ID="{B90D7019-72C6-46E8-990C-3BC04B2724DB}" SchemaVersion="70">
+<WwiseDocument Type="WorkUnit" ID="{B90D7019-72C6-46E8-990C-3BC04B2724DB}" SchemaVersion="72">
 	<Busses>
 		<WorkUnit Name="Default Work Unit" ID="{B90D7019-72C6-46E8-990C-3BC04B2724DB}" PersistMode="Standalone">
 			<ChildrenList>
@@ -79,43 +79,36 @@
 									<PropertyList>
 										<Property Name="BypassEffect0" Type="bool">
 											<ValueList>
-												<Value Platform="Wii">False</Value>
-												<Value Platform="3DS">False</Value>
-												<Value Platform="iOS">False</Value>
 												<Value Platform="VitaHW">False</Value>
+												<Value Platform="iOS">False</Value>
+												<Value Platform="3DS">False</Value>
 											</ValueList>
 										</Property>
 										<Property Name="BypassEffect1" Type="bool">
 											<ValueList>
-												<Value Platform="Wii">False</Value>
-												<Value Platform="3DS">False</Value>
-												<Value Platform="iOS">False</Value>
 												<Value Platform="VitaHW">False</Value>
+												<Value Platform="iOS">False</Value>
+												<Value Platform="3DS">False</Value>
 											</ValueList>
 										</Property>
 										<Property Name="BypassEffect2" Type="bool">
 											<ValueList>
-												<Value Platform="Wii">False</Value>
-												<Value Platform="3DS">False</Value>
-												<Value Platform="iOS">False</Value>
 												<Value Platform="VitaHW">False</Value>
+												<Value Platform="iOS">False</Value>
+												<Value Platform="3DS">False</Value>
 											</ValueList>
 										</Property>
 										<Property Name="BypassEffect3" Type="bool">
 											<ValueList>
-												<Value Platform="Wii">False</Value>
-												<Value Platform="3DS">False</Value>
-												<Value Platform="iOS">False</Value>
 												<Value Platform="VitaHW">False</Value>
+												<Value Platform="iOS">False</Value>
+												<Value Platform="3DS">False</Value>
 											</ValueList>
 										</Property>
 									</PropertyList>
 									<ReferenceList>
 										<Reference Name="Effect0" PluginName="Wwise RoomVerb" CompanyID="0" PluginID="118" PluginType="3">
 											<ObjectRef Name="Hangar_Env" ID="{C2817027-BAD4-4483-8762-64C45E56497E}" WorkUnitID="{DC1BCA07-F4BB-483E-A207-A5D3F24C41B2}"/>
-										</Reference>
-										<Reference Name="Effect0" Platform="Wii" PluginName="Wii Standard Reverb" CompanyID="0" PluginID="112" PluginType="3">
-											<ObjectRef Name="Garage" ID="{F88BE6D4-6202-4443-B1CA-A94BE5C0E6C2}" WorkUnitID="{7FE6457A-8D14-4D77-895C-AE53602C6B10}"/>
 										</Reference>
 										<Reference Name="Effect0" Platform="3DS" PluginName="3DS Reverb" CompanyID="0" PluginID="133" PluginType="3">
 											<ObjectRef Name="Hangar_3DS" ID="{E718D6B2-90C5-4B1C-80DE-F27D2EBC8E99}" WorkUnitID="{DC1BCA07-F4BB-483E-A207-A5D3F24C41B2}"/>
@@ -128,15 +121,12 @@
 												<Effect Name="Default (Custom)" ID="{EC551BFA-3792-40F7-8C10-2640297EE891}" ShortID="920518491" PluginName="Vita Reverb" CompanyID="0" PluginID="140" PluginType="3"/>
 											</Custom>
 										</Reference>
-										<Reference Name="Effect1" Platform="Wii"/>
 										<Reference Name="Effect1" Platform="3DS"/>
 										<Reference Name="Effect1" Platform="iOS"/>
 										<Reference Name="Effect1" Platform="VitaHW"/>
-										<Reference Name="Effect2" Platform="Wii"/>
 										<Reference Name="Effect2" Platform="3DS"/>
 										<Reference Name="Effect2" Platform="iOS"/>
 										<Reference Name="Effect2" Platform="VitaHW"/>
-										<Reference Name="Effect3" Platform="Wii"/>
 										<Reference Name="Effect3" Platform="3DS"/>
 										<Reference Name="Effect3" Platform="iOS"/>
 										<Reference Name="Effect3" Platform="VitaHW"/>

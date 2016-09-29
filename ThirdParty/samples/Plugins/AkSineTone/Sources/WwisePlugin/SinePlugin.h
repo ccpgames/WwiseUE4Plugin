@@ -30,13 +30,9 @@ public:
 
     virtual bool GetBankParameters( const GUID & in_guidPlatform, AK::Wwise::IWriteData* in_pDataWriter ) const;
 
-	virtual bool DisplayNameForProp( LPCWSTR in_szPropertyName, LPWSTR out_szDisplayName, UINT in_unCharCount ) const;
-
 	virtual bool Help( HWND in_hWnd, eDialog in_eDialog, LPCWSTR in_szLanguageCode ) const;
 
-	static const short CompanyID;
-	static const short PluginID;
-
+	virtual bool GetSourceDuration( double& out_dblMinDuration, double& out_dblMaxDuration ) const;
 private:
 	AK::Wwise::IPluginPropertySet * m_pPSet;
 };

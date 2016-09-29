@@ -35,8 +35,6 @@ public:
 
     virtual bool GetBankParameters( const GUID & in_guidPlatform, AK::Wwise::IWriteData* in_pDataWriter ) const;
 
-	virtual bool DisplayNameForProp( LPCWSTR in_szPropertyName, LPWSTR out_szDisplayName, UINT in_unCharCount ) const;
-
 	virtual bool Help( HWND in_hWnd, eDialog in_eDialog, LPCWSTR in_szLanguageCode ) const;
 
 	static void GetFormatCallbackFunc(
@@ -48,9 +46,6 @@ public:
 		AkPlayingID		in_playingID,  ///< Playing ID (same that was returned from the PostEvent call or from the PlayAudioInput call.
 		AkAudioBuffer*	io_pBufferOut  ///< Buffer to fill
 	    );
-
-	static const short CompanyID;
-	static const short PluginID;
 
 private:
 	SoundInput m_Input;

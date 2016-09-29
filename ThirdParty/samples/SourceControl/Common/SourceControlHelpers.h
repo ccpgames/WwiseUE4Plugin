@@ -23,8 +23,8 @@ namespace SourceControlHelpers
 		const CString& in_csDestinationDir,
 		std::vector<CString>& out_rNewPaths,
 		AK::Wwise::ISourceControlUtilities* in_pUtilities,
-		UINT in_uiIdsErrorAlreadyExist,
-		UINT in_uiIdsErrorNameConflict );
+		LPCTSTR in_pszErrorAlreadyExist,
+		LPCTSTR in_pszErrorNameConflict );
 
 	CString GetLastErrorString();
 

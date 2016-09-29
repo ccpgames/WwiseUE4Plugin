@@ -25,14 +25,6 @@
       <Configuration>Profile</Configuration>
       <Platform>x64</Platform>
     </ProjectConfiguration>
-    <ProjectConfiguration Include="Profile_EnableAsserts|Win32">
-      <Configuration>Profile_EnableAsserts</Configuration>
-      <Platform>Win32</Platform>
-    </ProjectConfiguration>
-    <ProjectConfiguration Include="Profile_EnableAsserts|x64">
-      <Configuration>Profile_EnableAsserts</Configuration>
-      <Platform>x64</Platform>
-    </ProjectConfiguration>
     <ProjectConfiguration Include="Profile(StaticCRT)|Win32">
       <Configuration>Profile(StaticCRT)</Configuration>
       <Platform>Win32</Platform>
@@ -105,18 +97,6 @@
     <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Profile|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
-    <UseDebugLibraries>true</UseDebugLibraries>
-    <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v140</PlatformToolset>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Profile_EnableAsserts|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
-    <UseDebugLibraries>true</UseDebugLibraries>
-    <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v140</PlatformToolset>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Profile_EnableAsserts|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
@@ -197,14 +177,6 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="../../../source/Build/PropertySheets/Win32/NDebug_vc140.props" />
   </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Profile_EnableAsserts|Win32'" Label="PropertySheets">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="../../../source/Build/PropertySheets/Win32/NDebug_vc140.props" />
-  </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Profile_EnableAsserts|x64'" Label="PropertySheets">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="../../../source/Build/PropertySheets/Win32/NDebug_vc140.props" />
-  </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Profile(StaticCRT)|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="../../../source/Build/PropertySheets/Win32/NDebug_StaticCRT_vc140.props" />
@@ -274,18 +246,6 @@
     <TargetName>IntegrationDemo</TargetName>
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Profile_EnableAsserts|Win32'">
-    <OutDir>..\..\..\$(Platform)_vc140\$(Configuration)\bin\</OutDir>
-    <IntDir>..\..\..\$(Platform)_vc140\$(Configuration)\obj\$(ProjectName)\</IntDir>
-    <TargetName>IntegrationDemo</TargetName>
-    <LinkIncremental>true</LinkIncremental>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Profile_EnableAsserts|x64'">
-    <OutDir>..\..\..\$(Platform)_vc140\$(Configuration)\bin\</OutDir>
-    <IntDir>..\..\..\$(Platform)_vc140\$(Configuration)\obj\$(ProjectName)\</IntDir>
-    <TargetName>IntegrationDemo</TargetName>
-    <LinkIncremental>true</LinkIncremental>
-  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Profile(StaticCRT)|Win32'">
     <OutDir>..\..\..\$(Platform)_vc140\$(Configuration)\bin\</OutDir>
     <IntDir>..\..\..\$(Platform)_vc140\$(Configuration)\obj\$(ProjectName)\</IntDir>
@@ -350,7 +310,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>AkConvolutionReverbFX.lib;AkFlangerFX.lib;AkTremoloFX.lib;AkMemoryMgr.lib;AuroHeadphoneFX.lib;IOSONOProximityMixer.lib;AkMotionGenerator.lib;AkSineSource.lib;AkSoundSeedWind.lib;AkStereoDelayFX.lib;AkGuitarDistortionFX.lib;AkRumble.lib;AkSoundEngine.lib;AkSilenceSource.lib;iZTrashBoxModelerFX.lib;AkSoundSeedImpactFX.lib;AkRoomVerbFX.lib;iZTrashDelayFX.lib;McDSPFutzBoxFX.lib;AkParametricEQFX.lib;AuroPannerMixer.lib;AkToneSource.lib;McDSPLimiterFX.lib;AkCompressorFX.lib;CrankcaseAudioREVModelPlayerFX.lib;AkAudioInputSource.lib;AkMusicEngine.lib;AkSoundSeedWoosh.lib;iZTrashMultibandDistortionFX.lib;iZHybridReverbFX.lib;AkPitchShifterFX.lib;iZTrashDynamicsFX.lib;iZTrashDistortionFX.lib;AkPeakLimiterFX.lib;AkDelayFX.lib;AkGainFX.lib;AkVorbisDecoder.lib;AkMeterFX.lib;AkMatrixReverbFX.lib;iZTrashFiltersFX.lib;AkSynthOne.lib;AkMP3Source.lib;AkStreamMgr.lib;AkHarmonizerFX.lib;AkTimeStretchFX.lib;AkExpanderFX.lib;dxguid.lib;ws2_32.lib;dinput8.lib;Dsound.lib;XInput.lib;Msacm32.lib;Dbghelp.lib;d3d9.lib;D3dx9.lib;Winmm.lib;CommunicationCentral.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>AkConvolutionReverbFX.lib;AkFlangerFX.lib;AkTremoloFX.lib;AkMemoryMgr.lib;AuroHeadphoneFX.lib;IOSONOProximityMixer.lib;AkMotionGenerator.lib;AkSineSource.lib;AkSoundSeedWind.lib;AkStereoDelayFX.lib;AkGuitarDistortionFX.lib;AkRumble.lib;AkSoundEngine.lib;AkSilenceSource.lib;iZTrashBoxModelerFX.lib;AkSoundSeedImpactFX.lib;AkRoomVerbFX.lib;iZTrashDelayFX.lib;McDSPFutzBoxFX.lib;AkParametricEQFX.lib;AkDelayFX.lib;iZTrashDynamicsFX.lib;AkCompressorFX.lib;iZTrashMultibandDistortionFX.lib;AkAudioInputSource.lib;AkMusicEngine.lib;iZTrashFiltersFX.lib;iZHybridReverbFX.lib;CrankcaseAudioREVModelPlayerFX.lib;AkTimeStretchFX.lib;AkPitchShifterFX.lib;AuroPannerMixer.lib;iZTrashDistortionFX.lib;AkMatrixReverbFX.lib;McDSPLimiterFX.lib;AkGainFX.lib;AkVorbisDecoder.lib;AkPeakLimiterFX.lib;AkRecorderFX.lib;AkSoundSeedWoosh.lib;AkMeterFX.lib;AkSynthOne.lib;AkStreamMgr.lib;AkHarmonizerFX.lib;AkToneSource.lib;AkExpanderFX.lib;dxguid.lib;ws2_32.lib;dinput8.lib;Dsound.lib;XInput.lib;Msacm32.lib;Dbghelp.lib;d3d9.lib;D3dx9.lib;Winmm.lib;CommunicationCentral.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)IntegrationDemo.exe</OutputFile>
       <AdditionalLibraryDirectories>$(DXSDK_DIR)\lib\x86;..\..\..\$(Platform)_vc140\$(Configuration)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <TargetMachine>MachineX86</TargetMachine>
@@ -374,7 +334,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>AkConvolutionReverbFX.lib;AkFlangerFX.lib;AkTremoloFX.lib;AkMemoryMgr.lib;AuroHeadphoneFX.lib;IOSONOProximityMixer.lib;AkMotionGenerator.lib;AkSineSource.lib;AkSoundSeedWind.lib;AkStereoDelayFX.lib;AkGuitarDistortionFX.lib;AkRumble.lib;AkSoundEngine.lib;AkSilenceSource.lib;iZTrashBoxModelerFX.lib;AkSoundSeedImpactFX.lib;AkRoomVerbFX.lib;iZTrashDelayFX.lib;McDSPFutzBoxFX.lib;AkParametricEQFX.lib;AuroPannerMixer.lib;AkToneSource.lib;McDSPLimiterFX.lib;AkCompressorFX.lib;CrankcaseAudioREVModelPlayerFX.lib;AkAudioInputSource.lib;AkMusicEngine.lib;AkSoundSeedWoosh.lib;iZTrashMultibandDistortionFX.lib;iZHybridReverbFX.lib;AkPitchShifterFX.lib;iZTrashDynamicsFX.lib;iZTrashDistortionFX.lib;AkPeakLimiterFX.lib;AkDelayFX.lib;AkGainFX.lib;AkVorbisDecoder.lib;AkMeterFX.lib;AkMatrixReverbFX.lib;iZTrashFiltersFX.lib;AkSynthOne.lib;AkMP3Source.lib;AkStreamMgr.lib;AkHarmonizerFX.lib;AkTimeStretchFX.lib;AkExpanderFX.lib;dxguid.lib;ws2_32.lib;dinput8.lib;Dsound.lib;XInput.lib;Msacm32.lib;Dbghelp.lib;d3d9.lib;D3dx9.lib;Winmm.lib;CommunicationCentral.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>AkConvolutionReverbFX.lib;AkFlangerFX.lib;AkTremoloFX.lib;AkMemoryMgr.lib;AuroHeadphoneFX.lib;IOSONOProximityMixer.lib;AkMotionGenerator.lib;AkSineSource.lib;AkSoundSeedWind.lib;AkStereoDelayFX.lib;AkGuitarDistortionFX.lib;AkRumble.lib;AkSoundEngine.lib;AkSilenceSource.lib;iZTrashBoxModelerFX.lib;AkSoundSeedImpactFX.lib;AkRoomVerbFX.lib;iZTrashDelayFX.lib;McDSPFutzBoxFX.lib;AkParametricEQFX.lib;AkDelayFX.lib;iZTrashDynamicsFX.lib;AkCompressorFX.lib;iZTrashMultibandDistortionFX.lib;AkAudioInputSource.lib;AkMusicEngine.lib;iZTrashFiltersFX.lib;iZHybridReverbFX.lib;CrankcaseAudioREVModelPlayerFX.lib;AkTimeStretchFX.lib;AkPitchShifterFX.lib;AuroPannerMixer.lib;iZTrashDistortionFX.lib;AkMatrixReverbFX.lib;McDSPLimiterFX.lib;AkGainFX.lib;AkVorbisDecoder.lib;AkPeakLimiterFX.lib;AkRecorderFX.lib;AkSoundSeedWoosh.lib;AkMeterFX.lib;AkSynthOne.lib;AkStreamMgr.lib;AkHarmonizerFX.lib;AkToneSource.lib;AkExpanderFX.lib;dxguid.lib;ws2_32.lib;dinput8.lib;Dsound.lib;XInput.lib;Msacm32.lib;Dbghelp.lib;d3d9.lib;D3dx9.lib;Winmm.lib;CommunicationCentral.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)IntegrationDemo.exe</OutputFile>
       <AdditionalLibraryDirectories>$(DXSDK_DIR)\lib\x64;..\..\..\$(Platform)_vc140\$(Configuration)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <TargetMachine>MachineX64</TargetMachine>
@@ -399,7 +359,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>AkConvolutionReverbFX.lib;AkFlangerFX.lib;AkTremoloFX.lib;AkMemoryMgr.lib;AuroHeadphoneFX.lib;IOSONOProximityMixer.lib;AkMotionGenerator.lib;AkSineSource.lib;AkSoundSeedWind.lib;AkStereoDelayFX.lib;AkGuitarDistortionFX.lib;AkRumble.lib;AkSoundEngine.lib;AkSilenceSource.lib;iZTrashBoxModelerFX.lib;AkSoundSeedImpactFX.lib;AkRoomVerbFX.lib;iZTrashDelayFX.lib;McDSPFutzBoxFX.lib;AkParametricEQFX.lib;AuroPannerMixer.lib;AkToneSource.lib;McDSPLimiterFX.lib;AkCompressorFX.lib;CrankcaseAudioREVModelPlayerFX.lib;AkAudioInputSource.lib;AkMusicEngine.lib;AkSoundSeedWoosh.lib;iZTrashMultibandDistortionFX.lib;iZHybridReverbFX.lib;AkPitchShifterFX.lib;iZTrashDynamicsFX.lib;iZTrashDistortionFX.lib;AkPeakLimiterFX.lib;AkDelayFX.lib;AkGainFX.lib;AkVorbisDecoder.lib;AkMeterFX.lib;AkMatrixReverbFX.lib;iZTrashFiltersFX.lib;AkSynthOne.lib;AkMP3Source.lib;AkStreamMgr.lib;AkHarmonizerFX.lib;AkTimeStretchFX.lib;AkExpanderFX.lib;dxguid.lib;ws2_32.lib;dinput8.lib;Dsound.lib;XInput.lib;Msacm32.lib;Dbghelp.lib;d3d9.lib;D3dx9.lib;Winmm.lib;CommunicationCentral.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>AkConvolutionReverbFX.lib;AkFlangerFX.lib;AkTremoloFX.lib;AkMemoryMgr.lib;AuroHeadphoneFX.lib;IOSONOProximityMixer.lib;AkMotionGenerator.lib;AkSineSource.lib;AkSoundSeedWind.lib;AkStereoDelayFX.lib;AkGuitarDistortionFX.lib;AkRumble.lib;AkSoundEngine.lib;AkSilenceSource.lib;iZTrashBoxModelerFX.lib;AkSoundSeedImpactFX.lib;AkRoomVerbFX.lib;iZTrashDelayFX.lib;McDSPFutzBoxFX.lib;AkParametricEQFX.lib;AkDelayFX.lib;iZTrashDynamicsFX.lib;AkCompressorFX.lib;iZTrashMultibandDistortionFX.lib;AkAudioInputSource.lib;AkMusicEngine.lib;iZTrashFiltersFX.lib;iZHybridReverbFX.lib;CrankcaseAudioREVModelPlayerFX.lib;AkTimeStretchFX.lib;AkPitchShifterFX.lib;AuroPannerMixer.lib;iZTrashDistortionFX.lib;AkMatrixReverbFX.lib;McDSPLimiterFX.lib;AkGainFX.lib;AkVorbisDecoder.lib;AkPeakLimiterFX.lib;AkRecorderFX.lib;AkSoundSeedWoosh.lib;AkMeterFX.lib;AkSynthOne.lib;AkStreamMgr.lib;AkHarmonizerFX.lib;AkToneSource.lib;AkExpanderFX.lib;dxguid.lib;ws2_32.lib;dinput8.lib;Dsound.lib;XInput.lib;Msacm32.lib;Dbghelp.lib;d3d9.lib;D3dx9.lib;Winmm.lib;CommunicationCentral.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)IntegrationDemo.exe</OutputFile>
       <AdditionalLibraryDirectories>$(DXSDK_DIR)\lib\x86;..\..\..\$(Platform)_vc140\$(Configuration)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <TargetMachine>MachineX86</TargetMachine>
@@ -423,7 +383,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>AkConvolutionReverbFX.lib;AkFlangerFX.lib;AkTremoloFX.lib;AkMemoryMgr.lib;AuroHeadphoneFX.lib;IOSONOProximityMixer.lib;AkMotionGenerator.lib;AkSineSource.lib;AkSoundSeedWind.lib;AkStereoDelayFX.lib;AkGuitarDistortionFX.lib;AkRumble.lib;AkSoundEngine.lib;AkSilenceSource.lib;iZTrashBoxModelerFX.lib;AkSoundSeedImpactFX.lib;AkRoomVerbFX.lib;iZTrashDelayFX.lib;McDSPFutzBoxFX.lib;AkParametricEQFX.lib;AuroPannerMixer.lib;AkToneSource.lib;McDSPLimiterFX.lib;AkCompressorFX.lib;CrankcaseAudioREVModelPlayerFX.lib;AkAudioInputSource.lib;AkMusicEngine.lib;AkSoundSeedWoosh.lib;iZTrashMultibandDistortionFX.lib;iZHybridReverbFX.lib;AkPitchShifterFX.lib;iZTrashDynamicsFX.lib;iZTrashDistortionFX.lib;AkPeakLimiterFX.lib;AkDelayFX.lib;AkGainFX.lib;AkVorbisDecoder.lib;AkMeterFX.lib;AkMatrixReverbFX.lib;iZTrashFiltersFX.lib;AkSynthOne.lib;AkMP3Source.lib;AkStreamMgr.lib;AkHarmonizerFX.lib;AkTimeStretchFX.lib;AkExpanderFX.lib;dxguid.lib;ws2_32.lib;dinput8.lib;Dsound.lib;XInput.lib;Msacm32.lib;Dbghelp.lib;d3d9.lib;D3dx9.lib;Winmm.lib;CommunicationCentral.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>AkConvolutionReverbFX.lib;AkFlangerFX.lib;AkTremoloFX.lib;AkMemoryMgr.lib;AuroHeadphoneFX.lib;IOSONOProximityMixer.lib;AkMotionGenerator.lib;AkSineSource.lib;AkSoundSeedWind.lib;AkStereoDelayFX.lib;AkGuitarDistortionFX.lib;AkRumble.lib;AkSoundEngine.lib;AkSilenceSource.lib;iZTrashBoxModelerFX.lib;AkSoundSeedImpactFX.lib;AkRoomVerbFX.lib;iZTrashDelayFX.lib;McDSPFutzBoxFX.lib;AkParametricEQFX.lib;AkDelayFX.lib;iZTrashDynamicsFX.lib;AkCompressorFX.lib;iZTrashMultibandDistortionFX.lib;AkAudioInputSource.lib;AkMusicEngine.lib;iZTrashFiltersFX.lib;iZHybridReverbFX.lib;CrankcaseAudioREVModelPlayerFX.lib;AkTimeStretchFX.lib;AkPitchShifterFX.lib;AuroPannerMixer.lib;iZTrashDistortionFX.lib;AkMatrixReverbFX.lib;McDSPLimiterFX.lib;AkGainFX.lib;AkVorbisDecoder.lib;AkPeakLimiterFX.lib;AkRecorderFX.lib;AkSoundSeedWoosh.lib;AkMeterFX.lib;AkSynthOne.lib;AkStreamMgr.lib;AkHarmonizerFX.lib;AkToneSource.lib;AkExpanderFX.lib;dxguid.lib;ws2_32.lib;dinput8.lib;Dsound.lib;XInput.lib;Msacm32.lib;Dbghelp.lib;d3d9.lib;D3dx9.lib;Winmm.lib;CommunicationCentral.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)IntegrationDemo.exe</OutputFile>
       <AdditionalLibraryDirectories>$(DXSDK_DIR)\lib\x64;..\..\..\$(Platform)_vc140\$(Configuration)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <TargetMachine>MachineX64</TargetMachine>
@@ -448,7 +408,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>AkConvolutionReverbFX.lib;AkFlangerFX.lib;AkTremoloFX.lib;AkMemoryMgr.lib;AuroHeadphoneFX.lib;IOSONOProximityMixer.lib;AkMotionGenerator.lib;AkSineSource.lib;AkSoundSeedWind.lib;AkStereoDelayFX.lib;AkGuitarDistortionFX.lib;AkRumble.lib;AkSoundEngine.lib;AkSilenceSource.lib;iZTrashBoxModelerFX.lib;AkSoundSeedImpactFX.lib;AkRoomVerbFX.lib;iZTrashDelayFX.lib;McDSPFutzBoxFX.lib;AkParametricEQFX.lib;AuroPannerMixer.lib;AkToneSource.lib;McDSPLimiterFX.lib;AkCompressorFX.lib;CrankcaseAudioREVModelPlayerFX.lib;AkAudioInputSource.lib;AkMusicEngine.lib;AkSoundSeedWoosh.lib;iZTrashMultibandDistortionFX.lib;iZHybridReverbFX.lib;AkPitchShifterFX.lib;iZTrashDynamicsFX.lib;iZTrashDistortionFX.lib;AkPeakLimiterFX.lib;AkDelayFX.lib;AkGainFX.lib;AkVorbisDecoder.lib;AkMeterFX.lib;AkMatrixReverbFX.lib;iZTrashFiltersFX.lib;AkSynthOne.lib;AkMP3Source.lib;AkStreamMgr.lib;AkHarmonizerFX.lib;AkTimeStretchFX.lib;AkExpanderFX.lib;dxguid.lib;ws2_32.lib;dinput8.lib;Dsound.lib;XInput.lib;Msacm32.lib;Dbghelp.lib;d3d9.lib;D3dx9.lib;Winmm.lib;CommunicationCentral.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>AkConvolutionReverbFX.lib;AkFlangerFX.lib;AkTremoloFX.lib;AkMemoryMgr.lib;AuroHeadphoneFX.lib;IOSONOProximityMixer.lib;AkMotionGenerator.lib;AkSineSource.lib;AkSoundSeedWind.lib;AkStereoDelayFX.lib;AkGuitarDistortionFX.lib;AkRumble.lib;AkSoundEngine.lib;AkSilenceSource.lib;iZTrashBoxModelerFX.lib;AkSoundSeedImpactFX.lib;AkRoomVerbFX.lib;iZTrashDelayFX.lib;McDSPFutzBoxFX.lib;AkParametricEQFX.lib;AkDelayFX.lib;iZTrashDynamicsFX.lib;AkCompressorFX.lib;iZTrashMultibandDistortionFX.lib;AkAudioInputSource.lib;AkMusicEngine.lib;iZTrashFiltersFX.lib;iZHybridReverbFX.lib;CrankcaseAudioREVModelPlayerFX.lib;AkTimeStretchFX.lib;AkPitchShifterFX.lib;AuroPannerMixer.lib;iZTrashDistortionFX.lib;AkMatrixReverbFX.lib;McDSPLimiterFX.lib;AkGainFX.lib;AkVorbisDecoder.lib;AkPeakLimiterFX.lib;AkRecorderFX.lib;AkSoundSeedWoosh.lib;AkMeterFX.lib;AkSynthOne.lib;AkStreamMgr.lib;AkHarmonizerFX.lib;AkToneSource.lib;AkExpanderFX.lib;dxguid.lib;ws2_32.lib;dinput8.lib;Dsound.lib;XInput.lib;Msacm32.lib;Dbghelp.lib;d3d9.lib;D3dx9.lib;Winmm.lib;CommunicationCentral.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)IntegrationDemo.exe</OutputFile>
       <AdditionalLibraryDirectories>$(DXSDK_DIR)\lib\x86;..\..\..\$(Platform)_vc140\$(Configuration)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <TargetMachine>MachineX86</TargetMachine>
@@ -472,56 +432,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>AkConvolutionReverbFX.lib;AkFlangerFX.lib;AkTremoloFX.lib;AkMemoryMgr.lib;AuroHeadphoneFX.lib;IOSONOProximityMixer.lib;AkMotionGenerator.lib;AkSineSource.lib;AkSoundSeedWind.lib;AkStereoDelayFX.lib;AkGuitarDistortionFX.lib;AkRumble.lib;AkSoundEngine.lib;AkSilenceSource.lib;iZTrashBoxModelerFX.lib;AkSoundSeedImpactFX.lib;AkRoomVerbFX.lib;iZTrashDelayFX.lib;McDSPFutzBoxFX.lib;AkParametricEQFX.lib;AuroPannerMixer.lib;AkToneSource.lib;McDSPLimiterFX.lib;AkCompressorFX.lib;CrankcaseAudioREVModelPlayerFX.lib;AkAudioInputSource.lib;AkMusicEngine.lib;AkSoundSeedWoosh.lib;iZTrashMultibandDistortionFX.lib;iZHybridReverbFX.lib;AkPitchShifterFX.lib;iZTrashDynamicsFX.lib;iZTrashDistortionFX.lib;AkPeakLimiterFX.lib;AkDelayFX.lib;AkGainFX.lib;AkVorbisDecoder.lib;AkMeterFX.lib;AkMatrixReverbFX.lib;iZTrashFiltersFX.lib;AkSynthOne.lib;AkMP3Source.lib;AkStreamMgr.lib;AkHarmonizerFX.lib;AkTimeStretchFX.lib;AkExpanderFX.lib;dxguid.lib;ws2_32.lib;dinput8.lib;Dsound.lib;XInput.lib;Msacm32.lib;Dbghelp.lib;d3d9.lib;D3dx9.lib;Winmm.lib;CommunicationCentral.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>$(OutDir)IntegrationDemo.exe</OutputFile>
-      <AdditionalLibraryDirectories>$(DXSDK_DIR)\lib\x64;..\..\..\$(Platform)_vc140\$(Configuration)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <TargetMachine>MachineX64</TargetMachine>
-    </Link>
-    <ProjectReference>
-      <LinkLibraryDependencies>false</LinkLibraryDependencies>
-    </ProjectReference>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Profile_EnableAsserts|Win32'">
-    <ClCompile>
-      <AdditionalIncludeDirectories>..\..\..\include;..\..\SoundEngine\Common;..\..\SoundEngine\Win32;.;..\Common;..\MenuSystem;..\DemoPages;$(DXSDK_DIR)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>NDEBUG;WIN32;AK_ENABLE_ASSERTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <PrecompiledHeader>Use</PrecompiledHeader>
-      <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
-    <ExceptionHandling>Sync</ExceptionHandling>
-      <EnableEnhancedInstructionSet>StreamingSIMDExtensions</EnableEnhancedInstructionSet>
-    </ClCompile>
-    <ResourceCompile>
-      <PreprocessorDefinitions>NDEBUG;WIN32;AK_ENABLE_ASSERTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\..\..\include;..\..\SoundEngine\Common;..\..\SoundEngine\Win32;.;..\Common;..\MenuSystem;..\DemoPages;$(DXSDK_DIR)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-    </ResourceCompile>
-    <Link>
-      <SubSystem>Windows</SubSystem>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>AkConvolutionReverbFX.lib;AkFlangerFX.lib;AkTremoloFX.lib;AkMemoryMgr.lib;AuroHeadphoneFX.lib;IOSONOProximityMixer.lib;AkMotionGenerator.lib;AkSineSource.lib;AkSoundSeedWind.lib;AkStereoDelayFX.lib;AkGuitarDistortionFX.lib;AkRumble.lib;AkSoundEngine.lib;AkSilenceSource.lib;iZTrashBoxModelerFX.lib;AkSoundSeedImpactFX.lib;AkRoomVerbFX.lib;iZTrashDelayFX.lib;McDSPFutzBoxFX.lib;AkParametricEQFX.lib;AuroPannerMixer.lib;AkToneSource.lib;McDSPLimiterFX.lib;AkCompressorFX.lib;CrankcaseAudioREVModelPlayerFX.lib;AkAudioInputSource.lib;AkMusicEngine.lib;AkSoundSeedWoosh.lib;iZTrashMultibandDistortionFX.lib;iZHybridReverbFX.lib;AkPitchShifterFX.lib;iZTrashDynamicsFX.lib;iZTrashDistortionFX.lib;AkPeakLimiterFX.lib;AkDelayFX.lib;AkGainFX.lib;AkVorbisDecoder.lib;AkMeterFX.lib;AkMatrixReverbFX.lib;iZTrashFiltersFX.lib;AkSynthOne.lib;AkMP3Source.lib;AkStreamMgr.lib;AkHarmonizerFX.lib;AkTimeStretchFX.lib;AkExpanderFX.lib;dxguid.lib;ws2_32.lib;dinput8.lib;Dsound.lib;XInput.lib;Msacm32.lib;Dbghelp.lib;d3d9.lib;D3dx9.lib;Winmm.lib;CommunicationCentral.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>$(OutDir)IntegrationDemo.exe</OutputFile>
-      <AdditionalLibraryDirectories>$(DXSDK_DIR)\lib\x86;..\..\..\$(Platform)_vc140\$(Configuration)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <TargetMachine>MachineX86</TargetMachine>
-    </Link>
-    <ProjectReference>
-      <LinkLibraryDependencies>false</LinkLibraryDependencies>
-    </ProjectReference>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Profile_EnableAsserts|x64'">
-    <ClCompile>
-      <AdditionalIncludeDirectories>..\..\..\include;..\..\SoundEngine\Common;..\..\SoundEngine\Win32;.;..\Common;..\MenuSystem;..\DemoPages;$(DXSDK_DIR)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>NDEBUG;WIN64;AK_ENABLE_ASSERTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <PrecompiledHeader>Use</PrecompiledHeader>
-      <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
-    <ExceptionHandling>Sync</ExceptionHandling>
-    </ClCompile>
-    <ResourceCompile>
-      <PreprocessorDefinitions>NDEBUG;WIN64;AK_ENABLE_ASSERTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\..\..\include;..\..\SoundEngine\Common;..\..\SoundEngine\Win32;.;..\Common;..\MenuSystem;..\DemoPages;$(DXSDK_DIR)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-    </ResourceCompile>
-    <Link>
-      <SubSystem>Windows</SubSystem>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>AkConvolutionReverbFX.lib;AkFlangerFX.lib;AkTremoloFX.lib;AkMemoryMgr.lib;AuroHeadphoneFX.lib;IOSONOProximityMixer.lib;AkMotionGenerator.lib;AkSineSource.lib;AkSoundSeedWind.lib;AkStereoDelayFX.lib;AkGuitarDistortionFX.lib;AkRumble.lib;AkSoundEngine.lib;AkSilenceSource.lib;iZTrashBoxModelerFX.lib;AkSoundSeedImpactFX.lib;AkRoomVerbFX.lib;iZTrashDelayFX.lib;McDSPFutzBoxFX.lib;AkParametricEQFX.lib;AuroPannerMixer.lib;AkToneSource.lib;McDSPLimiterFX.lib;AkCompressorFX.lib;CrankcaseAudioREVModelPlayerFX.lib;AkAudioInputSource.lib;AkMusicEngine.lib;AkSoundSeedWoosh.lib;iZTrashMultibandDistortionFX.lib;iZHybridReverbFX.lib;AkPitchShifterFX.lib;iZTrashDynamicsFX.lib;iZTrashDistortionFX.lib;AkPeakLimiterFX.lib;AkDelayFX.lib;AkGainFX.lib;AkVorbisDecoder.lib;AkMeterFX.lib;AkMatrixReverbFX.lib;iZTrashFiltersFX.lib;AkSynthOne.lib;AkMP3Source.lib;AkStreamMgr.lib;AkHarmonizerFX.lib;AkTimeStretchFX.lib;AkExpanderFX.lib;dxguid.lib;ws2_32.lib;dinput8.lib;Dsound.lib;XInput.lib;Msacm32.lib;Dbghelp.lib;d3d9.lib;D3dx9.lib;Winmm.lib;CommunicationCentral.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>AkConvolutionReverbFX.lib;AkFlangerFX.lib;AkTremoloFX.lib;AkMemoryMgr.lib;AuroHeadphoneFX.lib;IOSONOProximityMixer.lib;AkMotionGenerator.lib;AkSineSource.lib;AkSoundSeedWind.lib;AkStereoDelayFX.lib;AkGuitarDistortionFX.lib;AkRumble.lib;AkSoundEngine.lib;AkSilenceSource.lib;iZTrashBoxModelerFX.lib;AkSoundSeedImpactFX.lib;AkRoomVerbFX.lib;iZTrashDelayFX.lib;McDSPFutzBoxFX.lib;AkParametricEQFX.lib;AkDelayFX.lib;iZTrashDynamicsFX.lib;AkCompressorFX.lib;iZTrashMultibandDistortionFX.lib;AkAudioInputSource.lib;AkMusicEngine.lib;iZTrashFiltersFX.lib;iZHybridReverbFX.lib;CrankcaseAudioREVModelPlayerFX.lib;AkTimeStretchFX.lib;AkPitchShifterFX.lib;AuroPannerMixer.lib;iZTrashDistortionFX.lib;AkMatrixReverbFX.lib;McDSPLimiterFX.lib;AkGainFX.lib;AkVorbisDecoder.lib;AkPeakLimiterFX.lib;AkRecorderFX.lib;AkSoundSeedWoosh.lib;AkMeterFX.lib;AkSynthOne.lib;AkStreamMgr.lib;AkHarmonizerFX.lib;AkToneSource.lib;AkExpanderFX.lib;dxguid.lib;ws2_32.lib;dinput8.lib;Dsound.lib;XInput.lib;Msacm32.lib;Dbghelp.lib;d3d9.lib;D3dx9.lib;Winmm.lib;CommunicationCentral.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)IntegrationDemo.exe</OutputFile>
       <AdditionalLibraryDirectories>$(DXSDK_DIR)\lib\x64;..\..\..\$(Platform)_vc140\$(Configuration)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <TargetMachine>MachineX64</TargetMachine>
@@ -546,7 +457,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>AkConvolutionReverbFX.lib;AkFlangerFX.lib;AkTremoloFX.lib;AkMemoryMgr.lib;AuroHeadphoneFX.lib;IOSONOProximityMixer.lib;AkMotionGenerator.lib;AkSineSource.lib;AkSoundSeedWind.lib;AkStereoDelayFX.lib;AkGuitarDistortionFX.lib;AkRumble.lib;AkSoundEngine.lib;AkSilenceSource.lib;iZTrashBoxModelerFX.lib;AkSoundSeedImpactFX.lib;AkRoomVerbFX.lib;iZTrashDelayFX.lib;McDSPFutzBoxFX.lib;AkParametricEQFX.lib;AuroPannerMixer.lib;AkToneSource.lib;McDSPLimiterFX.lib;AkCompressorFX.lib;CrankcaseAudioREVModelPlayerFX.lib;AkAudioInputSource.lib;AkMusicEngine.lib;AkSoundSeedWoosh.lib;iZTrashMultibandDistortionFX.lib;iZHybridReverbFX.lib;AkPitchShifterFX.lib;iZTrashDynamicsFX.lib;iZTrashDistortionFX.lib;AkPeakLimiterFX.lib;AkDelayFX.lib;AkGainFX.lib;AkVorbisDecoder.lib;AkMeterFX.lib;AkMatrixReverbFX.lib;iZTrashFiltersFX.lib;AkSynthOne.lib;AkMP3Source.lib;AkStreamMgr.lib;AkHarmonizerFX.lib;AkTimeStretchFX.lib;AkExpanderFX.lib;dxguid.lib;ws2_32.lib;dinput8.lib;Dsound.lib;XInput.lib;Msacm32.lib;Dbghelp.lib;d3d9.lib;D3dx9.lib;Winmm.lib;CommunicationCentral.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>AkConvolutionReverbFX.lib;AkFlangerFX.lib;AkTremoloFX.lib;AkMemoryMgr.lib;AuroHeadphoneFX.lib;IOSONOProximityMixer.lib;AkMotionGenerator.lib;AkSineSource.lib;AkSoundSeedWind.lib;AkStereoDelayFX.lib;AkGuitarDistortionFX.lib;AkRumble.lib;AkSoundEngine.lib;AkSilenceSource.lib;iZTrashBoxModelerFX.lib;AkSoundSeedImpactFX.lib;AkRoomVerbFX.lib;iZTrashDelayFX.lib;McDSPFutzBoxFX.lib;AkParametricEQFX.lib;AkDelayFX.lib;iZTrashDynamicsFX.lib;AkCompressorFX.lib;iZTrashMultibandDistortionFX.lib;AkAudioInputSource.lib;AkMusicEngine.lib;iZTrashFiltersFX.lib;iZHybridReverbFX.lib;CrankcaseAudioREVModelPlayerFX.lib;AkTimeStretchFX.lib;AkPitchShifterFX.lib;AuroPannerMixer.lib;iZTrashDistortionFX.lib;AkMatrixReverbFX.lib;McDSPLimiterFX.lib;AkGainFX.lib;AkVorbisDecoder.lib;AkPeakLimiterFX.lib;AkRecorderFX.lib;AkSoundSeedWoosh.lib;AkMeterFX.lib;AkSynthOne.lib;AkStreamMgr.lib;AkHarmonizerFX.lib;AkToneSource.lib;AkExpanderFX.lib;dxguid.lib;ws2_32.lib;dinput8.lib;Dsound.lib;XInput.lib;Msacm32.lib;Dbghelp.lib;d3d9.lib;D3dx9.lib;Winmm.lib;CommunicationCentral.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)IntegrationDemo.exe</OutputFile>
       <AdditionalLibraryDirectories>$(DXSDK_DIR)\lib\x86;..\..\..\$(Platform)_vc140\$(Configuration)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <TargetMachine>MachineX86</TargetMachine>
@@ -570,7 +481,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>AkConvolutionReverbFX.lib;AkFlangerFX.lib;AkTremoloFX.lib;AkMemoryMgr.lib;AuroHeadphoneFX.lib;IOSONOProximityMixer.lib;AkMotionGenerator.lib;AkSineSource.lib;AkSoundSeedWind.lib;AkStereoDelayFX.lib;AkGuitarDistortionFX.lib;AkRumble.lib;AkSoundEngine.lib;AkSilenceSource.lib;iZTrashBoxModelerFX.lib;AkSoundSeedImpactFX.lib;AkRoomVerbFX.lib;iZTrashDelayFX.lib;McDSPFutzBoxFX.lib;AkParametricEQFX.lib;AuroPannerMixer.lib;AkToneSource.lib;McDSPLimiterFX.lib;AkCompressorFX.lib;CrankcaseAudioREVModelPlayerFX.lib;AkAudioInputSource.lib;AkMusicEngine.lib;AkSoundSeedWoosh.lib;iZTrashMultibandDistortionFX.lib;iZHybridReverbFX.lib;AkPitchShifterFX.lib;iZTrashDynamicsFX.lib;iZTrashDistortionFX.lib;AkPeakLimiterFX.lib;AkDelayFX.lib;AkGainFX.lib;AkVorbisDecoder.lib;AkMeterFX.lib;AkMatrixReverbFX.lib;iZTrashFiltersFX.lib;AkSynthOne.lib;AkMP3Source.lib;AkStreamMgr.lib;AkHarmonizerFX.lib;AkTimeStretchFX.lib;AkExpanderFX.lib;dxguid.lib;ws2_32.lib;dinput8.lib;Dsound.lib;XInput.lib;Msacm32.lib;Dbghelp.lib;d3d9.lib;D3dx9.lib;Winmm.lib;CommunicationCentral.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>AkConvolutionReverbFX.lib;AkFlangerFX.lib;AkTremoloFX.lib;AkMemoryMgr.lib;AuroHeadphoneFX.lib;IOSONOProximityMixer.lib;AkMotionGenerator.lib;AkSineSource.lib;AkSoundSeedWind.lib;AkStereoDelayFX.lib;AkGuitarDistortionFX.lib;AkRumble.lib;AkSoundEngine.lib;AkSilenceSource.lib;iZTrashBoxModelerFX.lib;AkSoundSeedImpactFX.lib;AkRoomVerbFX.lib;iZTrashDelayFX.lib;McDSPFutzBoxFX.lib;AkParametricEQFX.lib;AkDelayFX.lib;iZTrashDynamicsFX.lib;AkCompressorFX.lib;iZTrashMultibandDistortionFX.lib;AkAudioInputSource.lib;AkMusicEngine.lib;iZTrashFiltersFX.lib;iZHybridReverbFX.lib;CrankcaseAudioREVModelPlayerFX.lib;AkTimeStretchFX.lib;AkPitchShifterFX.lib;AuroPannerMixer.lib;iZTrashDistortionFX.lib;AkMatrixReverbFX.lib;McDSPLimiterFX.lib;AkGainFX.lib;AkVorbisDecoder.lib;AkPeakLimiterFX.lib;AkRecorderFX.lib;AkSoundSeedWoosh.lib;AkMeterFX.lib;AkSynthOne.lib;AkStreamMgr.lib;AkHarmonizerFX.lib;AkToneSource.lib;AkExpanderFX.lib;dxguid.lib;ws2_32.lib;dinput8.lib;Dsound.lib;XInput.lib;Msacm32.lib;Dbghelp.lib;d3d9.lib;D3dx9.lib;Winmm.lib;CommunicationCentral.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)IntegrationDemo.exe</OutputFile>
       <AdditionalLibraryDirectories>$(DXSDK_DIR)\lib\x64;..\..\..\$(Platform)_vc140\$(Configuration)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <TargetMachine>MachineX64</TargetMachine>
@@ -595,7 +506,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>AkConvolutionReverbFX.lib;AkFlangerFX.lib;AkTremoloFX.lib;AkMemoryMgr.lib;AuroHeadphoneFX.lib;IOSONOProximityMixer.lib;AkMotionGenerator.lib;AkSineSource.lib;AkSoundSeedWind.lib;AkStereoDelayFX.lib;AkGuitarDistortionFX.lib;AkRumble.lib;AkSoundEngine.lib;AkSilenceSource.lib;iZTrashBoxModelerFX.lib;AkSoundSeedImpactFX.lib;AkRoomVerbFX.lib;iZTrashDelayFX.lib;McDSPFutzBoxFX.lib;AkParametricEQFX.lib;AuroPannerMixer.lib;AkToneSource.lib;McDSPLimiterFX.lib;AkCompressorFX.lib;CrankcaseAudioREVModelPlayerFX.lib;AkAudioInputSource.lib;AkMusicEngine.lib;AkSoundSeedWoosh.lib;iZTrashMultibandDistortionFX.lib;iZHybridReverbFX.lib;AkPitchShifterFX.lib;iZTrashDynamicsFX.lib;iZTrashDistortionFX.lib;AkPeakLimiterFX.lib;AkDelayFX.lib;AkGainFX.lib;AkVorbisDecoder.lib;AkMeterFX.lib;AkMatrixReverbFX.lib;iZTrashFiltersFX.lib;AkSynthOne.lib;AkMP3Source.lib;AkStreamMgr.lib;AkHarmonizerFX.lib;AkTimeStretchFX.lib;AkExpanderFX.lib;dxguid.lib;ws2_32.lib;dinput8.lib;Dsound.lib;XInput.lib;Msacm32.lib;Dbghelp.lib;d3d9.lib;D3dx9.lib;Winmm.lib;CommunicationCentral.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>AkConvolutionReverbFX.lib;AkFlangerFX.lib;AkTremoloFX.lib;AkMemoryMgr.lib;AuroHeadphoneFX.lib;IOSONOProximityMixer.lib;AkMotionGenerator.lib;AkSineSource.lib;AkSoundSeedWind.lib;AkStereoDelayFX.lib;AkGuitarDistortionFX.lib;AkRumble.lib;AkSoundEngine.lib;AkSilenceSource.lib;iZTrashBoxModelerFX.lib;AkSoundSeedImpactFX.lib;AkRoomVerbFX.lib;iZTrashDelayFX.lib;McDSPFutzBoxFX.lib;AkParametricEQFX.lib;AkDelayFX.lib;iZTrashDynamicsFX.lib;AkCompressorFX.lib;iZTrashMultibandDistortionFX.lib;AkAudioInputSource.lib;AkMusicEngine.lib;iZTrashFiltersFX.lib;iZHybridReverbFX.lib;CrankcaseAudioREVModelPlayerFX.lib;AkTimeStretchFX.lib;AkPitchShifterFX.lib;AuroPannerMixer.lib;iZTrashDistortionFX.lib;AkMatrixReverbFX.lib;McDSPLimiterFX.lib;AkGainFX.lib;AkVorbisDecoder.lib;AkPeakLimiterFX.lib;AkRecorderFX.lib;AkSoundSeedWoosh.lib;AkMeterFX.lib;AkSynthOne.lib;AkStreamMgr.lib;AkHarmonizerFX.lib;AkToneSource.lib;AkExpanderFX.lib;dxguid.lib;ws2_32.lib;dinput8.lib;Dsound.lib;XInput.lib;Msacm32.lib;Dbghelp.lib;d3d9.lib;D3dx9.lib;Winmm.lib;CommunicationCentral.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)IntegrationDemo.exe</OutputFile>
       <AdditionalLibraryDirectories>$(DXSDK_DIR)\lib\x86;..\..\..\$(Platform)_vc140\$(Configuration)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <TargetMachine>MachineX86</TargetMachine>
@@ -619,7 +530,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>AkConvolutionReverbFX.lib;AkFlangerFX.lib;AkTremoloFX.lib;AkMemoryMgr.lib;AuroHeadphoneFX.lib;IOSONOProximityMixer.lib;AkMotionGenerator.lib;AkSineSource.lib;AkSoundSeedWind.lib;AkStereoDelayFX.lib;AkGuitarDistortionFX.lib;AkRumble.lib;AkSoundEngine.lib;AkSilenceSource.lib;iZTrashBoxModelerFX.lib;AkSoundSeedImpactFX.lib;AkRoomVerbFX.lib;iZTrashDelayFX.lib;McDSPFutzBoxFX.lib;AkParametricEQFX.lib;AuroPannerMixer.lib;AkToneSource.lib;McDSPLimiterFX.lib;AkCompressorFX.lib;CrankcaseAudioREVModelPlayerFX.lib;AkAudioInputSource.lib;AkMusicEngine.lib;AkSoundSeedWoosh.lib;iZTrashMultibandDistortionFX.lib;iZHybridReverbFX.lib;AkPitchShifterFX.lib;iZTrashDynamicsFX.lib;iZTrashDistortionFX.lib;AkPeakLimiterFX.lib;AkDelayFX.lib;AkGainFX.lib;AkVorbisDecoder.lib;AkMeterFX.lib;AkMatrixReverbFX.lib;iZTrashFiltersFX.lib;AkSynthOne.lib;AkMP3Source.lib;AkStreamMgr.lib;AkHarmonizerFX.lib;AkTimeStretchFX.lib;AkExpanderFX.lib;dxguid.lib;ws2_32.lib;dinput8.lib;Dsound.lib;XInput.lib;Msacm32.lib;Dbghelp.lib;d3d9.lib;D3dx9.lib;Winmm.lib;CommunicationCentral.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>AkConvolutionReverbFX.lib;AkFlangerFX.lib;AkTremoloFX.lib;AkMemoryMgr.lib;AuroHeadphoneFX.lib;IOSONOProximityMixer.lib;AkMotionGenerator.lib;AkSineSource.lib;AkSoundSeedWind.lib;AkStereoDelayFX.lib;AkGuitarDistortionFX.lib;AkRumble.lib;AkSoundEngine.lib;AkSilenceSource.lib;iZTrashBoxModelerFX.lib;AkSoundSeedImpactFX.lib;AkRoomVerbFX.lib;iZTrashDelayFX.lib;McDSPFutzBoxFX.lib;AkParametricEQFX.lib;AkDelayFX.lib;iZTrashDynamicsFX.lib;AkCompressorFX.lib;iZTrashMultibandDistortionFX.lib;AkAudioInputSource.lib;AkMusicEngine.lib;iZTrashFiltersFX.lib;iZHybridReverbFX.lib;CrankcaseAudioREVModelPlayerFX.lib;AkTimeStretchFX.lib;AkPitchShifterFX.lib;AuroPannerMixer.lib;iZTrashDistortionFX.lib;AkMatrixReverbFX.lib;McDSPLimiterFX.lib;AkGainFX.lib;AkVorbisDecoder.lib;AkPeakLimiterFX.lib;AkRecorderFX.lib;AkSoundSeedWoosh.lib;AkMeterFX.lib;AkSynthOne.lib;AkStreamMgr.lib;AkHarmonizerFX.lib;AkToneSource.lib;AkExpanderFX.lib;dxguid.lib;ws2_32.lib;dinput8.lib;Dsound.lib;XInput.lib;Msacm32.lib;Dbghelp.lib;d3d9.lib;D3dx9.lib;Winmm.lib;CommunicationCentral.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)IntegrationDemo.exe</OutputFile>
       <AdditionalLibraryDirectories>$(DXSDK_DIR)\lib\x64;..\..\..\$(Platform)_vc140\$(Configuration)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <TargetMachine>MachineX64</TargetMachine>
@@ -644,7 +555,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>AkConvolutionReverbFX.lib;AkFlangerFX.lib;AkTremoloFX.lib;AkMemoryMgr.lib;AuroHeadphoneFX.lib;IOSONOProximityMixer.lib;AkMotionGenerator.lib;AkSineSource.lib;AkSoundSeedWind.lib;AkStereoDelayFX.lib;AkGuitarDistortionFX.lib;AkRumble.lib;AkSoundEngine.lib;AkSilenceSource.lib;iZTrashBoxModelerFX.lib;AkSoundSeedImpactFX.lib;AkRoomVerbFX.lib;iZTrashDelayFX.lib;McDSPFutzBoxFX.lib;AkParametricEQFX.lib;AuroPannerMixer.lib;AkToneSource.lib;McDSPLimiterFX.lib;AkCompressorFX.lib;CrankcaseAudioREVModelPlayerFX.lib;AkAudioInputSource.lib;AkMusicEngine.lib;AkSoundSeedWoosh.lib;iZTrashMultibandDistortionFX.lib;iZHybridReverbFX.lib;AkPitchShifterFX.lib;iZTrashDynamicsFX.lib;iZTrashDistortionFX.lib;AkPeakLimiterFX.lib;AkDelayFX.lib;AkGainFX.lib;AkVorbisDecoder.lib;AkMeterFX.lib;AkMatrixReverbFX.lib;iZTrashFiltersFX.lib;AkSynthOne.lib;AkMP3Source.lib;AkStreamMgr.lib;AkHarmonizerFX.lib;AkTimeStretchFX.lib;AkExpanderFX.lib;dxguid.lib;ws2_32.lib;dinput8.lib;Dsound.lib;XInput.lib;Msacm32.lib;Dbghelp.lib;d3d9.lib;D3dx9.lib;Winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>AkConvolutionReverbFX.lib;AkFlangerFX.lib;AkTremoloFX.lib;AkMemoryMgr.lib;AuroHeadphoneFX.lib;IOSONOProximityMixer.lib;AkMotionGenerator.lib;AkSineSource.lib;AkSoundSeedWind.lib;AkStereoDelayFX.lib;AkGuitarDistortionFX.lib;AkRumble.lib;AkSoundEngine.lib;AkSilenceSource.lib;iZTrashBoxModelerFX.lib;AkSoundSeedImpactFX.lib;AkRoomVerbFX.lib;iZTrashDelayFX.lib;McDSPFutzBoxFX.lib;AkParametricEQFX.lib;AkDelayFX.lib;iZTrashDynamicsFX.lib;AkCompressorFX.lib;iZTrashMultibandDistortionFX.lib;AkAudioInputSource.lib;AkMusicEngine.lib;iZTrashFiltersFX.lib;iZHybridReverbFX.lib;CrankcaseAudioREVModelPlayerFX.lib;AkTimeStretchFX.lib;AkPitchShifterFX.lib;AuroPannerMixer.lib;iZTrashDistortionFX.lib;AkMatrixReverbFX.lib;McDSPLimiterFX.lib;AkGainFX.lib;AkVorbisDecoder.lib;AkPeakLimiterFX.lib;AkRecorderFX.lib;AkSoundSeedWoosh.lib;AkMeterFX.lib;AkSynthOne.lib;AkStreamMgr.lib;AkHarmonizerFX.lib;AkToneSource.lib;AkExpanderFX.lib;dxguid.lib;ws2_32.lib;dinput8.lib;Dsound.lib;XInput.lib;Msacm32.lib;Dbghelp.lib;d3d9.lib;D3dx9.lib;Winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)IntegrationDemo.exe</OutputFile>
       <AdditionalLibraryDirectories>$(DXSDK_DIR)\lib\x86;..\..\..\$(Platform)_vc140\$(Configuration)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <TargetMachine>MachineX86</TargetMachine>
@@ -668,7 +579,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>AkConvolutionReverbFX.lib;AkFlangerFX.lib;AkTremoloFX.lib;AkMemoryMgr.lib;AuroHeadphoneFX.lib;IOSONOProximityMixer.lib;AkMotionGenerator.lib;AkSineSource.lib;AkSoundSeedWind.lib;AkStereoDelayFX.lib;AkGuitarDistortionFX.lib;AkRumble.lib;AkSoundEngine.lib;AkSilenceSource.lib;iZTrashBoxModelerFX.lib;AkSoundSeedImpactFX.lib;AkRoomVerbFX.lib;iZTrashDelayFX.lib;McDSPFutzBoxFX.lib;AkParametricEQFX.lib;AuroPannerMixer.lib;AkToneSource.lib;McDSPLimiterFX.lib;AkCompressorFX.lib;CrankcaseAudioREVModelPlayerFX.lib;AkAudioInputSource.lib;AkMusicEngine.lib;AkSoundSeedWoosh.lib;iZTrashMultibandDistortionFX.lib;iZHybridReverbFX.lib;AkPitchShifterFX.lib;iZTrashDynamicsFX.lib;iZTrashDistortionFX.lib;AkPeakLimiterFX.lib;AkDelayFX.lib;AkGainFX.lib;AkVorbisDecoder.lib;AkMeterFX.lib;AkMatrixReverbFX.lib;iZTrashFiltersFX.lib;AkSynthOne.lib;AkMP3Source.lib;AkStreamMgr.lib;AkHarmonizerFX.lib;AkTimeStretchFX.lib;AkExpanderFX.lib;dxguid.lib;ws2_32.lib;dinput8.lib;Dsound.lib;XInput.lib;Msacm32.lib;Dbghelp.lib;d3d9.lib;D3dx9.lib;Winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>AkConvolutionReverbFX.lib;AkFlangerFX.lib;AkTremoloFX.lib;AkMemoryMgr.lib;AuroHeadphoneFX.lib;IOSONOProximityMixer.lib;AkMotionGenerator.lib;AkSineSource.lib;AkSoundSeedWind.lib;AkStereoDelayFX.lib;AkGuitarDistortionFX.lib;AkRumble.lib;AkSoundEngine.lib;AkSilenceSource.lib;iZTrashBoxModelerFX.lib;AkSoundSeedImpactFX.lib;AkRoomVerbFX.lib;iZTrashDelayFX.lib;McDSPFutzBoxFX.lib;AkParametricEQFX.lib;AkDelayFX.lib;iZTrashDynamicsFX.lib;AkCompressorFX.lib;iZTrashMultibandDistortionFX.lib;AkAudioInputSource.lib;AkMusicEngine.lib;iZTrashFiltersFX.lib;iZHybridReverbFX.lib;CrankcaseAudioREVModelPlayerFX.lib;AkTimeStretchFX.lib;AkPitchShifterFX.lib;AuroPannerMixer.lib;iZTrashDistortionFX.lib;AkMatrixReverbFX.lib;McDSPLimiterFX.lib;AkGainFX.lib;AkVorbisDecoder.lib;AkPeakLimiterFX.lib;AkRecorderFX.lib;AkSoundSeedWoosh.lib;AkMeterFX.lib;AkSynthOne.lib;AkStreamMgr.lib;AkHarmonizerFX.lib;AkToneSource.lib;AkExpanderFX.lib;dxguid.lib;ws2_32.lib;dinput8.lib;Dsound.lib;XInput.lib;Msacm32.lib;Dbghelp.lib;d3d9.lib;D3dx9.lib;Winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)IntegrationDemo.exe</OutputFile>
       <AdditionalLibraryDirectories>$(DXSDK_DIR)\lib\x64;..\..\..\$(Platform)_vc140\$(Configuration)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <TargetMachine>MachineX64</TargetMachine>
@@ -693,7 +604,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>AkConvolutionReverbFX.lib;AkFlangerFX.lib;AkTremoloFX.lib;AkMemoryMgr.lib;AuroHeadphoneFX.lib;IOSONOProximityMixer.lib;AkMotionGenerator.lib;AkSineSource.lib;AkSoundSeedWind.lib;AkStereoDelayFX.lib;AkGuitarDistortionFX.lib;AkRumble.lib;AkSoundEngine.lib;AkSilenceSource.lib;iZTrashBoxModelerFX.lib;AkSoundSeedImpactFX.lib;AkRoomVerbFX.lib;iZTrashDelayFX.lib;McDSPFutzBoxFX.lib;AkParametricEQFX.lib;AuroPannerMixer.lib;AkToneSource.lib;McDSPLimiterFX.lib;AkCompressorFX.lib;CrankcaseAudioREVModelPlayerFX.lib;AkAudioInputSource.lib;AkMusicEngine.lib;AkSoundSeedWoosh.lib;iZTrashMultibandDistortionFX.lib;iZHybridReverbFX.lib;AkPitchShifterFX.lib;iZTrashDynamicsFX.lib;iZTrashDistortionFX.lib;AkPeakLimiterFX.lib;AkDelayFX.lib;AkGainFX.lib;AkVorbisDecoder.lib;AkMeterFX.lib;AkMatrixReverbFX.lib;iZTrashFiltersFX.lib;AkSynthOne.lib;AkMP3Source.lib;AkStreamMgr.lib;AkHarmonizerFX.lib;AkTimeStretchFX.lib;AkExpanderFX.lib;dxguid.lib;ws2_32.lib;dinput8.lib;Dsound.lib;XInput.lib;Msacm32.lib;Dbghelp.lib;d3d9.lib;D3dx9.lib;Winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>AkConvolutionReverbFX.lib;AkFlangerFX.lib;AkTremoloFX.lib;AkMemoryMgr.lib;AuroHeadphoneFX.lib;IOSONOProximityMixer.lib;AkMotionGenerator.lib;AkSineSource.lib;AkSoundSeedWind.lib;AkStereoDelayFX.lib;AkGuitarDistortionFX.lib;AkRumble.lib;AkSoundEngine.lib;AkSilenceSource.lib;iZTrashBoxModelerFX.lib;AkSoundSeedImpactFX.lib;AkRoomVerbFX.lib;iZTrashDelayFX.lib;McDSPFutzBoxFX.lib;AkParametricEQFX.lib;AkDelayFX.lib;iZTrashDynamicsFX.lib;AkCompressorFX.lib;iZTrashMultibandDistortionFX.lib;AkAudioInputSource.lib;AkMusicEngine.lib;iZTrashFiltersFX.lib;iZHybridReverbFX.lib;CrankcaseAudioREVModelPlayerFX.lib;AkTimeStretchFX.lib;AkPitchShifterFX.lib;AuroPannerMixer.lib;iZTrashDistortionFX.lib;AkMatrixReverbFX.lib;McDSPLimiterFX.lib;AkGainFX.lib;AkVorbisDecoder.lib;AkPeakLimiterFX.lib;AkRecorderFX.lib;AkSoundSeedWoosh.lib;AkMeterFX.lib;AkSynthOne.lib;AkStreamMgr.lib;AkHarmonizerFX.lib;AkToneSource.lib;AkExpanderFX.lib;dxguid.lib;ws2_32.lib;dinput8.lib;Dsound.lib;XInput.lib;Msacm32.lib;Dbghelp.lib;d3d9.lib;D3dx9.lib;Winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)IntegrationDemo.exe</OutputFile>
       <AdditionalLibraryDirectories>$(DXSDK_DIR)\lib\x86;..\..\..\$(Platform)_vc140\$(Configuration)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <TargetMachine>MachineX86</TargetMachine>
@@ -717,7 +628,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>AkConvolutionReverbFX.lib;AkFlangerFX.lib;AkTremoloFX.lib;AkMemoryMgr.lib;AuroHeadphoneFX.lib;IOSONOProximityMixer.lib;AkMotionGenerator.lib;AkSineSource.lib;AkSoundSeedWind.lib;AkStereoDelayFX.lib;AkGuitarDistortionFX.lib;AkRumble.lib;AkSoundEngine.lib;AkSilenceSource.lib;iZTrashBoxModelerFX.lib;AkSoundSeedImpactFX.lib;AkRoomVerbFX.lib;iZTrashDelayFX.lib;McDSPFutzBoxFX.lib;AkParametricEQFX.lib;AuroPannerMixer.lib;AkToneSource.lib;McDSPLimiterFX.lib;AkCompressorFX.lib;CrankcaseAudioREVModelPlayerFX.lib;AkAudioInputSource.lib;AkMusicEngine.lib;AkSoundSeedWoosh.lib;iZTrashMultibandDistortionFX.lib;iZHybridReverbFX.lib;AkPitchShifterFX.lib;iZTrashDynamicsFX.lib;iZTrashDistortionFX.lib;AkPeakLimiterFX.lib;AkDelayFX.lib;AkGainFX.lib;AkVorbisDecoder.lib;AkMeterFX.lib;AkMatrixReverbFX.lib;iZTrashFiltersFX.lib;AkSynthOne.lib;AkMP3Source.lib;AkStreamMgr.lib;AkHarmonizerFX.lib;AkTimeStretchFX.lib;AkExpanderFX.lib;dxguid.lib;ws2_32.lib;dinput8.lib;Dsound.lib;XInput.lib;Msacm32.lib;Dbghelp.lib;d3d9.lib;D3dx9.lib;Winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>AkConvolutionReverbFX.lib;AkFlangerFX.lib;AkTremoloFX.lib;AkMemoryMgr.lib;AuroHeadphoneFX.lib;IOSONOProximityMixer.lib;AkMotionGenerator.lib;AkSineSource.lib;AkSoundSeedWind.lib;AkStereoDelayFX.lib;AkGuitarDistortionFX.lib;AkRumble.lib;AkSoundEngine.lib;AkSilenceSource.lib;iZTrashBoxModelerFX.lib;AkSoundSeedImpactFX.lib;AkRoomVerbFX.lib;iZTrashDelayFX.lib;McDSPFutzBoxFX.lib;AkParametricEQFX.lib;AkDelayFX.lib;iZTrashDynamicsFX.lib;AkCompressorFX.lib;iZTrashMultibandDistortionFX.lib;AkAudioInputSource.lib;AkMusicEngine.lib;iZTrashFiltersFX.lib;iZHybridReverbFX.lib;CrankcaseAudioREVModelPlayerFX.lib;AkTimeStretchFX.lib;AkPitchShifterFX.lib;AuroPannerMixer.lib;iZTrashDistortionFX.lib;AkMatrixReverbFX.lib;McDSPLimiterFX.lib;AkGainFX.lib;AkVorbisDecoder.lib;AkPeakLimiterFX.lib;AkRecorderFX.lib;AkSoundSeedWoosh.lib;AkMeterFX.lib;AkSynthOne.lib;AkStreamMgr.lib;AkHarmonizerFX.lib;AkToneSource.lib;AkExpanderFX.lib;dxguid.lib;ws2_32.lib;dinput8.lib;Dsound.lib;XInput.lib;Msacm32.lib;Dbghelp.lib;d3d9.lib;D3dx9.lib;Winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)IntegrationDemo.exe</OutputFile>
       <AdditionalLibraryDirectories>$(DXSDK_DIR)\lib\x64;..\..\..\$(Platform)_vc140\$(Configuration)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <TargetMachine>MachineX64</TargetMachine>
@@ -742,9 +653,11 @@
     <ClInclude Include="..\DemoPages\DemoLocalization.h" />
     <ClInclude Include="..\DemoPages\DemoMarkers.h" />
     <ClInclude Include="..\DemoPages\DemoMicrophone.h" />
+    <ClInclude Include="..\DemoPages\DemoMIDIMetronome.h" />
     <ClInclude Include="..\DemoPages\DemoMotion.h" />
     <ClInclude Include="..\DemoPages\DemoMusicCallbacks.h" />
     <ClInclude Include="..\DemoPages\DemoPositioning.h" />
+    <ClInclude Include="..\DemoPages\DemoPositioningMenu.h" />
     <ClInclude Include="..\DemoPages\DemoRTPCCarEngine.h" />
     <ClInclude Include="..\DemoPages\MenuPages.h" />
     <ClInclude Include="..\MenuSystem\ButtonControl.h" />
@@ -776,8 +689,6 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug(StaticCRT)|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Profile|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Profile|x64'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Profile_EnableAsserts|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Profile_EnableAsserts|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Profile(StaticCRT)|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Profile(StaticCRT)|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Profile(StaticCRT)_EnableAsserts|Win32'">Create</PrecompiledHeader>
@@ -815,11 +726,15 @@
     </ClCompile>
     <ClCompile Include="..\DemoPages\DemoMicrophone.cpp">
     </ClCompile>
+    <ClCompile Include="..\DemoPages\DemoMIDIMetronome.cpp">
+    </ClCompile>
     <ClCompile Include="..\DemoPages\DemoMotion.cpp">
     </ClCompile>
     <ClCompile Include="..\DemoPages\DemoMusicCallbacks.cpp">
     </ClCompile>
     <ClCompile Include="..\DemoPages\DemoPositioning.cpp">
+    </ClCompile>
+    <ClCompile Include="..\DemoPages\DemoPositioningMenu.cpp">
     </ClCompile>
     <ClCompile Include="..\DemoPages\DemoRTPCCarEngine.cpp">
     </ClCompile>

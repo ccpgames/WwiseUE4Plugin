@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<WwiseDocument Type="WorkUnit" ID="{39255352-6310-4790-ACD5-F0B3026DF735}" SchemaVersion="70">
+<WwiseDocument Type="WorkUnit" ID="{39255352-6310-4790-ACD5-F0B3026DF735}" SchemaVersion="72">
 	<AudioObjects>
 		<WorkUnit Name="Footsteps With Multiple Variables" ID="{39255352-6310-4790-ACD5-F0B3026DF735}" PersistMode="Standalone">
 			<ChildrenList>
@@ -68,30 +68,26 @@ Walking/Running speed is a simple offset in volume and pitch also done with an R
 							<PropertyList>
 								<Property Name="BypassEffect0" Type="bool">
 									<ValueList>
-										<Value Platform="Wii">False</Value>
-										<Value Platform="3DS">False</Value>
 										<Value Platform="VitaHW">False</Value>
+										<Value Platform="3DS">False</Value>
 									</ValueList>
 								</Property>
 								<Property Name="BypassEffect1" Type="bool">
 									<ValueList>
-										<Value Platform="Wii">False</Value>
-										<Value Platform="3DS">False</Value>
 										<Value Platform="VitaHW">False</Value>
+										<Value Platform="3DS">False</Value>
 									</ValueList>
 								</Property>
 								<Property Name="BypassEffect2" Type="bool">
 									<ValueList>
-										<Value Platform="Wii">False</Value>
-										<Value Platform="3DS">False</Value>
 										<Value Platform="VitaHW">False</Value>
+										<Value Platform="3DS">False</Value>
 									</ValueList>
 								</Property>
 								<Property Name="BypassEffect3" Type="bool">
 									<ValueList>
-										<Value Platform="Wii">False</Value>
-										<Value Platform="3DS">False</Value>
 										<Value Platform="VitaHW">False</Value>
+										<Value Platform="3DS">False</Value>
 									</ValueList>
 								</Property>
 								<Property Name="Lowpass" Type="int16">
@@ -179,30 +175,26 @@ Walking/Running speed is a simple offset in volume and pitch also done with an R
 								<Property Name="RandomAvoidRepeating" Type="bool" Value="False"/>
 								<Property Name="RenderEffect0" Type="bool">
 									<ValueList>
-										<Value Platform="Wii">True</Value>
-										<Value Platform="3DS">True</Value>
 										<Value Platform="VitaHW">True</Value>
+										<Value Platform="3DS">True</Value>
 									</ValueList>
 								</Property>
 								<Property Name="RenderEffect1" Type="bool">
 									<ValueList>
-										<Value Platform="Wii">False</Value>
-										<Value Platform="3DS">False</Value>
 										<Value Platform="VitaHW">False</Value>
+										<Value Platform="3DS">False</Value>
 									</ValueList>
 								</Property>
 								<Property Name="RenderEffect2" Type="bool">
 									<ValueList>
-										<Value Platform="Wii">False</Value>
-										<Value Platform="3DS">False</Value>
 										<Value Platform="VitaHW">False</Value>
+										<Value Platform="3DS">False</Value>
 									</ValueList>
 								</Property>
 								<Property Name="RenderEffect3" Type="bool">
 									<ValueList>
-										<Value Platform="Wii">False</Value>
-										<Value Platform="3DS">False</Value>
 										<Value Platform="VitaHW">False</Value>
+										<Value Platform="3DS">False</Value>
 									</ValueList>
 								</Property>
 								<Property Name="Volume" Type="Real64">
@@ -253,22 +245,16 @@ Walking/Running speed is a simple offset in volume and pitch also done with an R
 								<Reference Name="Effect0" PluginName="Wwise Parametric EQ" CompanyID="0" PluginID="105" PluginType="3">
 									<ObjectRef Name="GravelEQ" ID="{34A4C6AF-F669-40BA-8351-0C6C1772D137}" WorkUnitID="{81786A24-8893-4DE1-81AF-602DBDFCFF71}"/>
 								</Reference>
-								<Reference Name="Effect0" Platform="Wii">
-									<ObjectRef Name="GravelEQ" ID="{34A4C6AF-F669-40BA-8351-0C6C1772D137}" WorkUnitID="{81786A24-8893-4DE1-81AF-602DBDFCFF71}"/>
-								</Reference>
 								<Reference Name="Effect0" Platform="3DS">
 									<ObjectRef Name="GravelEQ" ID="{34A4C6AF-F669-40BA-8351-0C6C1772D137}" WorkUnitID="{81786A24-8893-4DE1-81AF-602DBDFCFF71}"/>
 								</Reference>
 								<Reference Name="Effect0" Platform="VitaHW">
 									<ObjectRef Name="GravelEQ" ID="{34A4C6AF-F669-40BA-8351-0C6C1772D137}" WorkUnitID="{81786A24-8893-4DE1-81AF-602DBDFCFF71}"/>
 								</Reference>
-								<Reference Name="Effect1" Platform="Wii"/>
 								<Reference Name="Effect1" Platform="3DS"/>
 								<Reference Name="Effect1" Platform="VitaHW"/>
-								<Reference Name="Effect2" Platform="Wii"/>
 								<Reference Name="Effect2" Platform="3DS"/>
 								<Reference Name="Effect2" Platform="VitaHW"/>
-								<Reference Name="Effect3" Platform="Wii"/>
 								<Reference Name="Effect3" Platform="3DS"/>
 								<Reference Name="Effect3" Platform="VitaHW"/>
 								<Reference Name="OutputBus">
@@ -368,34 +354,30 @@ Walking/Running speed is a simple offset in volume and pitch also done with an R
 							<PropertyList>
 								<Property Name="BypassEffect0" Type="bool">
 									<ValueList>
-										<Value Platform="Wii">False</Value>
 										<Value Platform="WiiUSW">False</Value>
-										<Value Platform="3DS">False</Value>
 										<Value Platform="iOS">False</Value>
+										<Value Platform="3DS">False</Value>
 									</ValueList>
 								</Property>
 								<Property Name="BypassEffect1" Type="bool">
 									<ValueList>
-										<Value Platform="Wii">False</Value>
 										<Value Platform="WiiUSW">False</Value>
-										<Value Platform="3DS">False</Value>
 										<Value Platform="iOS">False</Value>
+										<Value Platform="3DS">False</Value>
 									</ValueList>
 								</Property>
 								<Property Name="BypassEffect2" Type="bool">
 									<ValueList>
-										<Value Platform="Wii">False</Value>
 										<Value Platform="WiiUSW">False</Value>
-										<Value Platform="3DS">False</Value>
 										<Value Platform="iOS">False</Value>
+										<Value Platform="3DS">False</Value>
 									</ValueList>
 								</Property>
 								<Property Name="BypassEffect3" Type="bool">
 									<ValueList>
-										<Value Platform="Wii">False</Value>
 										<Value Platform="WiiUSW">False</Value>
-										<Value Platform="3DS">False</Value>
 										<Value Platform="iOS">False</Value>
+										<Value Platform="3DS">False</Value>
 									</ValueList>
 								</Property>
 								<Property Name="MotionLowpass" Type="int16">
@@ -405,34 +387,30 @@ Walking/Running speed is a simple offset in volume and pitch also done with an R
 								</Property>
 								<Property Name="RenderEffect0" Type="bool">
 									<ValueList>
-										<Value Platform="Wii">False</Value>
 										<Value Platform="WiiUSW">False</Value>
-										<Value Platform="3DS">False</Value>
 										<Value Platform="iOS">False</Value>
+										<Value Platform="3DS">False</Value>
 									</ValueList>
 								</Property>
 								<Property Name="RenderEffect1" Type="bool">
 									<ValueList>
-										<Value Platform="Wii">False</Value>
 										<Value Platform="WiiUSW">False</Value>
-										<Value Platform="3DS">False</Value>
 										<Value Platform="iOS">False</Value>
+										<Value Platform="3DS">False</Value>
 									</ValueList>
 								</Property>
 								<Property Name="RenderEffect2" Type="bool">
 									<ValueList>
-										<Value Platform="Wii">False</Value>
 										<Value Platform="WiiUSW">False</Value>
-										<Value Platform="3DS">False</Value>
 										<Value Platform="iOS">False</Value>
+										<Value Platform="3DS">False</Value>
 									</ValueList>
 								</Property>
 								<Property Name="RenderEffect3" Type="bool">
 									<ValueList>
-										<Value Platform="Wii">False</Value>
 										<Value Platform="WiiUSW">False</Value>
-										<Value Platform="3DS">False</Value>
 										<Value Platform="iOS">False</Value>
+										<Value Platform="3DS">False</Value>
 									</ValueList>
 								</Property>
 							</PropertyList>
@@ -1166,34 +1144,30 @@ Walking/Running speed is a simple offset in volume and pitch also done with an R
 							<PropertyList>
 								<Property Name="BypassEffect0" Type="bool">
 									<ValueList>
-										<Value Platform="Wii">False</Value>
 										<Value Platform="WiiUSW">False</Value>
-										<Value Platform="3DS">False</Value>
 										<Value Platform="iOS">False</Value>
+										<Value Platform="3DS">False</Value>
 									</ValueList>
 								</Property>
 								<Property Name="BypassEffect1" Type="bool">
 									<ValueList>
-										<Value Platform="Wii">False</Value>
 										<Value Platform="WiiUSW">False</Value>
-										<Value Platform="3DS">False</Value>
 										<Value Platform="iOS">False</Value>
+										<Value Platform="3DS">False</Value>
 									</ValueList>
 								</Property>
 								<Property Name="BypassEffect2" Type="bool">
 									<ValueList>
-										<Value Platform="Wii">False</Value>
 										<Value Platform="WiiUSW">False</Value>
-										<Value Platform="3DS">False</Value>
 										<Value Platform="iOS">False</Value>
+										<Value Platform="3DS">False</Value>
 									</ValueList>
 								</Property>
 								<Property Name="BypassEffect3" Type="bool">
 									<ValueList>
-										<Value Platform="Wii">False</Value>
 										<Value Platform="WiiUSW">False</Value>
-										<Value Platform="3DS">False</Value>
 										<Value Platform="iOS">False</Value>
+										<Value Platform="3DS">False</Value>
 									</ValueList>
 								</Property>
 								<Property Name="Lowpass" Type="int16">

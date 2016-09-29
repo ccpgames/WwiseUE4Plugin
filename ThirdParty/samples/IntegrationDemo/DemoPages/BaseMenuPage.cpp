@@ -103,6 +103,13 @@ void BaseMenuPage::InitControls()
 	newBtn->SetDelegate( (PageMFP)&BaseMenuPage::OpenInteractiveMusicDemoPage );
 	m_Controls.push_back( newBtn );
 
+	// Add button linking to MIDI API demo (Metronome)
+	newBtn = new ButtonControl( *this );
+	newBtn->SetLabel( "MIDI API Demo (Metronome)" );
+	newBtn->SetDelegate( (PageMFP)&BaseMenuPage::OpenMIDIMetronomeDemoPage );
+	m_Controls.push_back( newBtn );
+
+
 #if defined AK_MOTION
 	// Add button linking to Motion demo
 	newBtn = new ButtonControl( *this );
@@ -198,6 +205,12 @@ void BaseMenuPage::OpenInteractiveMusicDemoPage( void*, ControlEvent* )
 	m_pParentMenu->StackPage( pg );
 }
 
+void BaseMenuPage::OpenMIDIMetronomeDemoPage( void*, ControlEvent* )
+{
+	DemoMIDIMetronome* pg = new DemoMIDIMetronome( *m_pParentMenu );
+	m_pParentMenu->StackPage( pg );
+}
+
 #if defined AK_MOTION
 void BaseMenuPage::OpenMotionDemoPage( void*, ControlEvent* )
 {
@@ -216,7 +229,7 @@ void BaseMenuPage::OpenMicrophoneDemoPage( void*, ControlEvent* )
 
 void BaseMenuPage::OpenPositioningDemoPage( void*, ControlEvent* )
 {
-	DemoPositioning* pg = new DemoPositioning( *m_pParentMenu );
+	DemoPositioningMenu* pg = new DemoPositioningMenu(*m_pParentMenu);
 	m_pParentMenu->StackPage( pg );
 }
 

@@ -4,4 +4,3 @@ LIBRARY      "Sink"
 
 EXPORTS
 	AkCreatePlugin
-	AkGetSoundEngineCallbacks
