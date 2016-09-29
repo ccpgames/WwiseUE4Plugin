@@ -63,6 +63,15 @@
 #include "Runtime/HeadMountedDisplay/Public/IHeadMountedDisplayModule.h"
 // OCULUS_END
 
+//---------------------------------------------------------------------
+// OCULUS_START
+//---------------------------------------------------------------------
+#include "OculusSpatializer.h"
+//---------------------------------------------------------------------
+// OCULUS_END
+//---------------------------------------------------------------------
+
+
 
 #if PLATFORM_XBOXONE
 	#include <apu.h>
@@ -1822,6 +1831,70 @@ bool FAkAudioDevice::EnsureInitialized()
 	}
 #endif
 #endif // AK_OPTIMIZED
+
+	//---------------------------------------------------------------------
+	// OCULUS_START
+	//---------------------------------------------------------------------
+#if PLATFORM_WINDOWS
+	// Load Oculus Spatializer dll plug-in
+	HMODULE OculusSpatializerLibrary = LoadLibrary(L"OculusSpatializer.dll");
+
+	// Successful?
+	if (OculusSpatializerLibrary)
+	{
+		typedef bool(__stdcall *AkGetSoundEngineCallbacksType)
+			(unsigned short in_usCompanyID,
+				unsigned short in_usPluginID,
+				AkCreatePluginCallback& out_funcEffect,
+				AkCreateParamCallback&  out_funcParam);
+
+		AkGetSoundEngineCallbacksType AkGetSoundEngineCallbacks =
+			(AkGetSoundEngineCallbacksType)(void*)GetProcAddress(OculusSpatializerLibrary, "AkGetSoundEngineCallbacks");
+
+		if (AkGetSoundEngineCallbacks)
+		{
+			AkCreatePluginCallback CreateOculusFX;
+			AkCreateParamCallback  CreateOculusFXParams;
+
+			// Register plugin effect
+			if (AkGetSoundEngineCallbacks(AKEFFECTID_OCULUS, AKEFFECTID_OCULUS_SPATIALIZER, CreateOculusFX, CreateOculusFXParams))
+			{
+				if (AK::SoundEngine::RegisterPlugin(AkPluginTypeMixer, AKEFFECTID_OCULUS, AKEFFECTID_OCULUS_SPATIALIZER, CreateOculusFX, CreateOculusFXParams) != AK_Success)
+				{
+					printf("Failed to register OculusSpatializer plugin.");
+				}
+			}
+			else
+			{
+				printf("Failed call to AkGetSoundEngineCallbacks in OculusSpatializer.dll");
+			}
+
+			// Register plugin attachment (for data attachment on individual sounds, like frequency hints etc.)
+			if (AkGetSoundEngineCallbacks(AKEFFECTID_OCULUS, AKEFFECTID_OCULUS_SPATIALIZER_ATTACHMENT, CreateOculusFX, CreateOculusFXParams))
+			{
+				if (AK::SoundEngine::RegisterPlugin(AkPluginTypeEffect, AKEFFECTID_OCULUS, AKEFFECTID_OCULUS_SPATIALIZER_ATTACHMENT, NULL, CreateOculusFXParams) != AK_Success)
+				{
+					printf("Failed to register OculusSpatializer attachment.");
+				}
+			}
+			else
+			{
+				printf("Failed call to AkGetSoundEngineCallbacks in OculusSpatializer.dll");
+			}
+		}
+		else
+		{
+			printf("Failed to load functions AkGetSoundEngineCallbacks in OculusSpatializer.dll");
+		}
+	}
+	else
+	{
+		printf("Failed to load OculusSpatializer.dll");
+	}
+#endif // PLATFORM_WINDOWS
+	//---------------------------------------------------------------------
+	// OCULUS_END
+	//---------------------------------------------------------------------
 
 	//
 	// Setup banks path
