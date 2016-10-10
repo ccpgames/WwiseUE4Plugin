@@ -18,7 +18,7 @@ const unsigned long AKEFFECTID_OCULUS_SPATIALIZER_ATTACHMENT	= 501;
 //---------------------------------------------------------------------
 
 // Load Oculus Spatializer dll plug-in
-HMODULE OculusSpatializerLibrary = LoadLibrary(L"OculusSpatializer.dll");
+HMODULE OculusSpatializerLibrary = LoadLibrary(L"OculusSpatializerWwise.dll");
 
 // Successful?
 if(OculusSpatializerLibrary)
