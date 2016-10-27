@@ -1,0 +1,44 @@
+# These files are text and should be normalized (convert crlf =&gt; lf)
+*.cpp         text
+*.h           text
+*.cs          text diff=csharp
+*.c           text
+*.hpp         text
+*.config      text
+*.sln         text
+*.csproj      text
+*.vcxproj     text
+*.xml         text     
+*.wproj       text
+*.wwu         text
+*.ini         text
+*.modules     text
+*.target      text
+*.vdf         text
+*.dockerfile  text
+*.uproject    text
+*.uplugin     text
+*.txt         text
+*.rc          text
+*.sh          text
+*.md          text
+*.sh          text
+*.ps1         text
+*.cmd         text
+*.bat         text eol=crlf
+*.msbuild     text
+
+# Binary files
+*.uasset   binary
+*.dll      binary
+*.pdb      binary
+*.exe      binary
+*.lib      binary
+*.png      binary
+*.jpg      binary
+*.pdf      binary
+*.ico      binary
+*.so       binary
+*.dylib    binary
+*.ilk      binary
+*.a        binary
