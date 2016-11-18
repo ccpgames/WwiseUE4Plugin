@@ -9,7 +9,7 @@
 	"EngineVersion" : "4.12.0",
 	"Description" : "Wwise integration for Unreal Engine 4",
 	"Category" : "Audio",
-	"EnabledByDefault" : false,
+	"EnabledByDefault" : true,
 	
 	"Modules" :
 	[
