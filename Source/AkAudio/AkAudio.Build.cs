@@ -261,7 +261,18 @@ public class AkAudio : ModuleRules
         AddWwiseLib(Target, "AkConvolutionReverbFX");
         AddWwiseLib(Target, "AkRecorderFX");
 
-        if ((Target.Platform != UnrealTargetPlatform.Android) && (Target.Platform != UnrealTargetPlatform.Linux) && (Target.Platform != UnrealTargetPlatform.Mac) && (Target.Platform != UnrealTargetPlatform.IOS))
+		AddWwiseLib(Target, "iZHybridReverbFX");
+		AddWwiseLib(Target, "iZTrashBoxModelerFX");
+		AddWwiseLib(Target, "iZTrashDelayFX");
+		AddWwiseLib(Target, "iZTrashDistortionFX");
+		AddWwiseLib(Target, "iZTrashDynamicsFX");
+		AddWwiseLib(Target, "iZTrashFiltersFX");
+		AddWwiseLib(Target, "iZTrashMultibandDistortionFX");
+
+		AddWwiseLib(Target, "AuroHeadphoneFX");
+		AddWwiseLib(Target, "AuroPannerMixer");
+
+		if ((Target.Platform != UnrealTargetPlatform.Android) && (Target.Platform != UnrealTargetPlatform.Linux) && (Target.Platform != UnrealTargetPlatform.Mac) && (Target.Platform != UnrealTargetPlatform.IOS))
         {
             AddWwiseLib(Target, "AkMotionGenerator");
             AddWwiseLib(Target, "AkRumble");

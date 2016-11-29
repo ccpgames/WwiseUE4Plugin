@@ -71,6 +71,20 @@
 // OCULUS_END
 //---------------------------------------------------------------------
 
+//---------------------------------------------------------------------
+// CCP START
+#include <AK/Plugin/iZHybridReverbFXFactory.h>
+#include <AK/Plugin/iZTrashMultibandDistortionFXFactory.h>
+#include <AK/Plugin/iZTrashBoxModelerFXFactory.h>
+#include <AK/Plugin/iZTrashDelayFXFactory.h>
+#include <AK/Plugin/iZTrashDistortionFXFactory.h>
+#include <AK/Plugin/iZTrashDynamicsFXFactory.h>
+#include <AK/Plugin/iZTrashFiltersFXFactory.h>
+
+#include <AK/Plugin/AuroHeadphoneFXFactory.h>
+#include <AK/Plugin/AuroPannerMixerFactory.h>
+// CCP END
+//---------------------------------------------------------------------
 
 
 #if PLATFORM_XBOXONE
