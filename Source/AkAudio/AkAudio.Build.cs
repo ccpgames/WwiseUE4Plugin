@@ -269,8 +269,13 @@ public class AkAudio : ModuleRules
 		AddWwiseLib(Target, "iZTrashFiltersFX");
 		AddWwiseLib(Target, "iZTrashMultibandDistortionFX");
 
-		AddWwiseLib(Target, "AuroHeadphoneFX");
-		AddWwiseLib(Target, "AuroPannerMixer");
+		if (Target.Platform == UnrealTargetPlatform.Win32 ||
+			Target.Platform == UnrealTargetPlatform.Win64 ||
+			Target.Platform == UnrealTargetPlatform.PS4)
+		{
+			AddWwiseLib(Target, "AuroHeadphoneFX");
+			AddWwiseLib(Target, "AuroPannerMixer");
+		}
 
 		if ((Target.Platform != UnrealTargetPlatform.Android) && (Target.Platform != UnrealTargetPlatform.Linux) && (Target.Platform != UnrealTargetPlatform.Mac) && (Target.Platform != UnrealTargetPlatform.IOS))
         {
