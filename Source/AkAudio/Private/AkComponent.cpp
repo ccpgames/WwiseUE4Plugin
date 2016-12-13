@@ -675,7 +675,10 @@ void UAkComponent::CalculateOcclusionValues(bool CalledFromTick)
 			CollisionParams.AddIgnoredActor(PlayerController->GetPawn());
 		}
 
-		bool bNowOccluded = GetWorld()->LineTraceSingleByChannel(OutHit, SourcePosition, ListenerPosition, ECC_Visibility, CollisionParams);
+
+		// NOTE (Siggi): Temp hack to get rid of error spam.  We need to track the cause of this causing an error in PhysX with AK:
+		// For reference therror (in debug builds): NpSceneQueries.cpp 211) eINVALID_PARAMETER : PxScene::raycast(): maxDist is negative.
+		bool bNowOccluded = false;// GetWorld()->LineTraceSingleByChannel(OutHit, SourcePosition, ListenerPosition, ECC_Visibility, CollisionParams);
 		if( bNowOccluded )
 		{
 			FBox BoundingBox;
