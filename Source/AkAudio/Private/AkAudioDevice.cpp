@@ -1769,6 +1769,9 @@ bool FAkAudioDevice::EnsureInitialized()
 	AkPlatformInitSettings platformInitSettings;
 	AK::SoundEngine::GetDefaultInitSettings( initSettings );
 	AK::SoundEngine::GetDefaultPlatformInitSettings( platformInitSettings );
+	// CCP MOD BEGIN - Increase audio lower engine pool
+	platformInitSettings.uLEngineDefaultPoolSize = 33554432;
+	// CCP MOD END - Increase audio lower engine pool
 #if PLATFORM_ANDROID
 	extern JavaVM* GJavaVM;
 	platformInitSettings.pJavaVM = GJavaVM;
