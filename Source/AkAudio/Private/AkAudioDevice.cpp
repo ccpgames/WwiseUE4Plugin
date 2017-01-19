@@ -115,6 +115,24 @@ bool FAkAudioDevice::m_bSoundEngineInitialized = false;
 #define GAME_OBJECT_MAX_STRING_SIZE 512
 #define AK_READ_SIZE DVD_MIN_READ_SIZE
 
+class YouWhatBruv
+{
+public:
+	YouWhatBruv(FString name):
+		BeginTime(FPlatformTime::Seconds()),
+		Name(name)
+	{
+	}
+	~YouWhatBruv()
+	{
+		UE_LOG(LogTemp, Log, TEXT("%s took %fs"), *Name, static_cast<float>(FPlatformTime::Seconds() - BeginTime));
+	}
+
+private:
+	double BeginTime;
+	FString Name;
+};
+
 /*------------------------------------------------------------------------------------
 	Memory hooks
 ------------------------------------------------------------------------------------*/
@@ -215,6 +233,8 @@ static inline void RegisterGameObj_WithName( AkGameObjectID in_gameObj, const TC
  */
 bool FAkAudioDevice::Init( void )
 {
+	YouWhatBruv time(TEXT("FAkAudioDevice::Init"));
+
 #if DEDICATED_SERVER
 	return false;
 #endif
@@ -288,6 +308,8 @@ bool FAkAudioDevice::Update( float DeltaTime )
  */
 void FAkAudioDevice::Teardown()
 {
+	YouWhatBruv time(TEXT("FAkAudioDevice::Teardown"));
+
 	if (m_bSoundEngineInitialized == true)
 	{
 		// Unload all loaded banks before teardown
@@ -474,6 +496,8 @@ void FAkAudioDevice::Flush(UWorld* WorldToFlush)
  */
 AKRESULT FAkAudioDevice::ClearBanks()
 {
+	YouWhatBruv time(TEXT("FAkAudioDevice::ClearBanks"));
+
 	if ( m_bSoundEngineInitialized )
 	{
 		AKRESULT eResult = AK::SoundEngine::ClearBanks();
@@ -505,6 +529,8 @@ AKRESULT FAkAudioDevice::LoadBank(
 	AkBankID &          out_bankID
 	)
 {
+	YouWhatBruv time(FString::Printf(TEXT("FAkAudioDevice::LoadBank (by reference) \'%s\'"), *(in_Bank->GetName())));
+
 	AKRESULT eResult = LoadBank(in_Bank->GetName(), in_memPoolId, out_bankID);
 	if( eResult == AK_Success && AkBankManager != NULL)
 	{
@@ -528,6 +554,8 @@ AKRESULT FAkAudioDevice::LoadBank(
 	AkBankID &          out_bankID
 	)
 {
+	YouWhatBruv time(FString::Printf(TEXT("FAkAudioDevice::LoadBank (by name) \'%s\'"), *in_BankName));
+
 	AKRESULT eResult = AK_Fail;
 	if( EnsureInitialized() ) // ensure audiolib is initialized
 	{
@@ -599,6 +627,8 @@ AKRESULT FAkAudioDevice::LoadBank(
 	AkBankID &          out_bankID
     )
 {
+	YouWhatBruv time(FString::Printf(TEXT("FAkAudioDevice::LoadBank (async by reference) \'%s\'"), *(in_Bank->GetName())));
+
 	if( EnsureInitialized() ) // ensure audiolib is initialized
 	{
 		FString name = in_Bank->GetName();
@@ -645,6 +675,8 @@ AKRESULT FAkAudioDevice::UnloadBank(
     AkMemPoolId *       out_pMemPoolId		    ///< Returned memory pool ID used with LoadBank() (can pass NULL)
     )
 {
+	YouWhatBruv time(FString::Printf(TEXT("FAkAudioDevice::UnloadBank (by reference) \'%s\'"), *(in_Bank->GetName())));
+
 	AKRESULT eResult = UnloadBank(in_Bank->GetName(), out_pMemPoolId);
 	if( eResult == AK_Success && AkBankManager != NULL)
 	{
@@ -666,6 +698,8 @@ AKRESULT FAkAudioDevice::UnloadBank(
     AkMemPoolId *       out_pMemPoolId		    ///< Returned memory pool ID used with LoadBank() (can pass NULL)
     )
 {
+	YouWhatBruv time(FString::Printf(TEXT("FAkAudioDevice::UnloadBank (by name) \'%s\'"), *in_BankName));
+
 	AKRESULT eResult = AK_Fail;
 	if ( m_bSoundEngineInitialized )
 	{
@@ -733,6 +767,8 @@ AKRESULT FAkAudioDevice::UnloadBank(
 	void *              in_pCookie
     )
 {
+	YouWhatBruv time(FString::Printf(TEXT("FAkAudioDevice::UnloadBank (async by reference) \'%s\'"), *(in_Bank->GetName())));
+
 	if ( m_bSoundEngineInitialized )
 	{
 		FString name = in_Bank->GetName();
@@ -773,6 +809,8 @@ AKRESULT FAkAudioDevice::UnloadBank(
  */
 AKRESULT FAkAudioDevice::LoadInitBank(void)
 {
+	YouWhatBruv time(TEXT("FAkAudioDevice::LoadInitBank"));
+
 	AkBankID BankID;
 #ifndef AK_SUPPORT_WCHAR
 	ANSICHAR* szString = TCHAR_TO_ANSI(INITBANKNAME);
@@ -789,11 +827,14 @@ AKRESULT FAkAudioDevice::LoadInitBank(void)
  */
 AKRESULT FAkAudioDevice::UnloadInitBank(void)
 {
+	YouWhatBruv time(TEXT("FAkAudioDevice::UnloadInitBank"));
+
 #ifndef AK_SUPPORT_WCHAR
 	ANSICHAR* szString = TCHAR_TO_ANSI(INITBANKNAME);
 #else
 	const WIDECHAR * szString = INITBANKNAME;
 #endif
+
 	return AK::SoundEngine::UnloadBank( szString, NULL );
 }
 
@@ -802,6 +843,8 @@ AKRESULT FAkAudioDevice::UnloadInitBank(void)
  */
 void FAkAudioDevice::LoadAllReferencedBanks()
 {
+	YouWhatBruv time(TEXT("FAkAudioDevice::LoadAllReferencedBanks"));
+
 	LoadInitBank();
 
 	// Load any banks that are in memory that haven't been loaded yet
