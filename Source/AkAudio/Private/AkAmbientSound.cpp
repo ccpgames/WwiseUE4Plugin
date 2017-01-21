@@ -110,7 +110,9 @@ bool AAkAmbientSound::IsCurrentlyPlaying()
 	bool ret = false;
 	if (AkComponent)
 	{
-		ret = AkComponent->NumActiveEvents.GetValue() != 0;
+		// CCP MOD BEGIN
+		ret = AkComponent->NumActiveEvents->GetValue() != 0;
+		// CCP MOD END
 	}
 
 	return ret;

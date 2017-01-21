@@ -26,10 +26,12 @@ void UAkComponent::AkComponentCallback( AkCallbackType in_eType, AkCallbackInfo*
 
 		if (in_eType == AK_EndOfEvent)
 		{
-			if (pPackage->pNumActiveEvents)
+			// CCP MOD BEGIN
+			if (pPackage->NumActiveEvents.IsValid())
 			{
-				pPackage->pNumActiveEvents->Decrement();
+				pPackage->NumActiveEvents->Decrement();
 			}
+			// CCP MOD END
 			delete pPackage;
 		}
 	}
@@ -60,7 +62,9 @@ Super(ObjectInitializer)
 	AttenuationScalingFactor = 1.0f;
 	bAutoDestroy = false;
 	bStarted = false;
-	NumActiveEvents.Reset();
+	// CCP MOD BEGIN
+	NumActiveEvents = MakeShared<FThreadSafeCounter, ESPMode::ThreadSafe>();
+	// CCP MOD END
 }
 
 void UAkComponent::PostAssociatedAkEvent()
@@ -110,13 +114,17 @@ void UAkComponent::PostAkEventByName(const FString& in_EventName)
 			CalculateOcclusionValues(false);
 		}
 
-		AkComponentCallbackPackage* cbPackage = new AkComponentCallbackPackage(NULL, NULL, AK_EndOfEvent, &NumActiveEvents);
+		// CCP MOD BEGIN
+		AkComponentCallbackPackage* cbPackage = new AkComponentCallbackPackage(NULL, NULL, AK_EndOfEvent, NumActiveEvents);
+		// CCP MOD END
 		if (cbPackage)
 		{
 			playingID = AK::SoundEngine::PostEvent(szEventName, (AkGameObjectID) this, AK_EndOfEvent, &UAkComponent::AkComponentCallback, cbPackage);
 			if (playingID != AK_INVALID_PLAYING_ID)
 			{
-				NumActiveEvents.Increment();
+				// CCP MOD BEGIN
+				NumActiveEvents->Increment();
+				// CCP MOD END
 				bStarted = true;
 			}
 		}
@@ -151,13 +159,17 @@ AkPlayingID UAkComponent::PostAkEventByNameWithCallback(const FString& in_EventN
 			CalculateOcclusionValues(false);
 		}
 
-		AkComponentCallbackPackage* cbPackage = new AkComponentCallbackPackage(in_pfnUserCallback, in_pUserCookie, in_uFlags, &NumActiveEvents);
+		// CCP MOD BEGIN
+		AkComponentCallbackPackage* cbPackage = new AkComponentCallbackPackage(in_pfnUserCallback, in_pUserCookie, in_uFlags, NumActiveEvents);
+		// CCP MOD END
 		if (cbPackage)
 		{
 			playingID = AK::SoundEngine::PostEvent(szEventName, (AkGameObjectID) this, in_uFlags | AK_EndOfEvent, &UAkComponent::AkComponentCallback, cbPackage);
 			if (playingID != AK_INVALID_PLAYING_ID)
 			{
-				NumActiveEvents.Increment();
+				// CCP MOD BEGIN
+				NumActiveEvents->Increment();
+				// CCP MOD END
 				bStarted = true;
 			}
 			else
@@ -413,7 +425,9 @@ void UAkComponent::TickComponent(float DeltaTime, enum ELevelTick TickType, FAct
 			SetOcclusion(DeltaTime);
 		}
 
-		if( NumActiveEvents.GetValue() == 0 && bAutoDestroy && bStarted)
+		// CCP MOD BEGIN
+		if(NumActiveEvents->GetValue() == 0 && bAutoDestroy && bStarted)
+		// CCP MOD END
 		{
 			DestroyComponent();
 		}

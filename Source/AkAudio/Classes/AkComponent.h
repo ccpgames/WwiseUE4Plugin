@@ -196,7 +196,9 @@ public:
 	void SetAutoDestroy(bool in_AutoDestroy) { bAutoDestroy = in_AutoDestroy; }
 
 	/** Thread safe counter for number of active events */
-	FThreadSafeCounter NumActiveEvents;
+	// CCP MOD BEGIN
+	TSharedPtr<FThreadSafeCounter, ESPMode::ThreadSafe> NumActiveEvents;
+	// CCP MOD END
 
 private:
 	/**
@@ -275,14 +277,16 @@ private:
 		/** Copy of the user callback flags, for use in our own callback */
 		uint32 uUserFlags;
 
-		FThreadSafeCounter* pNumActiveEvents;
+		// CCP MOD BEGIN
+		TSharedPtr<FThreadSafeCounter, ESPMode::ThreadSafe> NumActiveEvents;
 
-		AkComponentCallbackPackage(AkCallbackFunc in_cbFunc, void* in_Cookie, uint32 in_Flags, FThreadSafeCounter* in_Counter)
+		AkComponentCallbackPackage(AkCallbackFunc in_cbFunc, void* in_Cookie, uint32 in_Flags, const TSharedPtr<FThreadSafeCounter, ESPMode::ThreadSafe>& numActiveEvents)
 			: pfnUserCallback(in_cbFunc)
 			, pUserCookie(in_Cookie)
 			, uUserFlags(in_Flags)
-			, pNumActiveEvents(in_Counter)
+			, NumActiveEvents(numActiveEvents)
 		{}
+		// CCP MOD END
 	};
 
 	/** Whether an event was posted on the component. Never reset to false. */
