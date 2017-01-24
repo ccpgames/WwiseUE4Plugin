@@ -1917,7 +1917,7 @@ bool FAkAudioDevice::EnsureInitialized()
 	//---------------------------------------------------------------------
 #if PLATFORM_WINDOWS
 	// Load Oculus Spatializer dll plug-in
-	HMODULE OculusSpatializerLibrary = LoadLibrary(L"OculusSpatializer.dll");
+	HMODULE OculusSpatializerLibrary = LoadLibrary(L"OculusSpatializerWwise.dll");
 
 	// Successful?
 	if (OculusSpatializerLibrary)
