@@ -1,0 +1,1671 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 45;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		33586EB01A5C1CDA35A17DCC /* AkDeviceBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 70C67C471F8769934A784164 /* AkDeviceBase.cpp */; };
+		0F8A486B1D9C761C5B7165B5 /* AkDeviceBlocking.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5CF025F32577449A7BC901E3 /* AkDeviceBlocking.cpp */; };
+		571B62547D11164806D71673 /* AkDeviceDeferredLinedUp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B3D498007FC35F860234BAF /* AkDeviceDeferredLinedUp.cpp */; };
+		2F8145F174C5401762FA1A28 /* AkIOMemMgr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07F36E431DE262BC50EC5782 /* AkIOMemMgr.cpp */; };
+		1F383BAC3E6304275AC9017A /* AkStreamMgr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 254F00726BE67B4935746459 /* AkStreamMgr.cpp */; };
+		50712C9F29220F5E00AE4133 /* AkTransferDeferred.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 58D603BC3ACA3BF57FA603CC /* AkTransferDeferred.cpp */; };
+		75B0763E12D830581BA921C7 /* AkIOThread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5E3F29024E445C1B3068094E /* AkIOThread.cpp */; };
+		2A493DE53D2B644F316301EA /* stdafx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FBA30BD6CB715B958A633C4 /* stdafx.cpp */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		5AA2520564E9275B60444472 /* AkPlatformStreamingDefaults.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "AkPlatformStreamingDefaults.h"; path = "AkPlatformStreamingDefaults.h"; sourceTree = "<group>"; };
+		1B011A5E148014975D0A5857 /* AkBuddyBlockPool.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "AkBuddyBlockPool.h"; path = "../Common/AkBuddyBlockPool.h"; sourceTree = "<group>"; };
+		70C67C471F8769934A784164 /* AkDeviceBase.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "AkDeviceBase.cpp"; path = "../Common/AkDeviceBase.cpp"; sourceTree = "<group>"; };
+		7D1058F55A32246773710C98 /* AkDeviceBase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "AkDeviceBase.h"; path = "../Common/AkDeviceBase.h"; sourceTree = "<group>"; };
+		5CF025F32577449A7BC901E3 /* AkDeviceBlocking.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "AkDeviceBlocking.cpp"; path = "../Common/AkDeviceBlocking.cpp"; sourceTree = "<group>"; };
+		538178F0722D7B94584862E1 /* AkDeviceBlocking.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "AkDeviceBlocking.h"; path = "../Common/AkDeviceBlocking.h"; sourceTree = "<group>"; };
+		4B3D498007FC35F860234BAF /* AkDeviceDeferredLinedUp.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "AkDeviceDeferredLinedUp.cpp"; path = "../Common/AkDeviceDeferredLinedUp.cpp"; sourceTree = "<group>"; };
+		0B23415360131D062D520313 /* AkDeviceDeferredLinedUp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "AkDeviceDeferredLinedUp.h"; path = "../Common/AkDeviceDeferredLinedUp.h"; sourceTree = "<group>"; };
+		07F36E431DE262BC50EC5782 /* AkIOMemMgr.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "AkIOMemMgr.cpp"; path = "../Common/AkIOMemMgr.cpp"; sourceTree = "<group>"; };
+		6D6B13EC0F322FB607DA1E41 /* AkIOMemMgr.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "AkIOMemMgr.h"; path = "../Common/AkIOMemMgr.h"; sourceTree = "<group>"; };
+		5AA669753B8A70713A2D6127 /* AkStmDeferredLinedUpBase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "AkStmDeferredLinedUpBase.h"; path = "../Common/AkStmDeferredLinedUpBase.h"; sourceTree = "<group>"; };
+		582373374D025F6F773547FC /* AkStmMemView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "AkStmMemView.h"; path = "../Common/AkStmMemView.h"; sourceTree = "<group>"; };
+		254F00726BE67B4935746459 /* AkStreamMgr.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "AkStreamMgr.cpp"; path = "../Common/AkStreamMgr.cpp"; sourceTree = "<group>"; };
+		0A13055C69D723D3185240F2 /* AkStreamMgr.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "AkStreamMgr.h"; path = "../Common/AkStreamMgr.h"; sourceTree = "<group>"; };
+		71701D4723277C736BEE5C9F /* AkStreamingDefaults.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "AkStreamingDefaults.h"; path = "../Common/AkStreamingDefaults.h"; sourceTree = "<group>"; };
+		58D603BC3ACA3BF57FA603CC /* AkTransferDeferred.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "AkTransferDeferred.cpp"; path = "../Common/AkTransferDeferred.cpp"; sourceTree = "<group>"; };
+		32E7607C1E190ADA0CB14316 /* AkTransferDeferred.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "AkTransferDeferred.h"; path = "../Common/AkTransferDeferred.h"; sourceTree = "<group>"; };
+		5E3F29024E445C1B3068094E /* AkIOThread.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "AkIOThread.cpp"; path = "../POSIX/AkIOThread.cpp"; sourceTree = "<group>"; };
+		1ACF15641020506E011332AD /* AkIOThread.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "AkIOThread.h"; path = "../POSIX/AkIOThread.h"; sourceTree = "<group>"; };
+		7FBA30BD6CB715B958A633C4 /* stdafx.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "stdafx.cpp"; path = "stdafx.cpp"; sourceTree = "<group>"; };
+		4C42116B0D0E3CE7097C2C4F /* stdafx.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "stdafx.h"; path = "stdafx.h"; sourceTree = "<group>"; };
+		7F6B525F69A16007063C5EA7 /* libAkStreamMgr.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = "libAkStreamMgr.a"; path = "libAkStreamMgr.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		64E937F67ED758B23B4B5A11 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		346C311D7D2A5C651FCC2072 /* AkStreamMgrMac */ = {
+			isa = PBXGroup;
+			children = (
+				5AA2520564E9275B60444472 /* AkPlatformStreamingDefaults.h */,
+				2B2C0B192E570B627A637ABD /* Common */,
+				19CA313B1F9A43654B0B5E34 /* POSIX */,
+				7FBA30BD6CB715B958A633C4 /* stdafx.cpp */,
+				4C42116B0D0E3CE7097C2C4F /* stdafx.h */,
+				159D2DE679041764622B242B /* Products */,
+			);
+			name = "AkStreamMgrMac";
+			sourceTree = "<group>";
+		};
+		2B2C0B192E570B627A637ABD /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				1B011A5E148014975D0A5857 /* AkBuddyBlockPool.h */,
+				70C67C471F8769934A784164 /* AkDeviceBase.cpp */,
+				7D1058F55A32246773710C98 /* AkDeviceBase.h */,
+				5CF025F32577449A7BC901E3 /* AkDeviceBlocking.cpp */,
+				538178F0722D7B94584862E1 /* AkDeviceBlocking.h */,
+				4B3D498007FC35F860234BAF /* AkDeviceDeferredLinedUp.cpp */,
+				0B23415360131D062D520313 /* AkDeviceDeferredLinedUp.h */,
+				07F36E431DE262BC50EC5782 /* AkIOMemMgr.cpp */,
+				6D6B13EC0F322FB607DA1E41 /* AkIOMemMgr.h */,
+				5AA669753B8A70713A2D6127 /* AkStmDeferredLinedUpBase.h */,
+				582373374D025F6F773547FC /* AkStmMemView.h */,
+				254F00726BE67B4935746459 /* AkStreamMgr.cpp */,
+				0A13055C69D723D3185240F2 /* AkStreamMgr.h */,
+				71701D4723277C736BEE5C9F /* AkStreamingDefaults.h */,
+				58D603BC3ACA3BF57FA603CC /* AkTransferDeferred.cpp */,
+				32E7607C1E190ADA0CB14316 /* AkTransferDeferred.h */,
+			);
+			name = "Common";
+			sourceTree = "<group>";
+		};
+		19CA313B1F9A43654B0B5E34 /* POSIX */ = {
+			isa = PBXGroup;
+			children = (
+				5E3F29024E445C1B3068094E /* AkIOThread.cpp */,
+				1ACF15641020506E011332AD /* AkIOThread.h */,
+			);
+			name = "POSIX";
+			sourceTree = "<group>";
+		};
+		159D2DE679041764622B242B /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				7F6B525F69A16007063C5EA7 /* libAkStreamMgr.a */,
+			);
+			name = "Products";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		5E8F1E035DAE054B1C634E82 /* AkStreamMgrMac */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 045715EB249C1D3E0C6F0606 /* Build configuration list for PBXNativeTarget "AkStreamMgrMac" */;
+			buildPhases = (
+				31F70576434B17963A2D6C9C /* Resources */,
+				7A3400555CBD3C60796A4845 /* Sources */,
+				64E937F67ED758B23B4B5A11 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "AkStreamMgrMac";
+			productName = "AkStreamMgrMac";
+			productReference = 7F6B525F69A16007063C5EA7 /* libAkStreamMgr.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		08FB7793FE84155DC02AAC07 /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = 1DEB928908733DD80010E9CD /* Build configuration list for PBXProject "AkStreamMgrMac" */;
+			compatibilityVersion = "Xcode 3.2";
+			hasScannedForEncodings = 1;
+			mainGroup = 346C311D7D2A5C651FCC2072 /* AkStreamMgrMac */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				5E8F1E035DAE054B1C634E82 /* libAkStreamMgr.a */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		31F70576434B17963A2D6C9C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		7A3400555CBD3C60796A4845 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				33586EB01A5C1CDA35A17DCC /* AkDeviceBase.cpp in Sources */,
+				0F8A486B1D9C761C5B7165B5 /* AkDeviceBlocking.cpp in Sources */,
+				571B62547D11164806D71673 /* AkDeviceDeferredLinedUp.cpp in Sources */,
+				2F8145F174C5401762FA1A28 /* AkIOMemMgr.cpp in Sources */,
+				1F383BAC3E6304275AC9017A /* AkStreamMgr.cpp in Sources */,
+				50712C9F29220F5E00AE4133 /* AkTransferDeferred.cpp in Sources */,
+				75B0763E12D830581BA921C7 /* AkIOThread.cpp in Sources */,
+				2A493DE53D2B644F316301EA /* stdafx.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		3231619D165D7098113C3581 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (i386, x86_64);
+				VALID_ARCHS = (i386, x86_64);
+				SDKROOT = macosx10.11;
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				ONLY_ACTIVE_ARCH = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_OPENMP_SUPPORT = NO;
+				ENABLE_BITCODE = NO;
+				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = YES;
+				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_MISSING_PARENTHESES = NO;
+				GCC_WARN_CHECK_SWITCH_STATEMENTS = NO;
+				GCC_FAST_OBJC_DISPATCH = YES;
+				GCC_AUTO_VECTORIZATION = NO;
+				GCC_OBJC_CALL_CXX_CDTORS = NO;
+				GCC_ENABLE_SSE3_EXTENSIONS = YES;
+				GCC_ENABLE_SUPPLEMENTAL_SSE3_INSTRUCTIONS = YES;
+				GCC_STRICT_ALIASING = NO;
+				GCC_FEEDBACK_DIRECTED_OPTIMIZATION = Off;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_GENERATE_TEST_COVERAGE_FILES = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_MODEL_TUNING = G4;
+				GCC_INSTRUMENT_PROGRAM_FLOW_ARCS = NO;
+				GCC_ENABLE_KERNEL_DEVELOPMENT = NO;
+				GCC_DEBUGGING_SYMBOLS = default;
+				GCC_REUSE_STRINGS = YES;
+				GCC_NO_COMMON_BLOCKS = NO;
+				GCC_ENABLE_OBJC_GC = unsupported;
+				GCC_FAST_MATH = YES;
+				GCC_ENABLE_SYMBOL_SEPARATION = YES;
+				GCC_THREADSAFE_STATICS = YES;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_UNROLL_LOOPS = NO;
+				GCC_MODEL_PPC64 = NO;
+				GCC_CHAR_IS_UNSIGNED_CHAR = NO;
+				GCC_ENABLE_ASM_KEYWORD = YES;
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_CHECK_RETURN_VALUE_OF_OPERATOR_NEW = NO;
+				GCC_CW_ASM_SYNTAX = YES;
+				GCC_INPUT_FILETYPE = automatic;
+				GCC_ALTIVEC_EXTENSIONS = NO;
+				GCC_ENABLE_CPP_EXCEPTIONS = NO;
+				GCC_ENABLE_CPP_RTTI = NO;
+				GCC_LINK_WITH_DYNAMIC_LIBRARIES = YES;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_ENABLE_TRIGRAPHS = NO;
+				GCC_ENABLE_FLOATING_POINT_LIBRARY_CALLS = NO;
+				GCC_USE_INDIRECT_FUNCTION_CALLS = NO;
+				GCC_USE_REGISTER_FUNCTION_CALLS = NO;
+				GCC_INCREASE_PRECOMPILED_HEADER_SHARING = NO;
+				OTHER_CFLAGS = -Wno-sign-compare;
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
+				GCC_ENABLE_BUILTIN_FUNCTIONS = YES;
+				GCC_ENABLE_PASCAL_STRINGS = YES;
+				GCC_FORCE_CPU_SUBTYPE_ALL = NO;
+				GCC_SHORT_ENUMS = NO;
+				GCC_USE_GCC3_PFE_SUPPORT = YES;
+				GCC_ONE_BYTE_BOOL = YES;
+				GCC_USE_STANDARD_INCLUDE_SEARCHING = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_ABOUT_POINTER_SIGNEDNESS = YES;
+				GCC_WARN_UNUSED_VARIABLE = NO;
+				OTHER_CPLUSPLUSFLAGS = ("$(OTHER_CFLAGS)", -Wno-write-strings, -fvisibility-inlines-hidden, -Wno-invalid-offsetof);
+				CLANG_ENABLE_OBJC_ARC = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CONFIGURATION_BUILD_DIR = "../../../Mac/Debug/lib";
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_MODEL_TUNING = G5;
+				INSTALL_PATH = /usr/local/lib;
+				PRODUCT_NAME = "AkStreamMgr";
+			};
+			name = "Debug";
+		};
+		566671F333342AB21B855F3A /* Debug_StaticCRT */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (i386, x86_64);
+				VALID_ARCHS = (i386, x86_64);
+				SDKROOT = macosx10.11;
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				ONLY_ACTIVE_ARCH = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_OPENMP_SUPPORT = NO;
+				ENABLE_BITCODE = NO;
+				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = YES;
+				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_MISSING_PARENTHESES = NO;
+				GCC_WARN_CHECK_SWITCH_STATEMENTS = NO;
+				GCC_FAST_OBJC_DISPATCH = YES;
+				GCC_AUTO_VECTORIZATION = NO;
+				GCC_OBJC_CALL_CXX_CDTORS = NO;
+				GCC_ENABLE_SSE3_EXTENSIONS = YES;
+				GCC_ENABLE_SUPPLEMENTAL_SSE3_INSTRUCTIONS = YES;
+				GCC_STRICT_ALIASING = NO;
+				GCC_FEEDBACK_DIRECTED_OPTIMIZATION = Off;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_GENERATE_TEST_COVERAGE_FILES = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_MODEL_TUNING = G4;
+				GCC_INSTRUMENT_PROGRAM_FLOW_ARCS = NO;
+				GCC_ENABLE_KERNEL_DEVELOPMENT = NO;
+				GCC_DEBUGGING_SYMBOLS = default;
+				GCC_REUSE_STRINGS = YES;
+				GCC_NO_COMMON_BLOCKS = NO;
+				GCC_ENABLE_OBJC_GC = unsupported;
+				GCC_FAST_MATH = YES;
+				GCC_ENABLE_SYMBOL_SEPARATION = YES;
+				GCC_THREADSAFE_STATICS = YES;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_UNROLL_LOOPS = NO;
+				GCC_MODEL_PPC64 = NO;
+				GCC_CHAR_IS_UNSIGNED_CHAR = NO;
+				GCC_ENABLE_ASM_KEYWORD = YES;
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_CHECK_RETURN_VALUE_OF_OPERATOR_NEW = NO;
+				GCC_CW_ASM_SYNTAX = YES;
+				GCC_INPUT_FILETYPE = automatic;
+				GCC_ALTIVEC_EXTENSIONS = NO;
+				GCC_ENABLE_CPP_EXCEPTIONS = NO;
+				GCC_ENABLE_CPP_RTTI = NO;
+				GCC_LINK_WITH_DYNAMIC_LIBRARIES = YES;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_ENABLE_TRIGRAPHS = NO;
+				GCC_ENABLE_FLOATING_POINT_LIBRARY_CALLS = NO;
+				GCC_USE_INDIRECT_FUNCTION_CALLS = NO;
+				GCC_USE_REGISTER_FUNCTION_CALLS = NO;
+				GCC_INCREASE_PRECOMPILED_HEADER_SHARING = NO;
+				OTHER_CFLAGS = -Wno-sign-compare;
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
+				GCC_ENABLE_BUILTIN_FUNCTIONS = YES;
+				GCC_ENABLE_PASCAL_STRINGS = YES;
+				GCC_FORCE_CPU_SUBTYPE_ALL = NO;
+				GCC_SHORT_ENUMS = NO;
+				GCC_USE_GCC3_PFE_SUPPORT = YES;
+				GCC_ONE_BYTE_BOOL = YES;
+				GCC_USE_STANDARD_INCLUDE_SEARCHING = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_ABOUT_POINTER_SIGNEDNESS = YES;
+				GCC_WARN_UNUSED_VARIABLE = NO;
+				OTHER_CPLUSPLUSFLAGS = ("$(OTHER_CFLAGS)", -Wno-write-strings, -fvisibility-inlines-hidden, -Wno-invalid-offsetof);
+				CLANG_ENABLE_OBJC_ARC = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CONFIGURATION_BUILD_DIR = "../../../Mac/Debug_StaticCRT/lib";
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_MODEL_TUNING = G5;
+				INSTALL_PATH = /usr/local/lib;
+				PRODUCT_NAME = "AkStreamMgr";
+			};
+			name = "Debug_StaticCRT";
+		};
+		3CD02A58285303AB61594761 /* Profile */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (i386, x86_64);
+				VALID_ARCHS = (i386, x86_64);
+				SDKROOT = macosx10.11;
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				ONLY_ACTIVE_ARCH = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_OPENMP_SUPPORT = NO;
+				ENABLE_BITCODE = NO;
+				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = YES;
+				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_MISSING_PARENTHESES = NO;
+				GCC_WARN_CHECK_SWITCH_STATEMENTS = NO;
+				GCC_FAST_OBJC_DISPATCH = YES;
+				GCC_AUTO_VECTORIZATION = NO;
+				GCC_OBJC_CALL_CXX_CDTORS = NO;
+				GCC_ENABLE_SSE3_EXTENSIONS = YES;
+				GCC_ENABLE_SUPPLEMENTAL_SSE3_INSTRUCTIONS = YES;
+				GCC_STRICT_ALIASING = NO;
+				GCC_FEEDBACK_DIRECTED_OPTIMIZATION = Off;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_GENERATE_TEST_COVERAGE_FILES = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_MODEL_TUNING = G4;
+				GCC_INSTRUMENT_PROGRAM_FLOW_ARCS = NO;
+				GCC_ENABLE_KERNEL_DEVELOPMENT = NO;
+				GCC_DEBUGGING_SYMBOLS = default;
+				GCC_REUSE_STRINGS = YES;
+				GCC_NO_COMMON_BLOCKS = NO;
+				GCC_ENABLE_OBJC_GC = unsupported;
+				GCC_FAST_MATH = YES;
+				GCC_ENABLE_SYMBOL_SEPARATION = YES;
+				GCC_THREADSAFE_STATICS = YES;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_UNROLL_LOOPS = NO;
+				GCC_MODEL_PPC64 = NO;
+				GCC_CHAR_IS_UNSIGNED_CHAR = NO;
+				GCC_ENABLE_ASM_KEYWORD = YES;
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_CHECK_RETURN_VALUE_OF_OPERATOR_NEW = NO;
+				GCC_CW_ASM_SYNTAX = YES;
+				GCC_INPUT_FILETYPE = automatic;
+				GCC_ALTIVEC_EXTENSIONS = NO;
+				GCC_ENABLE_CPP_EXCEPTIONS = NO;
+				GCC_ENABLE_CPP_RTTI = NO;
+				GCC_LINK_WITH_DYNAMIC_LIBRARIES = YES;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_ENABLE_TRIGRAPHS = NO;
+				GCC_ENABLE_FLOATING_POINT_LIBRARY_CALLS = NO;
+				GCC_USE_INDIRECT_FUNCTION_CALLS = NO;
+				GCC_USE_REGISTER_FUNCTION_CALLS = NO;
+				GCC_INCREASE_PRECOMPILED_HEADER_SHARING = NO;
+				OTHER_CFLAGS = -Wno-sign-compare;
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
+				GCC_ENABLE_BUILTIN_FUNCTIONS = YES;
+				GCC_ENABLE_PASCAL_STRINGS = YES;
+				GCC_FORCE_CPU_SUBTYPE_ALL = NO;
+				GCC_SHORT_ENUMS = NO;
+				GCC_USE_GCC3_PFE_SUPPORT = YES;
+				GCC_ONE_BYTE_BOOL = YES;
+				GCC_USE_STANDARD_INCLUDE_SEARCHING = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_ABOUT_POINTER_SIGNEDNESS = YES;
+				GCC_WARN_UNUSED_VARIABLE = NO;
+				OTHER_CPLUSPLUSFLAGS = ("$(OTHER_CFLAGS)", -Wno-write-strings, -fvisibility-inlines-hidden, -Wno-invalid-offsetof);
+				CLANG_ENABLE_OBJC_ARC = YES;
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CONFIGURATION_BUILD_DIR = "../../../Mac/Profile/lib";
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_MODEL_TUNING = G5;
+				INSTALL_PATH = /usr/local/lib;
+				PRODUCT_NAME = "AkStreamMgr";
+			};
+			name = "Profile";
+		};
+		3BC719A73F3F4C6A565F2993 /* Profile_EnableAsserts */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (i386, x86_64);
+				VALID_ARCHS = (i386, x86_64);
+				SDKROOT = macosx10.11;
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				ONLY_ACTIVE_ARCH = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_OPENMP_SUPPORT = NO;
+				ENABLE_BITCODE = NO;
+				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = YES;
+				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_MISSING_PARENTHESES = NO;
+				GCC_WARN_CHECK_SWITCH_STATEMENTS = NO;
+				GCC_FAST_OBJC_DISPATCH = YES;
+				GCC_AUTO_VECTORIZATION = NO;
+				GCC_OBJC_CALL_CXX_CDTORS = NO;
+				GCC_ENABLE_SSE3_EXTENSIONS = YES;
+				GCC_ENABLE_SUPPLEMENTAL_SSE3_INSTRUCTIONS = YES;
+				GCC_STRICT_ALIASING = NO;
+				GCC_FEEDBACK_DIRECTED_OPTIMIZATION = Off;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_GENERATE_TEST_COVERAGE_FILES = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_MODEL_TUNING = G4;
+				GCC_INSTRUMENT_PROGRAM_FLOW_ARCS = NO;
+				GCC_ENABLE_KERNEL_DEVELOPMENT = NO;
+				GCC_DEBUGGING_SYMBOLS = default;
+				GCC_REUSE_STRINGS = YES;
+				GCC_NO_COMMON_BLOCKS = NO;
+				GCC_ENABLE_OBJC_GC = unsupported;
+				GCC_FAST_MATH = YES;
+				GCC_ENABLE_SYMBOL_SEPARATION = YES;
+				GCC_THREADSAFE_STATICS = YES;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_UNROLL_LOOPS = NO;
+				GCC_MODEL_PPC64 = NO;
+				GCC_CHAR_IS_UNSIGNED_CHAR = NO;
+				GCC_ENABLE_ASM_KEYWORD = YES;
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_CHECK_RETURN_VALUE_OF_OPERATOR_NEW = NO;
+				GCC_CW_ASM_SYNTAX = YES;
+				GCC_INPUT_FILETYPE = automatic;
+				GCC_ALTIVEC_EXTENSIONS = NO;
+				GCC_ENABLE_CPP_EXCEPTIONS = NO;
+				GCC_ENABLE_CPP_RTTI = NO;
+				GCC_LINK_WITH_DYNAMIC_LIBRARIES = YES;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_ENABLE_TRIGRAPHS = NO;
+				GCC_ENABLE_FLOATING_POINT_LIBRARY_CALLS = NO;
+				GCC_USE_INDIRECT_FUNCTION_CALLS = NO;
+				GCC_USE_REGISTER_FUNCTION_CALLS = NO;
+				GCC_INCREASE_PRECOMPILED_HEADER_SHARING = NO;
+				OTHER_CFLAGS = -Wno-sign-compare;
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
+				GCC_ENABLE_BUILTIN_FUNCTIONS = YES;
+				GCC_ENABLE_PASCAL_STRINGS = YES;
+				GCC_FORCE_CPU_SUBTYPE_ALL = NO;
+				GCC_SHORT_ENUMS = NO;
+				GCC_USE_GCC3_PFE_SUPPORT = YES;
+				GCC_ONE_BYTE_BOOL = YES;
+				GCC_USE_STANDARD_INCLUDE_SEARCHING = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_ABOUT_POINTER_SIGNEDNESS = YES;
+				GCC_WARN_UNUSED_VARIABLE = NO;
+				OTHER_CPLUSPLUSFLAGS = ("$(OTHER_CFLAGS)", -Wno-write-strings, -fvisibility-inlines-hidden, -Wno-invalid-offsetof);
+				CLANG_ENABLE_OBJC_ARC = YES;
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CONFIGURATION_BUILD_DIR = "../../../Mac/Profile_EnableAsserts/lib";
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_MODEL_TUNING = G5;
+				INSTALL_PATH = /usr/local/lib;
+				PRODUCT_NAME = "AkStreamMgr";
+			};
+			name = "Profile_EnableAsserts";
+		};
+		59F243CD51276E3104A062CF /* Profile_StaticCRT */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (i386, x86_64);
+				VALID_ARCHS = (i386, x86_64);
+				SDKROOT = macosx10.11;
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				ONLY_ACTIVE_ARCH = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_OPENMP_SUPPORT = NO;
+				ENABLE_BITCODE = NO;
+				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = YES;
+				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_MISSING_PARENTHESES = NO;
+				GCC_WARN_CHECK_SWITCH_STATEMENTS = NO;
+				GCC_FAST_OBJC_DISPATCH = YES;
+				GCC_AUTO_VECTORIZATION = NO;
+				GCC_OBJC_CALL_CXX_CDTORS = NO;
+				GCC_ENABLE_SSE3_EXTENSIONS = YES;
+				GCC_ENABLE_SUPPLEMENTAL_SSE3_INSTRUCTIONS = YES;
+				GCC_STRICT_ALIASING = NO;
+				GCC_FEEDBACK_DIRECTED_OPTIMIZATION = Off;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_GENERATE_TEST_COVERAGE_FILES = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_MODEL_TUNING = G4;
+				GCC_INSTRUMENT_PROGRAM_FLOW_ARCS = NO;
+				GCC_ENABLE_KERNEL_DEVELOPMENT = NO;
+				GCC_DEBUGGING_SYMBOLS = default;
+				GCC_REUSE_STRINGS = YES;
+				GCC_NO_COMMON_BLOCKS = NO;
+				GCC_ENABLE_OBJC_GC = unsupported;
+				GCC_FAST_MATH = YES;
+				GCC_ENABLE_SYMBOL_SEPARATION = YES;
+				GCC_THREADSAFE_STATICS = YES;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_UNROLL_LOOPS = NO;
+				GCC_MODEL_PPC64 = NO;
+				GCC_CHAR_IS_UNSIGNED_CHAR = NO;
+				GCC_ENABLE_ASM_KEYWORD = YES;
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_CHECK_RETURN_VALUE_OF_OPERATOR_NEW = NO;
+				GCC_CW_ASM_SYNTAX = YES;
+				GCC_INPUT_FILETYPE = automatic;
+				GCC_ALTIVEC_EXTENSIONS = NO;
+				GCC_ENABLE_CPP_EXCEPTIONS = NO;
+				GCC_ENABLE_CPP_RTTI = NO;
+				GCC_LINK_WITH_DYNAMIC_LIBRARIES = YES;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_ENABLE_TRIGRAPHS = NO;
+				GCC_ENABLE_FLOATING_POINT_LIBRARY_CALLS = NO;
+				GCC_USE_INDIRECT_FUNCTION_CALLS = NO;
+				GCC_USE_REGISTER_FUNCTION_CALLS = NO;
+				GCC_INCREASE_PRECOMPILED_HEADER_SHARING = NO;
+				OTHER_CFLAGS = -Wno-sign-compare;
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
+				GCC_ENABLE_BUILTIN_FUNCTIONS = YES;
+				GCC_ENABLE_PASCAL_STRINGS = YES;
+				GCC_FORCE_CPU_SUBTYPE_ALL = NO;
+				GCC_SHORT_ENUMS = NO;
+				GCC_USE_GCC3_PFE_SUPPORT = YES;
+				GCC_ONE_BYTE_BOOL = YES;
+				GCC_USE_STANDARD_INCLUDE_SEARCHING = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_ABOUT_POINTER_SIGNEDNESS = YES;
+				GCC_WARN_UNUSED_VARIABLE = NO;
+				OTHER_CPLUSPLUSFLAGS = ("$(OTHER_CFLAGS)", -Wno-write-strings, -fvisibility-inlines-hidden, -Wno-invalid-offsetof);
+				CLANG_ENABLE_OBJC_ARC = YES;
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CONFIGURATION_BUILD_DIR = "../../../Mac/Profile_StaticCRT/lib";
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_MODEL_TUNING = G5;
+				INSTALL_PATH = /usr/local/lib;
+				PRODUCT_NAME = "AkStreamMgr";
+			};
+			name = "Profile_StaticCRT";
+		};
+		2FF302F93E2254091E0F2ADA /* Profile_StaticCRT_EnableAsserts */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (i386, x86_64);
+				VALID_ARCHS = (i386, x86_64);
+				SDKROOT = macosx10.11;
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				ONLY_ACTIVE_ARCH = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_OPENMP_SUPPORT = NO;
+				ENABLE_BITCODE = NO;
+				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = YES;
+				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_MISSING_PARENTHESES = NO;
+				GCC_WARN_CHECK_SWITCH_STATEMENTS = NO;
+				GCC_FAST_OBJC_DISPATCH = YES;
+				GCC_AUTO_VECTORIZATION = NO;
+				GCC_OBJC_CALL_CXX_CDTORS = NO;
+				GCC_ENABLE_SSE3_EXTENSIONS = YES;
+				GCC_ENABLE_SUPPLEMENTAL_SSE3_INSTRUCTIONS = YES;
+				GCC_STRICT_ALIASING = NO;
+				GCC_FEEDBACK_DIRECTED_OPTIMIZATION = Off;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_GENERATE_TEST_COVERAGE_FILES = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_MODEL_TUNING = G4;
+				GCC_INSTRUMENT_PROGRAM_FLOW_ARCS = NO;
+				GCC_ENABLE_KERNEL_DEVELOPMENT = NO;
+				GCC_DEBUGGING_SYMBOLS = default;
+				GCC_REUSE_STRINGS = YES;
+				GCC_NO_COMMON_BLOCKS = NO;
+				GCC_ENABLE_OBJC_GC = unsupported;
+				GCC_FAST_MATH = YES;
+				GCC_ENABLE_SYMBOL_SEPARATION = YES;
+				GCC_THREADSAFE_STATICS = YES;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_UNROLL_LOOPS = NO;
+				GCC_MODEL_PPC64 = NO;
+				GCC_CHAR_IS_UNSIGNED_CHAR = NO;
+				GCC_ENABLE_ASM_KEYWORD = YES;
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_CHECK_RETURN_VALUE_OF_OPERATOR_NEW = NO;
+				GCC_CW_ASM_SYNTAX = YES;
+				GCC_INPUT_FILETYPE = automatic;
+				GCC_ALTIVEC_EXTENSIONS = NO;
+				GCC_ENABLE_CPP_EXCEPTIONS = NO;
+				GCC_ENABLE_CPP_RTTI = NO;
+				GCC_LINK_WITH_DYNAMIC_LIBRARIES = YES;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_ENABLE_TRIGRAPHS = NO;
+				GCC_ENABLE_FLOATING_POINT_LIBRARY_CALLS = NO;
+				GCC_USE_INDIRECT_FUNCTION_CALLS = NO;
+				GCC_USE_REGISTER_FUNCTION_CALLS = NO;
+				GCC_INCREASE_PRECOMPILED_HEADER_SHARING = NO;
+				OTHER_CFLAGS = -Wno-sign-compare;
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
+				GCC_ENABLE_BUILTIN_FUNCTIONS = YES;
+				GCC_ENABLE_PASCAL_STRINGS = YES;
+				GCC_FORCE_CPU_SUBTYPE_ALL = NO;
+				GCC_SHORT_ENUMS = NO;
+				GCC_USE_GCC3_PFE_SUPPORT = YES;
+				GCC_ONE_BYTE_BOOL = YES;
+				GCC_USE_STANDARD_INCLUDE_SEARCHING = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_ABOUT_POINTER_SIGNEDNESS = YES;
+				GCC_WARN_UNUSED_VARIABLE = NO;
+				OTHER_CPLUSPLUSFLAGS = ("$(OTHER_CFLAGS)", -Wno-write-strings, -fvisibility-inlines-hidden, -Wno-invalid-offsetof);
+				CLANG_ENABLE_OBJC_ARC = YES;
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CONFIGURATION_BUILD_DIR = "../../../Mac/Profile_StaticCRT_EnableAsserts/lib";
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_MODEL_TUNING = G5;
+				INSTALL_PATH = /usr/local/lib;
+				PRODUCT_NAME = "AkStreamMgr";
+			};
+			name = "Profile_StaticCRT_EnableAsserts";
+		};
+		25FF38DA17B25A4D2CB47435 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (i386, x86_64);
+				VALID_ARCHS = (i386, x86_64);
+				SDKROOT = macosx10.11;
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				ONLY_ACTIVE_ARCH = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_OPENMP_SUPPORT = NO;
+				ENABLE_BITCODE = NO;
+				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = YES;
+				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_MISSING_PARENTHESES = NO;
+				GCC_WARN_CHECK_SWITCH_STATEMENTS = NO;
+				GCC_FAST_OBJC_DISPATCH = YES;
+				GCC_AUTO_VECTORIZATION = NO;
+				GCC_OBJC_CALL_CXX_CDTORS = NO;
+				GCC_ENABLE_SSE3_EXTENSIONS = YES;
+				GCC_ENABLE_SUPPLEMENTAL_SSE3_INSTRUCTIONS = YES;
+				GCC_STRICT_ALIASING = NO;
+				GCC_FEEDBACK_DIRECTED_OPTIMIZATION = Off;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_GENERATE_TEST_COVERAGE_FILES = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_MODEL_TUNING = G4;
+				GCC_INSTRUMENT_PROGRAM_FLOW_ARCS = NO;
+				GCC_ENABLE_KERNEL_DEVELOPMENT = NO;
+				GCC_DEBUGGING_SYMBOLS = default;
+				GCC_REUSE_STRINGS = YES;
+				GCC_NO_COMMON_BLOCKS = NO;
+				GCC_ENABLE_OBJC_GC = unsupported;
+				GCC_FAST_MATH = YES;
+				GCC_ENABLE_SYMBOL_SEPARATION = YES;
+				GCC_THREADSAFE_STATICS = YES;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_UNROLL_LOOPS = NO;
+				GCC_MODEL_PPC64 = NO;
+				GCC_CHAR_IS_UNSIGNED_CHAR = NO;
+				GCC_ENABLE_ASM_KEYWORD = YES;
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_CHECK_RETURN_VALUE_OF_OPERATOR_NEW = NO;
+				GCC_CW_ASM_SYNTAX = YES;
+				GCC_INPUT_FILETYPE = automatic;
+				GCC_ALTIVEC_EXTENSIONS = NO;
+				GCC_ENABLE_CPP_EXCEPTIONS = NO;
+				GCC_ENABLE_CPP_RTTI = NO;
+				GCC_LINK_WITH_DYNAMIC_LIBRARIES = YES;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_ENABLE_TRIGRAPHS = NO;
+				GCC_ENABLE_FLOATING_POINT_LIBRARY_CALLS = NO;
+				GCC_USE_INDIRECT_FUNCTION_CALLS = NO;
+				GCC_USE_REGISTER_FUNCTION_CALLS = NO;
+				GCC_INCREASE_PRECOMPILED_HEADER_SHARING = NO;
+				OTHER_CFLAGS = -Wno-sign-compare;
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
+				GCC_ENABLE_BUILTIN_FUNCTIONS = YES;
+				GCC_ENABLE_PASCAL_STRINGS = YES;
+				GCC_FORCE_CPU_SUBTYPE_ALL = NO;
+				GCC_SHORT_ENUMS = NO;
+				GCC_USE_GCC3_PFE_SUPPORT = YES;
+				GCC_ONE_BYTE_BOOL = YES;
+				GCC_USE_STANDARD_INCLUDE_SEARCHING = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_ABOUT_POINTER_SIGNEDNESS = YES;
+				GCC_WARN_UNUSED_VARIABLE = NO;
+				OTHER_CPLUSPLUSFLAGS = ("$(OTHER_CFLAGS)", -Wno-write-strings, -fvisibility-inlines-hidden, -Wno-invalid-offsetof);
+				CLANG_ENABLE_OBJC_ARC = YES;
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CONFIGURATION_BUILD_DIR = "../../../Mac/Release/lib";
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_MODEL_TUNING = G5;
+				INSTALL_PATH = /usr/local/lib;
+				PRODUCT_NAME = "AkStreamMgr";
+			};
+			name = "Release";
+		};
+		076A00CF2F130DB771845137 /* Release_StaticCRT */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (i386, x86_64);
+				VALID_ARCHS = (i386, x86_64);
+				SDKROOT = macosx10.11;
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				ONLY_ACTIVE_ARCH = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_OPENMP_SUPPORT = NO;
+				ENABLE_BITCODE = NO;
+				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = YES;
+				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_MISSING_PARENTHESES = NO;
+				GCC_WARN_CHECK_SWITCH_STATEMENTS = NO;
+				GCC_FAST_OBJC_DISPATCH = YES;
+				GCC_AUTO_VECTORIZATION = NO;
+				GCC_OBJC_CALL_CXX_CDTORS = NO;
+				GCC_ENABLE_SSE3_EXTENSIONS = YES;
+				GCC_ENABLE_SUPPLEMENTAL_SSE3_INSTRUCTIONS = YES;
+				GCC_STRICT_ALIASING = NO;
+				GCC_FEEDBACK_DIRECTED_OPTIMIZATION = Off;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_GENERATE_TEST_COVERAGE_FILES = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_MODEL_TUNING = G4;
+				GCC_INSTRUMENT_PROGRAM_FLOW_ARCS = NO;
+				GCC_ENABLE_KERNEL_DEVELOPMENT = NO;
+				GCC_DEBUGGING_SYMBOLS = default;
+				GCC_REUSE_STRINGS = YES;
+				GCC_NO_COMMON_BLOCKS = NO;
+				GCC_ENABLE_OBJC_GC = unsupported;
+				GCC_FAST_MATH = YES;
+				GCC_ENABLE_SYMBOL_SEPARATION = YES;
+				GCC_THREADSAFE_STATICS = YES;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_UNROLL_LOOPS = NO;
+				GCC_MODEL_PPC64 = NO;
+				GCC_CHAR_IS_UNSIGNED_CHAR = NO;
+				GCC_ENABLE_ASM_KEYWORD = YES;
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_CHECK_RETURN_VALUE_OF_OPERATOR_NEW = NO;
+				GCC_CW_ASM_SYNTAX = YES;
+				GCC_INPUT_FILETYPE = automatic;
+				GCC_ALTIVEC_EXTENSIONS = NO;
+				GCC_ENABLE_CPP_EXCEPTIONS = NO;
+				GCC_ENABLE_CPP_RTTI = NO;
+				GCC_LINK_WITH_DYNAMIC_LIBRARIES = YES;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_ENABLE_TRIGRAPHS = NO;
+				GCC_ENABLE_FLOATING_POINT_LIBRARY_CALLS = NO;
+				GCC_USE_INDIRECT_FUNCTION_CALLS = NO;
+				GCC_USE_REGISTER_FUNCTION_CALLS = NO;
+				GCC_INCREASE_PRECOMPILED_HEADER_SHARING = NO;
+				OTHER_CFLAGS = -Wno-sign-compare;
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
+				GCC_ENABLE_BUILTIN_FUNCTIONS = YES;
+				GCC_ENABLE_PASCAL_STRINGS = YES;
+				GCC_FORCE_CPU_SUBTYPE_ALL = NO;
+				GCC_SHORT_ENUMS = NO;
+				GCC_USE_GCC3_PFE_SUPPORT = YES;
+				GCC_ONE_BYTE_BOOL = YES;
+				GCC_USE_STANDARD_INCLUDE_SEARCHING = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_ABOUT_POINTER_SIGNEDNESS = YES;
+				GCC_WARN_UNUSED_VARIABLE = NO;
+				OTHER_CPLUSPLUSFLAGS = ("$(OTHER_CFLAGS)", -Wno-write-strings, -fvisibility-inlines-hidden, -Wno-invalid-offsetof);
+				CLANG_ENABLE_OBJC_ARC = YES;
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CONFIGURATION_BUILD_DIR = "../../../Mac/Release_StaticCRT/lib";
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_MODEL_TUNING = G5;
+				INSTALL_PATH = /usr/local/lib;
+				PRODUCT_NAME = "AkStreamMgr";
+			};
+			name = "Release_StaticCRT";
+		};
+		29084D62040109EE1D5435FA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (i386, x86_64);
+				VALID_ARCHS = (i386, x86_64);
+				SDKROOT = macosx10.11;
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				ONLY_ACTIVE_ARCH = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_OPENMP_SUPPORT = NO;
+				ENABLE_BITCODE = NO;
+				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = YES;
+				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_MISSING_PARENTHESES = NO;
+				GCC_WARN_CHECK_SWITCH_STATEMENTS = NO;
+				GCC_FAST_OBJC_DISPATCH = YES;
+				GCC_AUTO_VECTORIZATION = NO;
+				GCC_OBJC_CALL_CXX_CDTORS = NO;
+				GCC_ENABLE_SSE3_EXTENSIONS = YES;
+				GCC_ENABLE_SUPPLEMENTAL_SSE3_INSTRUCTIONS = YES;
+				GCC_STRICT_ALIASING = NO;
+				GCC_FEEDBACK_DIRECTED_OPTIMIZATION = Off;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_GENERATE_TEST_COVERAGE_FILES = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_MODEL_TUNING = G4;
+				GCC_INSTRUMENT_PROGRAM_FLOW_ARCS = NO;
+				GCC_ENABLE_KERNEL_DEVELOPMENT = NO;
+				GCC_DEBUGGING_SYMBOLS = default;
+				GCC_REUSE_STRINGS = YES;
+				GCC_NO_COMMON_BLOCKS = NO;
+				GCC_ENABLE_OBJC_GC = unsupported;
+				GCC_FAST_MATH = YES;
+				GCC_ENABLE_SYMBOL_SEPARATION = YES;
+				GCC_THREADSAFE_STATICS = YES;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_UNROLL_LOOPS = NO;
+				GCC_MODEL_PPC64 = NO;
+				GCC_CHAR_IS_UNSIGNED_CHAR = NO;
+				GCC_ENABLE_ASM_KEYWORD = YES;
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_CHECK_RETURN_VALUE_OF_OPERATOR_NEW = NO;
+				GCC_CW_ASM_SYNTAX = YES;
+				GCC_INPUT_FILETYPE = automatic;
+				GCC_ALTIVEC_EXTENSIONS = NO;
+				GCC_ENABLE_CPP_EXCEPTIONS = NO;
+				GCC_ENABLE_CPP_RTTI = NO;
+				GCC_LINK_WITH_DYNAMIC_LIBRARIES = YES;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_ENABLE_TRIGRAPHS = NO;
+				GCC_ENABLE_FLOATING_POINT_LIBRARY_CALLS = NO;
+				GCC_USE_INDIRECT_FUNCTION_CALLS = NO;
+				GCC_USE_REGISTER_FUNCTION_CALLS = NO;
+				GCC_INCREASE_PRECOMPILED_HEADER_SHARING = NO;
+				OTHER_CFLAGS = -Wno-sign-compare;
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
+				GCC_ENABLE_BUILTIN_FUNCTIONS = YES;
+				GCC_ENABLE_PASCAL_STRINGS = YES;
+				GCC_FORCE_CPU_SUBTYPE_ALL = NO;
+				GCC_SHORT_ENUMS = NO;
+				GCC_USE_GCC3_PFE_SUPPORT = YES;
+				GCC_ONE_BYTE_BOOL = YES;
+				GCC_USE_STANDARD_INCLUDE_SEARCHING = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_ABOUT_POINTER_SIGNEDNESS = YES;
+				GCC_WARN_UNUSED_VARIABLE = NO;
+				OTHER_CPLUSPLUSFLAGS = ("$(OTHER_CFLAGS)", -Wno-write-strings, -fvisibility-inlines-hidden, -Wno-invalid-offsetof);
+				CLANG_ENABLE_OBJC_ARC = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				SDKROOT = macosx10.5;
+				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
+				CONFIGURATION_BUILD_DIR = "$(SYMROOT)";
+				CONFIGURATION_TEMP_DIR = "$(OBJROOT)";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"_DEBUG",
+					"AUDIOKINETIC",
+					"AKSOUNDENGINE_EXPORTS",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"../../../include",
+					".",
+					"../Common",
+					"../POSIX",
+				);
+				OBJROOT = "../../../Mac/Debug/obj/$(PREMAKE4_BUILDTARGET_BASENAME)";
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_CFLAGS = (
+					"-Wno-invalid-offsetof",
+				);
+				SYMROOT = "../../../Mac/Debug/lib";
+			};
+			name = "Debug";
+		};
+		61DA41A831727024780B2F25 /* Debug_StaticCRT */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (i386, x86_64);
+				VALID_ARCHS = (i386, x86_64);
+				SDKROOT = macosx10.11;
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				ONLY_ACTIVE_ARCH = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_OPENMP_SUPPORT = NO;
+				ENABLE_BITCODE = NO;
+				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = YES;
+				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_MISSING_PARENTHESES = NO;
+				GCC_WARN_CHECK_SWITCH_STATEMENTS = NO;
+				GCC_FAST_OBJC_DISPATCH = YES;
+				GCC_AUTO_VECTORIZATION = NO;
+				GCC_OBJC_CALL_CXX_CDTORS = NO;
+				GCC_ENABLE_SSE3_EXTENSIONS = YES;
+				GCC_ENABLE_SUPPLEMENTAL_SSE3_INSTRUCTIONS = YES;
+				GCC_STRICT_ALIASING = NO;
+				GCC_FEEDBACK_DIRECTED_OPTIMIZATION = Off;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_GENERATE_TEST_COVERAGE_FILES = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_MODEL_TUNING = G4;
+				GCC_INSTRUMENT_PROGRAM_FLOW_ARCS = NO;
+				GCC_ENABLE_KERNEL_DEVELOPMENT = NO;
+				GCC_DEBUGGING_SYMBOLS = default;
+				GCC_REUSE_STRINGS = YES;
+				GCC_NO_COMMON_BLOCKS = NO;
+				GCC_ENABLE_OBJC_GC = unsupported;
+				GCC_FAST_MATH = YES;
+				GCC_ENABLE_SYMBOL_SEPARATION = YES;
+				GCC_THREADSAFE_STATICS = YES;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_UNROLL_LOOPS = NO;
+				GCC_MODEL_PPC64 = NO;
+				GCC_CHAR_IS_UNSIGNED_CHAR = NO;
+				GCC_ENABLE_ASM_KEYWORD = YES;
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_CHECK_RETURN_VALUE_OF_OPERATOR_NEW = NO;
+				GCC_CW_ASM_SYNTAX = YES;
+				GCC_INPUT_FILETYPE = automatic;
+				GCC_ALTIVEC_EXTENSIONS = NO;
+				GCC_ENABLE_CPP_EXCEPTIONS = NO;
+				GCC_ENABLE_CPP_RTTI = NO;
+				GCC_LINK_WITH_DYNAMIC_LIBRARIES = YES;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_ENABLE_TRIGRAPHS = NO;
+				GCC_ENABLE_FLOATING_POINT_LIBRARY_CALLS = NO;
+				GCC_USE_INDIRECT_FUNCTION_CALLS = NO;
+				GCC_USE_REGISTER_FUNCTION_CALLS = NO;
+				GCC_INCREASE_PRECOMPILED_HEADER_SHARING = NO;
+				OTHER_CFLAGS = -Wno-sign-compare;
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
+				GCC_ENABLE_BUILTIN_FUNCTIONS = YES;
+				GCC_ENABLE_PASCAL_STRINGS = YES;
+				GCC_FORCE_CPU_SUBTYPE_ALL = NO;
+				GCC_SHORT_ENUMS = NO;
+				GCC_USE_GCC3_PFE_SUPPORT = YES;
+				GCC_ONE_BYTE_BOOL = YES;
+				GCC_USE_STANDARD_INCLUDE_SEARCHING = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_ABOUT_POINTER_SIGNEDNESS = YES;
+				GCC_WARN_UNUSED_VARIABLE = NO;
+				OTHER_CPLUSPLUSFLAGS = ("$(OTHER_CFLAGS)", -Wno-write-strings, -fvisibility-inlines-hidden, -Wno-invalid-offsetof);
+				CLANG_ENABLE_OBJC_ARC = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				SDKROOT = macosx10.5;
+				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
+				CONFIGURATION_BUILD_DIR = "$(SYMROOT)";
+				CONFIGURATION_TEMP_DIR = "$(OBJROOT)";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"_DEBUG",
+					"AUDIOKINETIC",
+					"AKSOUNDENGINE_EXPORTS",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"../../../include",
+					".",
+					"../Common",
+					"../POSIX",
+				);
+				OBJROOT = "../../../Mac/Debug_StaticCRT/obj/$(PREMAKE4_BUILDTARGET_BASENAME)";
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_CFLAGS = (
+					"-Wno-invalid-offsetof",
+				);
+				SYMROOT = "../../../Mac/Debug_StaticCRT/lib";
+			};
+			name = "Debug_StaticCRT";
+		};
+		4EED459136733826643631E5 /* Profile */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (i386, x86_64);
+				VALID_ARCHS = (i386, x86_64);
+				SDKROOT = macosx10.11;
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				ONLY_ACTIVE_ARCH = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_OPENMP_SUPPORT = NO;
+				ENABLE_BITCODE = NO;
+				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = YES;
+				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_MISSING_PARENTHESES = NO;
+				GCC_WARN_CHECK_SWITCH_STATEMENTS = NO;
+				GCC_FAST_OBJC_DISPATCH = YES;
+				GCC_AUTO_VECTORIZATION = NO;
+				GCC_OBJC_CALL_CXX_CDTORS = NO;
+				GCC_ENABLE_SSE3_EXTENSIONS = YES;
+				GCC_ENABLE_SUPPLEMENTAL_SSE3_INSTRUCTIONS = YES;
+				GCC_STRICT_ALIASING = NO;
+				GCC_FEEDBACK_DIRECTED_OPTIMIZATION = Off;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_GENERATE_TEST_COVERAGE_FILES = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_MODEL_TUNING = G4;
+				GCC_INSTRUMENT_PROGRAM_FLOW_ARCS = NO;
+				GCC_ENABLE_KERNEL_DEVELOPMENT = NO;
+				GCC_DEBUGGING_SYMBOLS = default;
+				GCC_REUSE_STRINGS = YES;
+				GCC_NO_COMMON_BLOCKS = NO;
+				GCC_ENABLE_OBJC_GC = unsupported;
+				GCC_FAST_MATH = YES;
+				GCC_ENABLE_SYMBOL_SEPARATION = YES;
+				GCC_THREADSAFE_STATICS = YES;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_UNROLL_LOOPS = NO;
+				GCC_MODEL_PPC64 = NO;
+				GCC_CHAR_IS_UNSIGNED_CHAR = NO;
+				GCC_ENABLE_ASM_KEYWORD = YES;
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_CHECK_RETURN_VALUE_OF_OPERATOR_NEW = NO;
+				GCC_CW_ASM_SYNTAX = YES;
+				GCC_INPUT_FILETYPE = automatic;
+				GCC_ALTIVEC_EXTENSIONS = NO;
+				GCC_ENABLE_CPP_EXCEPTIONS = NO;
+				GCC_ENABLE_CPP_RTTI = NO;
+				GCC_LINK_WITH_DYNAMIC_LIBRARIES = YES;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_ENABLE_TRIGRAPHS = NO;
+				GCC_ENABLE_FLOATING_POINT_LIBRARY_CALLS = NO;
+				GCC_USE_INDIRECT_FUNCTION_CALLS = NO;
+				GCC_USE_REGISTER_FUNCTION_CALLS = NO;
+				GCC_INCREASE_PRECOMPILED_HEADER_SHARING = NO;
+				OTHER_CFLAGS = -Wno-sign-compare;
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
+				GCC_ENABLE_BUILTIN_FUNCTIONS = YES;
+				GCC_ENABLE_PASCAL_STRINGS = YES;
+				GCC_FORCE_CPU_SUBTYPE_ALL = NO;
+				GCC_SHORT_ENUMS = NO;
+				GCC_USE_GCC3_PFE_SUPPORT = YES;
+				GCC_ONE_BYTE_BOOL = YES;
+				GCC_USE_STANDARD_INCLUDE_SEARCHING = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_ABOUT_POINTER_SIGNEDNESS = YES;
+				GCC_WARN_UNUSED_VARIABLE = NO;
+				OTHER_CPLUSPLUSFLAGS = ("$(OTHER_CFLAGS)", -Wno-write-strings, -fvisibility-inlines-hidden, -Wno-invalid-offsetof);
+				CLANG_ENABLE_OBJC_ARC = YES;
+				SDKROOT = macosx10.5;
+				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
+				CONFIGURATION_BUILD_DIR = "$(SYMROOT)";
+				CONFIGURATION_TEMP_DIR = "$(OBJROOT)";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"NDEBUG",
+					"AUDIOKINETIC",
+					"AKSOUNDENGINE_EXPORTS",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"../../../include",
+					".",
+					"../Common",
+					"../POSIX",
+				);
+				OBJROOT = "../../../Mac/Profile/obj/$(PREMAKE4_BUILDTARGET_BASENAME)";
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_CFLAGS = (
+					"-Wno-invalid-offsetof",
+				);
+				SYMROOT = "../../../Mac/Profile/lib";
+			};
+			name = "Profile";
+		};
+		20C51EA3678D0D6633AF4AEC /* Profile_EnableAsserts */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (i386, x86_64);
+				VALID_ARCHS = (i386, x86_64);
+				SDKROOT = macosx10.11;
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				ONLY_ACTIVE_ARCH = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_OPENMP_SUPPORT = NO;
+				ENABLE_BITCODE = NO;
+				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = YES;
+				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_MISSING_PARENTHESES = NO;
+				GCC_WARN_CHECK_SWITCH_STATEMENTS = NO;
+				GCC_FAST_OBJC_DISPATCH = YES;
+				GCC_AUTO_VECTORIZATION = NO;
+				GCC_OBJC_CALL_CXX_CDTORS = NO;
+				GCC_ENABLE_SSE3_EXTENSIONS = YES;
+				GCC_ENABLE_SUPPLEMENTAL_SSE3_INSTRUCTIONS = YES;
+				GCC_STRICT_ALIASING = NO;
+				GCC_FEEDBACK_DIRECTED_OPTIMIZATION = Off;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_GENERATE_TEST_COVERAGE_FILES = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_MODEL_TUNING = G4;
+				GCC_INSTRUMENT_PROGRAM_FLOW_ARCS = NO;
+				GCC_ENABLE_KERNEL_DEVELOPMENT = NO;
+				GCC_DEBUGGING_SYMBOLS = default;
+				GCC_REUSE_STRINGS = YES;
+				GCC_NO_COMMON_BLOCKS = NO;
+				GCC_ENABLE_OBJC_GC = unsupported;
+				GCC_FAST_MATH = YES;
+				GCC_ENABLE_SYMBOL_SEPARATION = YES;
+				GCC_THREADSAFE_STATICS = YES;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_UNROLL_LOOPS = NO;
+				GCC_MODEL_PPC64 = NO;
+				GCC_CHAR_IS_UNSIGNED_CHAR = NO;
+				GCC_ENABLE_ASM_KEYWORD = YES;
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_CHECK_RETURN_VALUE_OF_OPERATOR_NEW = NO;
+				GCC_CW_ASM_SYNTAX = YES;
+				GCC_INPUT_FILETYPE = automatic;
+				GCC_ALTIVEC_EXTENSIONS = NO;
+				GCC_ENABLE_CPP_EXCEPTIONS = NO;
+				GCC_ENABLE_CPP_RTTI = NO;
+				GCC_LINK_WITH_DYNAMIC_LIBRARIES = YES;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_ENABLE_TRIGRAPHS = NO;
+				GCC_ENABLE_FLOATING_POINT_LIBRARY_CALLS = NO;
+				GCC_USE_INDIRECT_FUNCTION_CALLS = NO;
+				GCC_USE_REGISTER_FUNCTION_CALLS = NO;
+				GCC_INCREASE_PRECOMPILED_HEADER_SHARING = NO;
+				OTHER_CFLAGS = -Wno-sign-compare;
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
+				GCC_ENABLE_BUILTIN_FUNCTIONS = YES;
+				GCC_ENABLE_PASCAL_STRINGS = YES;
+				GCC_FORCE_CPU_SUBTYPE_ALL = NO;
+				GCC_SHORT_ENUMS = NO;
+				GCC_USE_GCC3_PFE_SUPPORT = YES;
+				GCC_ONE_BYTE_BOOL = YES;
+				GCC_USE_STANDARD_INCLUDE_SEARCHING = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_ABOUT_POINTER_SIGNEDNESS = YES;
+				GCC_WARN_UNUSED_VARIABLE = NO;
+				OTHER_CPLUSPLUSFLAGS = ("$(OTHER_CFLAGS)", -Wno-write-strings, -fvisibility-inlines-hidden, -Wno-invalid-offsetof);
+				CLANG_ENABLE_OBJC_ARC = YES;
+				SDKROOT = macosx10.5;
+				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
+				CONFIGURATION_BUILD_DIR = "$(SYMROOT)";
+				CONFIGURATION_TEMP_DIR = "$(OBJROOT)";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"NDEBUG",
+					"AK_ENABLE_ASSERTS",
+					"AUDIOKINETIC",
+					"AKSOUNDENGINE_EXPORTS",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"../../../include",
+					".",
+					"../Common",
+					"../POSIX",
+				);
+				OBJROOT = "../../../Mac/Profile_EnableAsserts/obj/$(PREMAKE4_BUILDTARGET_BASENAME)";
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_CFLAGS = (
+					"-Wno-invalid-offsetof",
+				);
+				SYMROOT = "../../../Mac/Profile_EnableAsserts/lib";
+			};
+			name = "Profile_EnableAsserts";
+		};
+		37ED5CDB2E5E5BD24AD8345E /* Profile_StaticCRT */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (i386, x86_64);
+				VALID_ARCHS = (i386, x86_64);
+				SDKROOT = macosx10.11;
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				ONLY_ACTIVE_ARCH = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_OPENMP_SUPPORT = NO;
+				ENABLE_BITCODE = NO;
+				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = YES;
+				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_MISSING_PARENTHESES = NO;
+				GCC_WARN_CHECK_SWITCH_STATEMENTS = NO;
+				GCC_FAST_OBJC_DISPATCH = YES;
+				GCC_AUTO_VECTORIZATION = NO;
+				GCC_OBJC_CALL_CXX_CDTORS = NO;
+				GCC_ENABLE_SSE3_EXTENSIONS = YES;
+				GCC_ENABLE_SUPPLEMENTAL_SSE3_INSTRUCTIONS = YES;
+				GCC_STRICT_ALIASING = NO;
+				GCC_FEEDBACK_DIRECTED_OPTIMIZATION = Off;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_GENERATE_TEST_COVERAGE_FILES = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_MODEL_TUNING = G4;
+				GCC_INSTRUMENT_PROGRAM_FLOW_ARCS = NO;
+				GCC_ENABLE_KERNEL_DEVELOPMENT = NO;
+				GCC_DEBUGGING_SYMBOLS = default;
+				GCC_REUSE_STRINGS = YES;
+				GCC_NO_COMMON_BLOCKS = NO;
+				GCC_ENABLE_OBJC_GC = unsupported;
+				GCC_FAST_MATH = YES;
+				GCC_ENABLE_SYMBOL_SEPARATION = YES;
+				GCC_THREADSAFE_STATICS = YES;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_UNROLL_LOOPS = NO;
+				GCC_MODEL_PPC64 = NO;
+				GCC_CHAR_IS_UNSIGNED_CHAR = NO;
+				GCC_ENABLE_ASM_KEYWORD = YES;
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_CHECK_RETURN_VALUE_OF_OPERATOR_NEW = NO;
+				GCC_CW_ASM_SYNTAX = YES;
+				GCC_INPUT_FILETYPE = automatic;
+				GCC_ALTIVEC_EXTENSIONS = NO;
+				GCC_ENABLE_CPP_EXCEPTIONS = NO;
+				GCC_ENABLE_CPP_RTTI = NO;
+				GCC_LINK_WITH_DYNAMIC_LIBRARIES = YES;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_ENABLE_TRIGRAPHS = NO;
+				GCC_ENABLE_FLOATING_POINT_LIBRARY_CALLS = NO;
+				GCC_USE_INDIRECT_FUNCTION_CALLS = NO;
+				GCC_USE_REGISTER_FUNCTION_CALLS = NO;
+				GCC_INCREASE_PRECOMPILED_HEADER_SHARING = NO;
+				OTHER_CFLAGS = -Wno-sign-compare;
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
+				GCC_ENABLE_BUILTIN_FUNCTIONS = YES;
+				GCC_ENABLE_PASCAL_STRINGS = YES;
+				GCC_FORCE_CPU_SUBTYPE_ALL = NO;
+				GCC_SHORT_ENUMS = NO;
+				GCC_USE_GCC3_PFE_SUPPORT = YES;
+				GCC_ONE_BYTE_BOOL = YES;
+				GCC_USE_STANDARD_INCLUDE_SEARCHING = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_ABOUT_POINTER_SIGNEDNESS = YES;
+				GCC_WARN_UNUSED_VARIABLE = NO;
+				OTHER_CPLUSPLUSFLAGS = ("$(OTHER_CFLAGS)", -Wno-write-strings, -fvisibility-inlines-hidden, -Wno-invalid-offsetof);
+				CLANG_ENABLE_OBJC_ARC = YES;
+				SDKROOT = macosx10.5;
+				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
+				CONFIGURATION_BUILD_DIR = "$(SYMROOT)";
+				CONFIGURATION_TEMP_DIR = "$(OBJROOT)";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"NDEBUG",
+					"AUDIOKINETIC",
+					"AKSOUNDENGINE_EXPORTS",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"../../../include",
+					".",
+					"../Common",
+					"../POSIX",
+				);
+				OBJROOT = "../../../Mac/Profile_StaticCRT/obj/$(PREMAKE4_BUILDTARGET_BASENAME)";
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_CFLAGS = (
+					"-Wno-invalid-offsetof",
+				);
+				SYMROOT = "../../../Mac/Profile_StaticCRT/lib";
+			};
+			name = "Profile_StaticCRT";
+		};
+		544D428136E314B654B2028B /* Profile_StaticCRT_EnableAsserts */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (i386, x86_64);
+				VALID_ARCHS = (i386, x86_64);
+				SDKROOT = macosx10.11;
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				ONLY_ACTIVE_ARCH = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_OPENMP_SUPPORT = NO;
+				ENABLE_BITCODE = NO;
+				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = YES;
+				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_MISSING_PARENTHESES = NO;
+				GCC_WARN_CHECK_SWITCH_STATEMENTS = NO;
+				GCC_FAST_OBJC_DISPATCH = YES;
+				GCC_AUTO_VECTORIZATION = NO;
+				GCC_OBJC_CALL_CXX_CDTORS = NO;
+				GCC_ENABLE_SSE3_EXTENSIONS = YES;
+				GCC_ENABLE_SUPPLEMENTAL_SSE3_INSTRUCTIONS = YES;
+				GCC_STRICT_ALIASING = NO;
+				GCC_FEEDBACK_DIRECTED_OPTIMIZATION = Off;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_GENERATE_TEST_COVERAGE_FILES = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_MODEL_TUNING = G4;
+				GCC_INSTRUMENT_PROGRAM_FLOW_ARCS = NO;
+				GCC_ENABLE_KERNEL_DEVELOPMENT = NO;
+				GCC_DEBUGGING_SYMBOLS = default;
+				GCC_REUSE_STRINGS = YES;
+				GCC_NO_COMMON_BLOCKS = NO;
+				GCC_ENABLE_OBJC_GC = unsupported;
+				GCC_FAST_MATH = YES;
+				GCC_ENABLE_SYMBOL_SEPARATION = YES;
+				GCC_THREADSAFE_STATICS = YES;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_UNROLL_LOOPS = NO;
+				GCC_MODEL_PPC64 = NO;
+				GCC_CHAR_IS_UNSIGNED_CHAR = NO;
+				GCC_ENABLE_ASM_KEYWORD = YES;
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_CHECK_RETURN_VALUE_OF_OPERATOR_NEW = NO;
+				GCC_CW_ASM_SYNTAX = YES;
+				GCC_INPUT_FILETYPE = automatic;
+				GCC_ALTIVEC_EXTENSIONS = NO;
+				GCC_ENABLE_CPP_EXCEPTIONS = NO;
+				GCC_ENABLE_CPP_RTTI = NO;
+				GCC_LINK_WITH_DYNAMIC_LIBRARIES = YES;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_ENABLE_TRIGRAPHS = NO;
+				GCC_ENABLE_FLOATING_POINT_LIBRARY_CALLS = NO;
+				GCC_USE_INDIRECT_FUNCTION_CALLS = NO;
+				GCC_USE_REGISTER_FUNCTION_CALLS = NO;
+				GCC_INCREASE_PRECOMPILED_HEADER_SHARING = NO;
+				OTHER_CFLAGS = -Wno-sign-compare;
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
+				GCC_ENABLE_BUILTIN_FUNCTIONS = YES;
+				GCC_ENABLE_PASCAL_STRINGS = YES;
+				GCC_FORCE_CPU_SUBTYPE_ALL = NO;
+				GCC_SHORT_ENUMS = NO;
+				GCC_USE_GCC3_PFE_SUPPORT = YES;
+				GCC_ONE_BYTE_BOOL = YES;
+				GCC_USE_STANDARD_INCLUDE_SEARCHING = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_ABOUT_POINTER_SIGNEDNESS = YES;
+				GCC_WARN_UNUSED_VARIABLE = NO;
+				OTHER_CPLUSPLUSFLAGS = ("$(OTHER_CFLAGS)", -Wno-write-strings, -fvisibility-inlines-hidden, -Wno-invalid-offsetof);
+				CLANG_ENABLE_OBJC_ARC = YES;
+				SDKROOT = macosx10.5;
+				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
+				CONFIGURATION_BUILD_DIR = "$(SYMROOT)";
+				CONFIGURATION_TEMP_DIR = "$(OBJROOT)";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"NDEBUG",
+					"AK_ENABLE_ASSERTS",
+					"AUDIOKINETIC",
+					"AKSOUNDENGINE_EXPORTS",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"../../../include",
+					".",
+					"../Common",
+					"../POSIX",
+				);
+				OBJROOT = "../../../Mac/Profile_StaticCRT_EnableAsserts/obj/$(PREMAKE4_BUILDTARGET_BASENAME)";
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_CFLAGS = (
+					"-Wno-invalid-offsetof",
+				);
+				SYMROOT = "../../../Mac/Profile_StaticCRT_EnableAsserts/lib";
+			};
+			name = "Profile_StaticCRT_EnableAsserts";
+		};
+		5E06762F146320A477741BD0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (i386, x86_64);
+				VALID_ARCHS = (i386, x86_64);
+				SDKROOT = macosx10.11;
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				ONLY_ACTIVE_ARCH = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_OPENMP_SUPPORT = NO;
+				ENABLE_BITCODE = NO;
+				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = YES;
+				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_MISSING_PARENTHESES = NO;
+				GCC_WARN_CHECK_SWITCH_STATEMENTS = NO;
+				GCC_FAST_OBJC_DISPATCH = YES;
+				GCC_AUTO_VECTORIZATION = NO;
+				GCC_OBJC_CALL_CXX_CDTORS = NO;
+				GCC_ENABLE_SSE3_EXTENSIONS = YES;
+				GCC_ENABLE_SUPPLEMENTAL_SSE3_INSTRUCTIONS = YES;
+				GCC_STRICT_ALIASING = NO;
+				GCC_FEEDBACK_DIRECTED_OPTIMIZATION = Off;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_GENERATE_TEST_COVERAGE_FILES = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_MODEL_TUNING = G4;
+				GCC_INSTRUMENT_PROGRAM_FLOW_ARCS = NO;
+				GCC_ENABLE_KERNEL_DEVELOPMENT = NO;
+				GCC_DEBUGGING_SYMBOLS = default;
+				GCC_REUSE_STRINGS = YES;
+				GCC_NO_COMMON_BLOCKS = NO;
+				GCC_ENABLE_OBJC_GC = unsupported;
+				GCC_FAST_MATH = YES;
+				GCC_ENABLE_SYMBOL_SEPARATION = YES;
+				GCC_THREADSAFE_STATICS = YES;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_UNROLL_LOOPS = NO;
+				GCC_MODEL_PPC64 = NO;
+				GCC_CHAR_IS_UNSIGNED_CHAR = NO;
+				GCC_ENABLE_ASM_KEYWORD = YES;
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_CHECK_RETURN_VALUE_OF_OPERATOR_NEW = NO;
+				GCC_CW_ASM_SYNTAX = YES;
+				GCC_INPUT_FILETYPE = automatic;
+				GCC_ALTIVEC_EXTENSIONS = NO;
+				GCC_ENABLE_CPP_EXCEPTIONS = NO;
+				GCC_ENABLE_CPP_RTTI = NO;
+				GCC_LINK_WITH_DYNAMIC_LIBRARIES = YES;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_ENABLE_TRIGRAPHS = NO;
+				GCC_ENABLE_FLOATING_POINT_LIBRARY_CALLS = NO;
+				GCC_USE_INDIRECT_FUNCTION_CALLS = NO;
+				GCC_USE_REGISTER_FUNCTION_CALLS = NO;
+				GCC_INCREASE_PRECOMPILED_HEADER_SHARING = NO;
+				OTHER_CFLAGS = -Wno-sign-compare;
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
+				GCC_ENABLE_BUILTIN_FUNCTIONS = YES;
+				GCC_ENABLE_PASCAL_STRINGS = YES;
+				GCC_FORCE_CPU_SUBTYPE_ALL = NO;
+				GCC_SHORT_ENUMS = NO;
+				GCC_USE_GCC3_PFE_SUPPORT = YES;
+				GCC_ONE_BYTE_BOOL = YES;
+				GCC_USE_STANDARD_INCLUDE_SEARCHING = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_ABOUT_POINTER_SIGNEDNESS = YES;
+				GCC_WARN_UNUSED_VARIABLE = NO;
+				OTHER_CPLUSPLUSFLAGS = ("$(OTHER_CFLAGS)", -Wno-write-strings, -fvisibility-inlines-hidden, -Wno-invalid-offsetof);
+				CLANG_ENABLE_OBJC_ARC = YES;
+				SDKROOT = macosx10.5;
+				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
+				CONFIGURATION_BUILD_DIR = "$(SYMROOT)";
+				CONFIGURATION_TEMP_DIR = "$(OBJROOT)";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"NDEBUG",
+					"AK_OPTIMIZED",
+					"AUDIOKINETIC",
+					"AKSOUNDENGINE_EXPORTS",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"../../../include",
+					".",
+					"../Common",
+					"../POSIX",
+				);
+				OBJROOT = "../../../Mac/Release/obj/$(PREMAKE4_BUILDTARGET_BASENAME)";
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_CFLAGS = (
+					"-Wno-invalid-offsetof",
+				);
+				SYMROOT = "../../../Mac/Release/lib";
+			};
+			name = "Release";
+		};
+		24BC5928715B318D39794E14 /* Release_StaticCRT */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (i386, x86_64);
+				VALID_ARCHS = (i386, x86_64);
+				SDKROOT = macosx10.11;
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				ONLY_ACTIVE_ARCH = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_OPENMP_SUPPORT = NO;
+				ENABLE_BITCODE = NO;
+				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = YES;
+				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_MISSING_PARENTHESES = NO;
+				GCC_WARN_CHECK_SWITCH_STATEMENTS = NO;
+				GCC_FAST_OBJC_DISPATCH = YES;
+				GCC_AUTO_VECTORIZATION = NO;
+				GCC_OBJC_CALL_CXX_CDTORS = NO;
+				GCC_ENABLE_SSE3_EXTENSIONS = YES;
+				GCC_ENABLE_SUPPLEMENTAL_SSE3_INSTRUCTIONS = YES;
+				GCC_STRICT_ALIASING = NO;
+				GCC_FEEDBACK_DIRECTED_OPTIMIZATION = Off;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_GENERATE_TEST_COVERAGE_FILES = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_MODEL_TUNING = G4;
+				GCC_INSTRUMENT_PROGRAM_FLOW_ARCS = NO;
+				GCC_ENABLE_KERNEL_DEVELOPMENT = NO;
+				GCC_DEBUGGING_SYMBOLS = default;
+				GCC_REUSE_STRINGS = YES;
+				GCC_NO_COMMON_BLOCKS = NO;
+				GCC_ENABLE_OBJC_GC = unsupported;
+				GCC_FAST_MATH = YES;
+				GCC_ENABLE_SYMBOL_SEPARATION = YES;
+				GCC_THREADSAFE_STATICS = YES;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_UNROLL_LOOPS = NO;
+				GCC_MODEL_PPC64 = NO;
+				GCC_CHAR_IS_UNSIGNED_CHAR = NO;
+				GCC_ENABLE_ASM_KEYWORD = YES;
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_CHECK_RETURN_VALUE_OF_OPERATOR_NEW = NO;
+				GCC_CW_ASM_SYNTAX = YES;
+				GCC_INPUT_FILETYPE = automatic;
+				GCC_ALTIVEC_EXTENSIONS = NO;
+				GCC_ENABLE_CPP_EXCEPTIONS = NO;
+				GCC_ENABLE_CPP_RTTI = NO;
+				GCC_LINK_WITH_DYNAMIC_LIBRARIES = YES;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_ENABLE_TRIGRAPHS = NO;
+				GCC_ENABLE_FLOATING_POINT_LIBRARY_CALLS = NO;
+				GCC_USE_INDIRECT_FUNCTION_CALLS = NO;
+				GCC_USE_REGISTER_FUNCTION_CALLS = NO;
+				GCC_INCREASE_PRECOMPILED_HEADER_SHARING = NO;
+				OTHER_CFLAGS = -Wno-sign-compare;
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
+				GCC_ENABLE_BUILTIN_FUNCTIONS = YES;
+				GCC_ENABLE_PASCAL_STRINGS = YES;
+				GCC_FORCE_CPU_SUBTYPE_ALL = NO;
+				GCC_SHORT_ENUMS = NO;
+				GCC_USE_GCC3_PFE_SUPPORT = YES;
+				GCC_ONE_BYTE_BOOL = YES;
+				GCC_USE_STANDARD_INCLUDE_SEARCHING = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_ABOUT_POINTER_SIGNEDNESS = YES;
+				GCC_WARN_UNUSED_VARIABLE = NO;
+				OTHER_CPLUSPLUSFLAGS = ("$(OTHER_CFLAGS)", -Wno-write-strings, -fvisibility-inlines-hidden, -Wno-invalid-offsetof);
+				CLANG_ENABLE_OBJC_ARC = YES;
+				SDKROOT = macosx10.5;
+				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
+				CONFIGURATION_BUILD_DIR = "$(SYMROOT)";
+				CONFIGURATION_TEMP_DIR = "$(OBJROOT)";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"NDEBUG",
+					"AK_OPTIMIZED",
+					"AUDIOKINETIC",
+					"AKSOUNDENGINE_EXPORTS",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"../../../include",
+					".",
+					"../Common",
+					"../POSIX",
+				);
+				OBJROOT = "../../../Mac/Release_StaticCRT/obj/$(PREMAKE4_BUILDTARGET_BASENAME)";
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_CFLAGS = (
+					"-Wno-invalid-offsetof",
+				);
+				SYMROOT = "../../../Mac/Release_StaticCRT/lib";
+			};
+			name = "Release_StaticCRT";
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		045715EB249C1D3E0C6F0606 /* Build configuration list for PBXNativeTarget "libAkStreamMgr.a" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3231619D165D7098113C3581 /* Debug */,
+				566671F333342AB21B855F3A /* Debug_StaticCRT */,
+				3CD02A58285303AB61594761 /* Profile */,
+				3BC719A73F3F4C6A565F2993 /* Profile_EnableAsserts */,
+				59F243CD51276E3104A062CF /* Profile_StaticCRT */,
+				2FF302F93E2254091E0F2ADA /* Profile_StaticCRT_EnableAsserts */,
+				25FF38DA17B25A4D2CB47435 /* Release */,
+				076A00CF2F130DB771845137 /* Release_StaticCRT */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = "Debug";
+		};
+		1DEB928908733DD80010E9CD /* Build configuration list for PBXProject "AkStreamMgrMac" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				29084D62040109EE1D5435FA /* Debug */,
+				61DA41A831727024780B2F25 /* Debug_StaticCRT */,
+				4EED459136733826643631E5 /* Profile */,
+				20C51EA3678D0D6633AF4AEC /* Profile_EnableAsserts */,
+				37ED5CDB2E5E5BD24AD8345E /* Profile_StaticCRT */,
+				544D428136E314B654B2028B /* Profile_StaticCRT_EnableAsserts */,
+				5E06762F146320A477741BD0 /* Release */,
+				24BC5928715B318D39794E14 /* Release_StaticCRT */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = "Debug";
+		};
+/* End XCConfigurationList section */
+
+	};
+	rootObject = 08FB7793FE84155DC02AAC07 /* Project object */;
+}
