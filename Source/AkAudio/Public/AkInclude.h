@@ -41,10 +41,7 @@
 #endif
 
 // Stream IO hooks
-#include "AkDefaultIOHookDeferred.h"
-#ifdef AK_USE_UNREAL_IO
 #include "AkUnrealIOHookDeferred.h"
-#endif
 
 #if PLATFORM_WINDOWS
 #include "HideWindowsPlatformTypes.h"

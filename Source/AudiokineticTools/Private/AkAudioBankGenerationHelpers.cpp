@@ -31,7 +31,10 @@ FString GetWwiseApplicationPath()
 #else
         ApplicationToRun = AkSettings->WwiseMacInstallationPath.FilePath;
 #endif
-		ApplicationToRun = FPaths::ConvertRelativePathToFull( ApplicationToRun );
+		if (FPaths::IsRelative(ApplicationToRun))
+		{
+			ApplicationToRun = FPaths::ConvertRelativePathToFull(FPaths::GameDir(), ApplicationToRun);
+		}
 		if( !(ApplicationToRun.EndsWith(TEXT("/")) || ApplicationToRun.EndsWith(TEXT("\\"))) )
 		{
 			ApplicationToRun += TEXT("/");
@@ -281,15 +284,15 @@ int32 WwiseBnkGenHelper::GenerateSoundBanks( TArray< TSharedPtr<FString> >& in_r
 
 		// Here you can specify languages, if no language is specified, all languages from the Wwise project.
 		// will be built.
-#if PLATFORM_WINDOWS
-		CommandLineParams += TEXT(" -Language English(US)");
-#else
-        CommandLineParams += TEXT(" -Language English\\(US\\)");
-#endif
-        
-        // To get more information on how banks can be generated from the comand lines.
+//#if PLATFORM_WINDOWS
+//		CommandLineParams += TEXT(" -Language English(US)");
+//#else
+//		CommandLineParams += TEXT(" -Language English\\(US\\)");
+//#endif
+
+		// To get more information on how banks can be generated from the comand lines.
 		// Refer to the section: Generating Banks from the Command Line in the Wwise SDK documentation.
-        return RunWwiseBlockingProcess( *CommandLineParams );
+		return RunWwiseBlockingProcess( *CommandLineParams );
 	}
 
 	return -2;

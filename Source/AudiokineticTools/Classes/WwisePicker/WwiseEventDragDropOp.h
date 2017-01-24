@@ -15,7 +15,7 @@ public:
 	/** Data for the asset this item represents */
 	TArray<TSharedPtr<FWwiseTreeItem>> Assets;
 
-	TSharedPtr<FSlateDynamicImageBrush> Icon;
+	const FSlateBrush* Icon;
 	
 
 	static TSharedRef<FWwiseEventDragDropOp> New(const TArray<TSharedPtr<FWwiseTreeItem>>& InAssets);

@@ -1,6 +1,0 @@
-; AudioInput.def : Declares the module parameters for the DLL.
-
-LIBRARY      "AudioInput"
-
-EXPORTS
-	AkCreatePlugin

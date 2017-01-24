@@ -66,7 +66,7 @@ public:
 	/**
 	 * Loads an AkBank.
 	 *
-	 * @return Returns true if the laod was successful, otherwise false
+	 * @return Returns true if the load was successful, otherwise false
 	 */
 	bool Load();
 
@@ -75,7 +75,7 @@ public:
 	 *
 	 * @param in_pfnBankCallback		Function to call on completion
 	 * @param in_pCookie				Cookie to pass in callback
-	 * @return Returns true if the laod was successful, otherwise false
+	 * @return Returns true if the load was successful, otherwise false
 	 */
 	bool LoadAsync(void* in_pfnBankCallback, void* in_pCookie);
 	

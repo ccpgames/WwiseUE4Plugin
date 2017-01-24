@@ -116,6 +116,10 @@ void UAkAudioBank::UnloadAsync(void* in_pfnBankCallback, void* in_pCookie)
 		if( AudioDevice )
 		{
 			eResult = AudioDevice->UnloadBank( this, (AkBankCallbackFunc)in_pfnBankCallback, in_pCookie );
+			if (eResult != AK_Success)
+			{
+				UE_LOG(LogAkAudio, Warning, TEXT("Failed to unload SoundBank %s"), *GetName());
+			}
 		}
 	}
 }

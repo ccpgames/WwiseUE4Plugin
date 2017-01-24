@@ -246,9 +246,7 @@ void UInterpTrackAkAudioEvent::PreviewUpdateTrack(float NewPosition, UInterpTrac
 {
 	UInterpGroupInst* GrInst = CastChecked<UInterpGroupInst>( TrInst->GetOuter() );
 	AMatineeActor* MatineeActor = CastChecked<AMatineeActor>( GrInst->GetOuter() );
-	UInterpTrackInstAkAudioEvent* AkEventInst = CastChecked<UInterpTrackInstAkAudioEvent>( TrInst );
 	UInterpGroup* Group = CastChecked<UInterpGroup>( GetOuter() );
-	UInterpData* IData = CastChecked<UInterpData>( Group->GetOuter() );
 
 	// Dont play sounds unless we are preview playback (ie not scrubbing).
 	bool bJump = !(MatineeActor->bIsPlaying);
@@ -267,7 +265,6 @@ const FString UInterpTrackAkAudioEvent::GetSlateHelperClassName() const
 
 void UInterpTrackAkAudioEvent::DrawTrack( FCanvas* Canvas, UInterpGroup* Group, const FInterpTrackDrawParams& Params )
 {
-	UInterpData* Data = CastChecked<UInterpData>(Group->GetOuter());
 	bool bHitTesting = Canvas->IsHitTesting();
 
 	// Use base-class to draw key triangles

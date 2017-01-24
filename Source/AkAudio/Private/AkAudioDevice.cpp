@@ -71,8 +71,7 @@
 // OCULUS_END
 //---------------------------------------------------------------------
 
-//---------------------------------------------------------------------
-// CCP START
+// CCP MOD BEGIN
 #include <AK/Plugin/iZHybridReverbFXFactory.h>
 #include <AK/Plugin/iZTrashMultibandDistortionFXFactory.h>
 #include <AK/Plugin/iZTrashBoxModelerFXFactory.h>
@@ -83,9 +82,7 @@
 
 #include <AK/Plugin/AuroHeadphoneFXFactory.h>
 #include <AK/Plugin/AuroPannerMixerFactory.h>
-// CCP END
-//---------------------------------------------------------------------
-
+// CCP MOD END
 
 #if PLATFORM_XBOXONE
 	#include <apu.h>
@@ -97,15 +94,11 @@ DEFINE_LOG_CATEGORY(LogAkAudio);
 	Statics and Globals
 ------------------------------------------------------------------------------------*/
 
-#ifdef AK_USE_UNREAL_IO
-	CAkUnrealIOHookDeferred g_lowLevelIO;
-#else
-	// Then, we're using the default CAkDefaultIOHookBlocking implementation that's part
-	// of the SDK's sample code
-	CAkDefaultIOHookDeferred g_lowLevelIO;
-#endif
+CAkUnrealIOHookDeferred g_lowLevelIO;
 
 bool FAkAudioDevice::m_bSoundEngineInitialized = false;
+bool FAkAudioDevice::m_EngineExiting = false;
+
 
 /*------------------------------------------------------------------------------------
 	Defines
@@ -115,6 +108,7 @@ bool FAkAudioDevice::m_bSoundEngineInitialized = false;
 #define GAME_OBJECT_MAX_STRING_SIZE 512
 #define AK_READ_SIZE DVD_MIN_READ_SIZE
 
+// CCP MOD BEGIN
 class YouWhatBruv
 {
 public:
@@ -132,7 +126,7 @@ private:
 	double BeginTime;
 	FString Name;
 };
-
+// CCP MOD END
 /*------------------------------------------------------------------------------------
 	Memory hooks
 ------------------------------------------------------------------------------------*/
@@ -203,7 +197,7 @@ static inline void AkVectorToFVector( const AkVector & in_vect, FVector & out_ve
 	Implementation
 ------------------------------------------------------------------------------------*/
 
-// CCP BEGIN - Enabling access to Wwise input callbacks
+// CCP MOD BEGIN - Enabling access to Wwise input callbacks
 void FAkAudioDevice::SetAudioInputCallbacks(
 	AkAudioInputPluginExecuteCallbackFunc in_pfnExecCallback,
 	AkAudioInputPluginGetFormatCallbackFunc in_pfnGetFormatCallback,
@@ -212,7 +206,7 @@ void FAkAudioDevice::SetAudioInputCallbacks(
 {
 	::SetAudioInputCallbacks(in_pfnExecCallback, in_pfnGetFormatCallback, in_pfnGetGainCallback);
 }
-// CCP END - Enabling access to Wwise input callbacks
+// CCP MOD END - Enabling access to Wwise input callbacks
 
 static inline void RegisterGameObj_WithName( AkGameObjectID in_gameObj, const TCHAR * in_tszName )
 {
@@ -233,7 +227,9 @@ static inline void RegisterGameObj_WithName( AkGameObjectID in_gameObj, const TC
  */
 bool FAkAudioDevice::Init( void )
 {
+	// CCP MOD BEGIN
 	YouWhatBruv time(TEXT("FAkAudioDevice::Init"));
+	// CCP MOD END
 
 #if DEDICATED_SERVER
 	return false;
@@ -308,7 +304,9 @@ bool FAkAudioDevice::Update( float DeltaTime )
  */
 void FAkAudioDevice::Teardown()
 {
+	// CCP MOD BEGIN
 	YouWhatBruv time(TEXT("FAkAudioDevice::Teardown"));
+	// CCP MOD END
 
 	if (m_bSoundEngineInitialized == true)
 	{
@@ -496,7 +494,9 @@ void FAkAudioDevice::Flush(UWorld* WorldToFlush)
  */
 AKRESULT FAkAudioDevice::ClearBanks()
 {
+	// CCP MOD BEGIN
 	YouWhatBruv time(TEXT("FAkAudioDevice::ClearBanks"));
+	// CCP MOD END
 
 	if ( m_bSoundEngineInitialized )
 	{
@@ -529,7 +529,9 @@ AKRESULT FAkAudioDevice::LoadBank(
 	AkBankID &          out_bankID
 	)
 {
+	// CCP MOD BEGIN
 	YouWhatBruv time(FString::Printf(TEXT("FAkAudioDevice::LoadBank (by reference) \'%s\'"), *(in_Bank->GetName())));
+	// CCP MOD END
 
 	AKRESULT eResult = LoadBank(in_Bank->GetName(), in_memPoolId, out_bankID);
 	if( eResult == AK_Success && AkBankManager != NULL)
@@ -554,7 +556,9 @@ AKRESULT FAkAudioDevice::LoadBank(
 	AkBankID &          out_bankID
 	)
 {
+	// CCP MOD BEGIN
 	YouWhatBruv time(FString::Printf(TEXT("FAkAudioDevice::LoadBank (by name) \'%s\'"), *in_BankName));
+	// CCP MOD END
 
 	AKRESULT eResult = AK_Fail;
 	if( EnsureInitialized() ) // ensure audiolib is initialized
@@ -577,35 +581,28 @@ static void AkAudioDeviceBankLoadCallback(
 	void *			in_pCookie
 )
 {
-	FAkAudioDevice * akAudioDevice = FAkAudioDevice::Get();
 	AkBankCallbackFunc cbFunc = NULL;
-	if( akAudioDevice )
+	void* pUserCookie = NULL;
+	if( in_pCookie )
 	{
-		FAkBankManager * BankManager = akAudioDevice->GetAkBankManager();
-		if( BankManager != NULL )
+		FAkBankManager::AkBankCallbackInfo* BankCbInfo = (FAkBankManager::AkBankCallbackInfo*)in_pCookie;
+		FAkBankManager * BankManager = BankCbInfo->pBankManager;
+		cbFunc = BankCbInfo->CallbackFunc;
+		pUserCookie = BankCbInfo->pUserCookie;
+		if( BankManager != NULL && in_eLoadResult == AK_Success)
 		{
 			FScopeLock Lock(&BankManager->m_BankManagerCriticalSection);
-
-			FAkBankManager::AkBankCallbackInfo * cbInfo = BankManager->GetBankLoadCallbackInfo(in_pCookie);
-			if( cbInfo != NULL )
-			{
-				cbFunc = cbInfo->CallbackFunc;
-			}
-
-			if( in_eLoadResult == AK_Success )
-			{
-				// Load worked; put the bank in the list.
-				BankManager->AddLoadedBank(cbInfo->pBank);
-			}
-
-			BankManager->RemoveBankLoadCallbackInfo(in_pCookie);
+			// Load worked; put the bank in the list.
+			BankManager->AddLoadedBank(BankCbInfo->pBank);
 		}
+
+		delete BankCbInfo;
 	}
 
 	if( cbFunc != NULL )
 	{
 		// Call the user's callback function
-		cbFunc(in_bankID, in_pInMemoryBankPtr, in_eLoadResult, in_memPoolId, in_pCookie);
+		cbFunc(in_bankID, in_pInMemoryBankPtr, in_eLoadResult, in_memPoolId, pUserCookie);
 	}
 }
 
@@ -627,7 +624,9 @@ AKRESULT FAkAudioDevice::LoadBank(
 	AkBankID &          out_bankID
     )
 {
+	// CCP MOD BEGIN
 	YouWhatBruv time(FString::Printf(TEXT("FAkAudioDevice::LoadBank (async by reference) \'%s\'"), *(in_Bank->GetName())));
+	// CCP MOD END
 
 	if( EnsureInitialized() ) // ensure audiolib is initialized
 	{
@@ -640,20 +639,13 @@ AKRESULT FAkAudioDevice::LoadBank(
 
 		if( AkBankManager != NULL )
 		{
-			FAkBankManager::AkBankCallbackInfo cbInfo(in_pfnBankCallback, in_Bank);
-
-			// We need a unique cookie for the map. If none, use the bank as cookie
-			if( in_pCookie == NULL )
-			{
-				in_pCookie = in_Bank;
-			}
+			FAkBankManager::AkBankCallbackInfo* cbInfo = new FAkBankManager::AkBankCallbackInfo(in_pfnBankCallback, in_Bank, in_pCookie, AkBankManager);
 
 			// Need to hijack the callback, so we can add the bank to the loaded banks list when successful.
-			AkBankManager->m_BankManagerCriticalSection.Lock();
-			AkBankManager->AddBankLoadCallbackInfo(in_pCookie, cbInfo);
-			AkBankManager->m_BankManagerCriticalSection.Unlock();
-
-			return AK::SoundEngine::LoadBank( szString, AkAudioDeviceBankLoadCallback, in_pCookie, in_memPoolId, out_bankID );
+			if (cbInfo)
+			{
+				return AK::SoundEngine::LoadBank(szString, AkAudioDeviceBankLoadCallback, cbInfo, in_memPoolId, out_bankID);
+			}
 		}
 		else
 		{
@@ -675,7 +667,9 @@ AKRESULT FAkAudioDevice::UnloadBank(
     AkMemPoolId *       out_pMemPoolId		    ///< Returned memory pool ID used with LoadBank() (can pass NULL)
     )
 {
+	// CCP MOD BEGIN
 	YouWhatBruv time(FString::Printf(TEXT("FAkAudioDevice::UnloadBank (by reference) \'%s\'"), *(in_Bank->GetName())));
+	// CCP MOD END
 
 	AKRESULT eResult = UnloadBank(in_Bank->GetName(), out_pMemPoolId);
 	if( eResult == AK_Success && AkBankManager != NULL)
@@ -698,7 +692,9 @@ AKRESULT FAkAudioDevice::UnloadBank(
     AkMemPoolId *       out_pMemPoolId		    ///< Returned memory pool ID used with LoadBank() (can pass NULL)
     )
 {
+	// CCP MOD BEGIN
 	YouWhatBruv time(FString::Printf(TEXT("FAkAudioDevice::UnloadBank (by name) \'%s\'"), *in_BankName));
+	// CCP MOD END
 
 	AKRESULT eResult = AK_Fail;
 	if ( m_bSoundEngineInitialized )
@@ -721,34 +717,28 @@ static void AkAudioDeviceBankUnloadCallback(
 	void *			in_pCookie
 )
 {
-	FAkAudioDevice * akAudioDevice = FAkAudioDevice::Get();
 	AkBankCallbackFunc cbFunc = NULL;
-	if( akAudioDevice )
+	void* pUserCookie = NULL;
+	if(in_pCookie)
 	{
-		FAkBankManager * BankManager = akAudioDevice->GetAkBankManager();
-		if( BankManager )
+		FAkBankManager::AkBankCallbackInfo* BankCbInfo = (FAkBankManager::AkBankCallbackInfo*)in_pCookie;
+		FAkBankManager * BankManager = BankCbInfo->pBankManager;
+		cbFunc = BankCbInfo->CallbackFunc;
+		pUserCookie = BankCbInfo->pUserCookie;
+		if( BankManager && in_eLoadResult == AK_Success )
 		{
 			FScopeLock Lock(&BankManager->m_BankManagerCriticalSection);
-			FAkBankManager::AkBankCallbackInfo * cbInfo = BankManager->GetBankUnloadCallbackInfo(in_pCookie);
-			if( cbInfo != NULL )
-			{
-				cbFunc = cbInfo->CallbackFunc;
-			}
-
-			if( in_eLoadResult == AK_Success )
-			{
-				// Load worked; put the bank in the list.
-				BankManager->RemoveLoadedBank(cbInfo->pBank);
-			}
-
-			BankManager->RemoveBankUnloadCallbackInfo(in_pCookie);
+			// Load worked; put the bank in the list.
+			BankManager->RemoveLoadedBank(BankCbInfo->pBank);
 		}
+
+		delete BankCbInfo;
 	}
 
 	if( cbFunc != NULL )
 	{
 		// Call the user's callback function
-		cbFunc(in_bankID, in_pInMemoryBankPtr, in_eLoadResult, in_memPoolId, in_pCookie);
+		cbFunc(in_bankID, in_pInMemoryBankPtr, in_eLoadResult, in_memPoolId, pUserCookie);
 	}
 	
 }
@@ -767,7 +757,9 @@ AKRESULT FAkAudioDevice::UnloadBank(
 	void *              in_pCookie
     )
 {
+	// CCP MOD BEGIN
 	YouWhatBruv time(FString::Printf(TEXT("FAkAudioDevice::UnloadBank (async by reference) \'%s\'"), *(in_Bank->GetName())));
+	// CCP MOD END
 
 	if ( m_bSoundEngineInitialized )
 	{
@@ -779,20 +771,12 @@ AKRESULT FAkAudioDevice::UnloadBank(
 #endif
 		if( AkBankManager != NULL )
 		{
-			FAkBankManager::AkBankCallbackInfo cbInfo(in_pfnBankCallback, in_Bank);
+			FAkBankManager::AkBankCallbackInfo* cbInfo = new FAkBankManager::AkBankCallbackInfo(in_pfnBankCallback, in_Bank, in_pCookie, AkBankManager);
 
-			// We need a unique cookie for the map. If none, use the bank as cookie
-			if( in_pCookie == NULL )
+			if (cbInfo)
 			{
-				in_pCookie = in_Bank;
+				return AK::SoundEngine::UnloadBank(szString, NULL, AkAudioDeviceBankUnloadCallback, cbInfo);
 			}
-
-			// Need to hijack the callback, so we can add the bank to the loaded banks list when successful.
-			AkBankManager->m_BankManagerCriticalSection.Lock();
-			AkBankManager->AddBankUnloadCallbackInfo(in_pCookie, cbInfo);
-			AkBankManager->m_BankManagerCriticalSection.Unlock();
-
-			return AK::SoundEngine::UnloadBank(szString, NULL, AkAudioDeviceBankUnloadCallback, in_pCookie);
 		}
 		else
 		{
@@ -809,7 +793,9 @@ AKRESULT FAkAudioDevice::UnloadBank(
  */
 AKRESULT FAkAudioDevice::LoadInitBank(void)
 {
+	// CCP MOD BEGIN
 	YouWhatBruv time(TEXT("FAkAudioDevice::LoadInitBank"));
+	// CCP MOD END
 
 	AkBankID BankID;
 #ifndef AK_SUPPORT_WCHAR
@@ -827,14 +813,15 @@ AKRESULT FAkAudioDevice::LoadInitBank(void)
  */
 AKRESULT FAkAudioDevice::UnloadInitBank(void)
 {
+	// CCP MOD BEGIN
 	YouWhatBruv time(TEXT("FAkAudioDevice::UnloadInitBank"));
+	// CCP MOD END
 
 #ifndef AK_SUPPORT_WCHAR
 	ANSICHAR* szString = TCHAR_TO_ANSI(INITBANKNAME);
 #else
 	const WIDECHAR * szString = INITBANKNAME;
 #endif
-
 	return AK::SoundEngine::UnloadBank( szString, NULL );
 }
 
@@ -843,7 +830,9 @@ AKRESULT FAkAudioDevice::UnloadInitBank(void)
  */
 void FAkAudioDevice::LoadAllReferencedBanks()
 {
+	// CCP MOD BEGIN
 	YouWhatBruv time(TEXT("FAkAudioDevice::LoadAllReferencedBanks"));
+	// CCP MOD END
 
 	LoadInitBank();
 
@@ -914,23 +903,45 @@ AkPlayingID FAkAudioDevice::PostEvent(
 	bool in_bStopWhenOwnerDestroyed /*= false*/
     )
 {
-	AkPlayingID playingID = AK_INVALID_PLAYING_ID;
-
-	if ( m_bSoundEngineInitialized )
+	if (m_bSoundEngineInitialized)
 	{
 		// PostEvent must be bound to a game object. Passing DUMMY_GAMEOBJ as default game object.
-		UAkComponent * pComponent = (UAkComponent*) DUMMY_GAMEOBJ;
-		if (in_pActor)
+		UAkComponent* pComponent = nullptr;
+		if (!in_pActor)
+		{
+			pComponent = (UAkComponent*)DUMMY_GAMEOBJ;
+		}
+		else if (!in_pActor->IsActorBeingDestroyed() && !in_pActor->IsPendingKill())
 		{
 			pComponent = GetAkComponent(in_pActor->GetRootComponent(), FName(), NULL, EAttachLocation::KeepRelativeOffset);
-			if (pComponent && pComponent != (UAkComponent*)DUMMY_GAMEOBJ)
+			if (pComponent)
 			{
 				pComponent->StopWhenOwnerDestroyed = in_bStopWhenOwnerDestroyed;
+				if (pComponent->OcclusionRefreshInterval > 0.0f)
+				{
+					pComponent->CalculateOcclusionValues(false);
+				}
 			}
 		}
-		playingID = PostEventInternal( in_EventName, pComponent, in_uFlags, in_pfnCallback, in_pCookie );
+
+		AkGameObjectID GameObjID = (AkGameObjectID)pComponent;
+
+		if (GameObjID == DUMMY_GAMEOBJ)
+		{
+#ifndef AK_SUPPORT_WCHAR
+			ANSICHAR* szEvent = TCHAR_TO_ANSI(*in_EventName);
+#else
+			const WIDECHAR * szEvent = *in_EventName;
+#endif
+			return AK::SoundEngine::PostEvent(szEvent, GameObjID, in_uFlags, in_pfnCallback, in_pCookie);
+		}
+		else if(pComponent)
+		{
+
+			return pComponent->PostAkEventByNameWithCallback(in_EventName, in_uFlags, in_pfnCallback, in_pCookie);
+		}
 	}
-	return playingID;
+	return AK_INVALID_PLAYING_ID;
 }
 
 /** Find AAkReverbVolumes at a given location
@@ -1198,7 +1209,11 @@ UAkComponent* FAkAudioDevice::SpawnAkComponentAtLocation( class UAkAudioEvent* i
 
 		if(AutoPost)
 		{
-			AkComponent->PostAssociatedAkEvent();
+			if (AkComponent->PostAssociatedAkEvent() == AK_INVALID_PLAYING_ID && AutoDestroy)
+			{
+				AkComponent->ConditionalBeginDestroy();
+				AkComponent = NULL;
+			}
 		}
 	}
 
@@ -1404,8 +1419,13 @@ AKRESULT FAkAudioDevice::SetGameObjectOutputBusVolume(
  */
 FAkAudioDevice * FAkAudioDevice::Get()
 {
-	FAkAudioModule& AkAudio = FModuleManager::LoadModuleChecked<FAkAudioModule>(TEXT("AkAudio"));
-	return AkAudio.IsAvailable() ? AkAudio.GetAkAudioDevice() : NULL;
+	static FName AkAudioName = TEXT("AkAudio");
+	if (m_EngineExiting && !FModuleManager::Get().IsModuleLoaded(AkAudioName))
+	{
+		return nullptr;
+	}
+	FAkAudioModule* AkAudio = FModuleManager::LoadModulePtr<FAkAudioModule>(AkAudioName);
+	return AkAudio ? AkAudio->GetAkAudioDevice() : nullptr;
 }
 
 /**
@@ -1803,7 +1823,7 @@ bool FAkAudioDevice::EnsureInitialized()
 	deviceSettings.uSchedulerTypeFlags = AK_SCHEDULER_DEFERRED_LINED_UP;
 	deviceSettings.uMaxConcurrentIO = AK_UNREAL_MAX_CONCURRENT_IO;
 
-	if ( g_lowLevelIO.Init( deviceSettings, true ) != AK_Success )
+	if ( g_lowLevelIO.Init( deviceSettings ) != AK_Success )
 	{
         return false;
 	}
@@ -1984,8 +2004,6 @@ bool FAkAudioDevice::EnsureInitialized()
 
 void FAkAudioDevice::SetBankDirectory()
 {
-#ifdef AK_USE_UNREAL_IO
-
 	FString BasePath = FPaths::Combine(*FPaths::GameContentDir(), TEXT("WwiseAudio"));
 	
 	#if defined AK_WIN
@@ -2005,32 +2023,6 @@ void FAkAudioDevice::SetBankDirectory()
     #else
 		#error "AkAudio integration is unsupported for this platform"
 	#endif
-
-
-#else
-
-	#if defined AK_WIN
-		FString BasePath = FPaths::Combine(*FPaths::GameContentDir(), TEXT("WwiseAudio"));
-		BasePath = FPaths::Combine(*BasePath, TEXT("Windows/"));
-    #elif defined AK_LINUX
-        FString BasePath = FPaths::Combine(*FPaths::GameContentDir(), TEXT("WwiseAudio"));
-        BasePath = FPaths::Combine(*BasePath, TEXT("Linux/"));
-    #elif defined AK_MAC_OS_X
-        FString BasePath = FPaths::Combine(*FPaths::GameContentDir(), TEXT("WwiseAudio"));
-        BasePath = FPaths::Combine(*BasePath, TEXT("Mac/"));
-	#elif defined AK_PS4
-		#error "Must define here the base path to use when bypassing Unreal I/O"
-	#elif defined AK_XBOXONE
-		#error "Must define here the base path to use when bypassing Unreal I/O"
-	#elif defined AK_ANDROID
-		#error "Must define here the base path to use when bypassing Unreal I/O"
-    #elif defined AK_IOS
-        #error "Must define here the base path to use when bypassing Unreal I/O"
-	#else
-		#error "AkAudio integration is unsupported for this platform"
-	#endif
-
-#endif
 
 	UE_LOG(LogInit, Log, TEXT("Audiokinetic Audio Device setting bank directory to %s."), *BasePath);
 
@@ -2055,48 +2047,6 @@ void FAkAudioDevice::SetBankDirectory()
 void* FAkAudioDevice::AllocatePermanentMemory( int32 Size, bool& AllocatedInPool )
 {
 	return 0;
-}
-
-AkPlayingID FAkAudioDevice::PostEventInternal(
-		const FString& in_szEvent, 
-		class UAkComponent* in_pAkComponent, 
-		AkUInt32 in_uFlags /*= 0*/,					///< Bitmask: see \ref AkCallbackType
-		AkCallbackFunc in_pfnCallback /*= NULL*/,	///< Callback function
-		void * in_pCookie /*= NULL*/				///< Callback cookie that will be sent to the callback function along with additional information.
-        )
-{
-	if ( m_bSoundEngineInitialized )
-	{
-		AkGameObjectID GameObjID = DUMMY_GAMEOBJ;
-		if ( in_pAkComponent )
-		{
-			GameObjID = (AkGameObjectID)in_pAkComponent;
-			if( in_pAkComponent != (UAkComponent*)DUMMY_GAMEOBJ && in_pAkComponent->OcclusionRefreshInterval > 0.0f )
-			{
-				in_pAkComponent->CalculateOcclusionValues(false);
-			}
-		}
-
-		if (in_pAkComponent == (UAkComponent*)DUMMY_GAMEOBJ)
-		{
-#ifndef AK_SUPPORT_WCHAR
-			ANSICHAR* szEvent = TCHAR_TO_ANSI(*in_szEvent);
-#else
-			const WIDECHAR * szEvent = *in_szEvent;
-#endif
-			return AK::SoundEngine::PostEvent(szEvent, GameObjID, in_uFlags, in_pfnCallback, in_pCookie);
-		}
-		else
-		{
-
-			return in_pAkComponent->PostAkEventByNameWithCallback(in_szEvent, in_uFlags, in_pfnCallback, in_pCookie);
-		}
-	}
-	else
-	{
-		return AK_INVALID_PLAYING_ID;
-	}
-	return AK_INVALID_PLAYING_ID;
 }
 
 AKRESULT FAkAudioDevice::GetGameObjectID( AActor * in_pActor, AkGameObjectID& io_GameObject )

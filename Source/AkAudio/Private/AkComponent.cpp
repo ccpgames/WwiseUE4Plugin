@@ -5,8 +5,10 @@
 =============================================================================*/
 
 #include "AkAudioDevice.h"
+#include "AkInclude.h"
 #include "AkAudioClasses.h"
 #include "Net/UnrealNetwork.h"
+
 
 /*------------------------------------------------------------------------------------
 	UAkComponent
@@ -26,12 +28,14 @@ void UAkComponent::AkComponentCallback( AkCallbackType in_eType, AkCallbackInfo*
 
 		if (in_eType == AK_EndOfEvent)
 		{
-			// CCP MOD BEGIN
-			if (pPackage->NumActiveEvents.IsValid())
+			if (pPackage->pNumActiveEvents)
 			{
-				pPackage->NumActiveEvents->Decrement();
+				pPackage->pNumActiveEvents->Decrement();
 			}
-			// CCP MOD END
+			{
+				FScopeLock Lock(pPackage->pPendingCallbackPackagesCriticalSection);
+				pPackage->pPendingCallbackPackagesOnAkComponent->Remove(pPackage);
+			}
 			delete pPackage;
 		}
 	}
@@ -62,79 +66,29 @@ Super(ObjectInitializer)
 	AttenuationScalingFactor = 1.0f;
 	bAutoDestroy = false;
 	bStarted = false;
-	// CCP MOD BEGIN
-	NumActiveEvents = MakeShared<FThreadSafeCounter, ESPMode::ThreadSafe>();
-	// CCP MOD END
+	NumActiveEvents.Reset();
 }
 
-void UAkComponent::PostAssociatedAkEvent()
+int32 UAkComponent::PostAssociatedAkEvent()
 {
-	if( AkAudioEvent )
-	{
-		PostAkEventByName(AkAudioEvent->GetName());
-	}
-	else
-	{
-		PostAkEventByName(EventName);
-	}
+	return PostAkEvent(AkAudioEvent, EventName);
 }
 
-void UAkComponent::PostAkEvent( class UAkAudioEvent * AkEvent, const FString& in_EventName )
+int32 UAkComponent::PostAkEvent( class UAkAudioEvent * AkEvent, const FString& in_EventName )
 {
 	if ( AkEvent )
 	{
-		PostAkEventByName(AkEvent->GetName());
+		return PostAkEventByName(AkEvent->GetName());
 	}
 	else
 	{
-		PostAkEventByName(in_EventName);
+		return PostAkEventByName(in_EventName);
 	}
 }
 
-void UAkComponent::PostAkEventByName(const FString& in_EventName)
+int32 UAkComponent::PostAkEventByName(const FString& in_EventName)
 {
-	UWorld* CurrentWorld = GetWorld();
-	AkPlayingID playingID = AK_INVALID_PLAYING_ID;
-
-	if (in_EventName.IsEmpty())
-	{
-		UE_LOG(LogAkAudio, Warning, TEXT("AkComponent: Attempted to post an empty AkEvent name."));
-		return;
-	}
-
-	if ( CurrentWorld->AllowAudioPlayback() && FAkAudioDevice::Get() )
-	{
-#ifndef AK_SUPPORT_WCHAR
-		ANSICHAR* szEventName = TCHAR_TO_ANSI(*in_EventName);
-#else
-		const WIDECHAR * szEventName = *in_EventName;
-#endif
-		if( OcclusionRefreshInterval > 0.0f )
-		{
-			CalculateOcclusionValues(false);
-		}
-
-		// CCP MOD BEGIN
-		AkComponentCallbackPackage* cbPackage = new AkComponentCallbackPackage(NULL, NULL, AK_EndOfEvent, NumActiveEvents);
-		// CCP MOD END
-		if (cbPackage)
-		{
-			playingID = AK::SoundEngine::PostEvent(szEventName, (AkGameObjectID) this, AK_EndOfEvent, &UAkComponent::AkComponentCallback, cbPackage);
-			if (playingID != AK_INVALID_PLAYING_ID)
-			{
-				// CCP MOD BEGIN
-				NumActiveEvents->Increment();
-				// CCP MOD END
-				bStarted = true;
-			}
-		}
-		else
-		{
-			playingID = AK::SoundEngine::PostEvent(szEventName, (AkGameObjectID) this);
-		}
-	}
-
-	return;
+	return PostAkEventByNameWithCallback(in_EventName);
 }
 
 AkPlayingID UAkComponent::PostAkEventByNameWithCallback(const FString& in_EventName, AkUInt32 in_uFlags /*= 0*/, AkCallbackFunc in_pfnUserCallback /*= NULL*/, void * in_pUserCookie /*= NULL*/)
@@ -143,7 +97,8 @@ AkPlayingID UAkComponent::PostAkEventByNameWithCallback(const FString& in_EventN
 	AkPlayingID playingID = AK_INVALID_PLAYING_ID;
 	if (in_EventName.IsEmpty())
 	{
-		UE_LOG(LogAkAudio, Warning, TEXT("AkComponent: Attempted to post an empty AkEvent name."));
+		FString OwnerName = GetOwner() ? GetOwner()->GetName() : FString(TEXT(""));
+		UE_LOG(LogAkAudio, Warning, TEXT("[%s.%s] AkComponent: Attempted to post an empty AkEvent name."), *OwnerName, *GetFName().ToString());
 		return playingID;
 	}
 
@@ -159,18 +114,18 @@ AkPlayingID UAkComponent::PostAkEventByNameWithCallback(const FString& in_EventN
 			CalculateOcclusionValues(false);
 		}
 
-		// CCP MOD BEGIN
-		AkComponentCallbackPackage* cbPackage = new AkComponentCallbackPackage(in_pfnUserCallback, in_pUserCookie, in_uFlags, NumActiveEvents);
-		// CCP MOD END
+		AkComponentCallbackPackage* cbPackage = new AkComponentCallbackPackage(in_pfnUserCallback, in_pUserCookie, in_uFlags, &NumActiveEvents, &PendingCallbackPackages, &PendingCallbackPackagesCriticalSection);
 		if (cbPackage)
 		{
 			playingID = AK::SoundEngine::PostEvent(szEventName, (AkGameObjectID) this, in_uFlags | AK_EndOfEvent, &UAkComponent::AkComponentCallback, cbPackage);
 			if (playingID != AK_INVALID_PLAYING_ID)
 			{
-				// CCP MOD BEGIN
-				NumActiveEvents->Increment();
-				// CCP MOD END
+				NumActiveEvents.Increment();
 				bStarted = true;
+				{
+					FScopeLock Lock(&PendingCallbackPackagesCriticalSection);
+					PendingCallbackPackages.Add(cbPackage);
+				}
 			}
 			else
 			{
@@ -276,6 +231,14 @@ void UAkComponent::SetOutputBusVolume(float BusVolume)
 void UAkComponent::OnRegister()
 {
 	RegisterGameObject(); // Done before parent so that OnUpdateTransform follows registration and updates position correctly.
+	if (OcclusionRefreshInterval > 0.0f)
+	{
+		UWorld* CurrentWorld = GetWorld();
+		if (CurrentWorld)
+		{
+			LastOcclusionRefresh = CurrentWorld->GetTimeSeconds() + FMath::RandRange(0.0f, OcclusionRefreshInterval);
+		}
+	}
 
 	Super::OnRegister();
 
@@ -420,14 +383,16 @@ void UAkComponent::TickComponent(float DeltaTime, enum ELevelTick TickType, FAct
 		}
 
 		// Check Occlusion/Obstruction, if enabled
-		if( OcclusionRefreshInterval > 0.f )
+		if( OcclusionRefreshInterval > 0.f || ClearingOcclusion )
 		{
 			SetOcclusion(DeltaTime);
 		}
+		else
+		{
+			ClearOcclusionValues();
+		}
 
-		// CCP MOD BEGIN
-		if(NumActiveEvents->GetValue() == 0 && bAutoDestroy && bStarted)
-		// CCP MOD END
+		if( NumActiveEvents.GetValue() == 0 && bAutoDestroy && bStarted)
 		{
 			DestroyComponent();
 		}
@@ -494,11 +459,18 @@ void UAkComponent::UnregisterGameObject()
 	if ( AkAudioDevice )
 	{
 		AkAudioDevice->UnregisterComponent( this );
-
-		if(bAutoDestroy)
+		
 		{
-			AkAudioDevice->CancelEventCallbackCookie(this);
+			FScopeLock Lock(&PendingCallbackPackagesCriticalSection);
+			for (auto It =PendingCallbackPackages.CreateConstIterator(); It; ++It)
+			{
+				AkAudioDevice->CancelEventCallbackCookie(*It);
+				delete *It;
+			}
+
+			PendingCallbackPackages.Empty();
 		}
+
 	}
 }
 
@@ -689,10 +661,12 @@ void UAkComponent::CalculateOcclusionValues(bool CalledFromTick)
 			CollisionParams.AddIgnoredActor(PlayerController->GetPawn());
 		}
 
-
+		// CCP MOD BEGIN
 		// NOTE (Siggi): Temp hack to get rid of error spam.  We need to track the cause of this causing an error in PhysX with AK:
 		// For reference therror (in debug builds): NpSceneQueries.cpp 211) eINVALID_PARAMETER : PxScene::raycast(): maxDist is negative.
 		bool bNowOccluded = false;// GetWorld()->LineTraceSingleByChannel(OutHit, SourcePosition, ListenerPosition, ECC_Visibility, CollisionParams);
+		// CCP MOD END
+		
 		if( bNowOccluded )
 		{
 			FBox BoundingBox;
@@ -776,5 +750,22 @@ void UAkComponent::CalculateOcclusionValues(bool CalledFromTick)
 				AkAudioDevice->SetOcclusionObstruction(this, ListenerIdx, 0.0f, ListenerOcclusionInfo[ListenerIdx].CurrentValue);
 			}
 		}
+	}
+}
+
+void UAkComponent::ClearOcclusionValues()
+{
+	ClearingOcclusion = false;
+	int32 NumListeners = 0;
+	FAkAudioDevice * AkAudioDevice = FAkAudioDevice::Get();
+	if (AkAudioDevice)
+	{
+		NumListeners = AkAudioDevice->GetNumListeners();
+	}
+
+	for (int32 ListenerIdx = 0; ListenerIdx < NumListeners && ListenerIdx < ListenerOcclusionInfo.Num(); ListenerIdx++)
+	{
+		ListenerOcclusionInfo[ListenerIdx].TargetValue = 0.0f;
+		ClearingOcclusion |= ListenerOcclusionInfo[ListenerIdx].CurrentValue > 0.0f;
 	}
 }

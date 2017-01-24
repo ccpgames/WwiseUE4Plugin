@@ -16,9 +16,9 @@
 #include "AkBankManager.h"
 #include "SoundDefinitions.h"
 
-// CCP BEGIN - Enabling access to Wwise input callbacks
+// CCP MOD BEGIN - Enabling access to Wwise input callbacks
 #include "AK/Plugin/AkAudioInputPlugin.h"
-// CCP END - Enabling access to Wwise input callbacks
+// CCP MOD END - Enabling access to Wwise input callbacks
 
 DECLARE_LOG_CATEGORY_EXTERN(LogAkAudio, Log, All);
 
@@ -57,13 +57,13 @@ public:
 
 	virtual ~FAkAudioDevice() {}
 
-	// CCP BEGIN - Enabling access to Wwise input callbacks
+	// CCP MOD BEGIN - Enabling access to Wwise input callbacks
 	static void SetAudioInputCallbacks(
 		AkAudioInputPluginExecuteCallbackFunc in_pfnExecCallback,
 		AkAudioInputPluginGetFormatCallbackFunc in_pfnGetFormatCallback = NULL, // Optional
 		AkAudioInputPluginGetGainCallbackFunc in_pfnGetGainCallback = NULL      // Optional
 		);
-	// CCP END - Enabling access to Wwise input callbacks
+	// CCP MOD END - Enabling access to Wwise input callbacks
 
 	/**
 	 * Initializes the audio device and creates sources.
@@ -703,6 +703,8 @@ public:
 		return MaxAuxBus;
 	}
 
+	static void SetEngineExiting(bool isExiting) { m_EngineExiting = isExiting; }
+
 #if WITH_EDITOR
 	void SetMaxAuxBus(uint8 ValToSet) 
 	{
@@ -728,14 +730,6 @@ private:
 	
 	void* AllocatePermanentMemory( int32 Size, /*OUT*/ bool& AllocatedInPool );
 	
-	AkPlayingID PostEventInternal(
-		const FString& in_szEvent, 
-		class UAkComponent* AkComponent, 
-		AkUInt32 in_uFlags /*= 0*/,
-		AkCallbackFunc in_pfnCallback /*= NULL*/,
-		void * in_pCookie /*= NULL*/
-        );
-		
 	AKRESULT GetGameObjectID(AActor * in_pActor, AkGameObjectID& io_GameObject );
 
 	// Overload allowing to modify StopWhenOwnerDestroyed after getting the AkComponent
@@ -751,6 +745,8 @@ private:
 	uint8 MaxAuxBus;
 
 	FAkBankManager * AkBankManager;
+
+	static bool m_EngineExiting;
 
 #ifdef AK_SOUNDFRAME
 	class AK::SoundFrame::ISoundFrame * m_pSoundFrame;

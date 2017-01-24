@@ -11,47 +11,16 @@
 #include "WwisePicker/WwiseWwuParser.h"
 #include "SSearchBox.h"
 #include "AkAudioBankGenerationHelpers.h"
+#include "AudiokineticToolsStyle.h"
 #include "DirectoryWatcherModule.h"
 
 #define LOCTEXT_NAMESPACE "AkAudio"
 
-TSharedPtr<FSlateDynamicImageBrush> SWwisePicker::EventIcon;
-TSharedPtr<FSlateDynamicImageBrush> SWwisePicker::AuxBusIcon;
-TSharedPtr<FSlateDynamicImageBrush> SWwisePicker::BusIcon;
-TSharedPtr<FSlateDynamicImageBrush> SWwisePicker::FolderIcon;
-TSharedPtr<FSlateDynamicImageBrush> SWwisePicker::PhysicalFolderIcon;
-TSharedPtr<FSlateDynamicImageBrush> SWwisePicker::WorkUnitIcon;
-TSharedPtr<FSlateDynamicImageBrush> SWwisePicker::ProjectIcon;
-TSharedPtr<FSlateDynamicImageBrush> SWwisePicker::WwiseIcon;
 const FName SWwisePicker::WwisePickerTabName = FName("WwisePicker");
 
 
 SWwisePicker::SWwisePicker()
 {
-	FString ContentDir = FPaths::EnginePluginsDir() / TEXT("Wwise/Content/WwisePicker");
-	FString EventIconPath = ContentDir / "event_nor.png";
-	if (!FPaths::FileExists(EventIconPath))
-	{
-		ContentDir = FPaths::GamePluginsDir() / TEXT("Wwise/Content/WwisePicker");
-		EventIconPath = ContentDir / "event_nor.png";
-	}
-
-	// Initialize icons
-	FString AuxBusIconPath = ContentDir / "auxbus_nor.png";
-	FString BusIconPath = ContentDir / "bus_nor.png";
-	FString FolderIconPath = ContentDir / "folder_nor.png";
-	FString PhysicalFolderIconPath = ContentDir / "physical_folder_nor.png";
-	FString WorkUnitIconPath = ContentDir / "workunit_nor.png";
-	FString ProjectIconPath = ContentDir / "wproj.png";
-	FString WwiseIconPath = ContentDir / "wwise_icon_16.png";
-	SWwisePicker::EventIcon = MakeShareable(new FSlateDynamicImageBrush(FName(*EventIconPath), FVector2D(15.0f, 15.0f)));
-	SWwisePicker::AuxBusIcon = MakeShareable(new FSlateDynamicImageBrush(FName(*AuxBusIconPath), FVector2D(15.0f, 15.0f)));
-	SWwisePicker::BusIcon = MakeShareable(new FSlateDynamicImageBrush(FName(*BusIconPath), FVector2D(15.0f, 15.0f)));
-	SWwisePicker::FolderIcon = MakeShareable(new FSlateDynamicImageBrush(FName(*FolderIconPath), FVector2D(15.0f, 15.0f)));
-	SWwisePicker::PhysicalFolderIcon = MakeShareable(new FSlateDynamicImageBrush(FName(*PhysicalFolderIconPath), FVector2D(15.0f, 15.0f)));
-	SWwisePicker::WorkUnitIcon = MakeShareable(new FSlateDynamicImageBrush(FName(*WorkUnitIconPath), FVector2D(15.0f, 15.0f)));
-	SWwisePicker::ProjectIcon = MakeShareable(new FSlateDynamicImageBrush(FName(*ProjectIconPath), FVector2D(15.0f, 15.0f)));
-	SWwisePicker::WwiseIcon = MakeShareable(new FSlateDynamicImageBrush(FName(*WwiseIconPath), FVector2D(16.0f, 16.0f)));
 	AllowTreeViewDelegates = true;
 }
 
@@ -97,14 +66,6 @@ void SWwisePicker::OnProjectDirectoryChanged(const TArray<struct FFileChangeData
 SWwisePicker::~SWwisePicker()
 {
 	RootItems.Empty();
-	SWwisePicker::EventIcon.Reset();
-	SWwisePicker::AuxBusIcon.Reset();
-	SWwisePicker::BusIcon.Reset();
-	SWwisePicker::FolderIcon.Reset();
-	SWwisePicker::PhysicalFolderIcon.Reset();
-	SWwisePicker::WorkUnitIcon.Reset();
-	SWwisePicker::ProjectIcon.Reset();
-	SWwisePicker::WwiseIcon.Reset();
 
 	FDirectoryWatcherModule& DirectoryWatcherModule = FModuleManager::LoadModuleChecked<FDirectoryWatcherModule>(TEXT("DirectoryWatcher"));
 	DirectoryWatcherModule.Get()->UnregisterDirectoryChangedCallback_Handle(ProjectFolder, ProjectDirectoryModifiedDelegateHandle);
@@ -161,7 +122,7 @@ void SWwisePicker::Construct(const FArguments& InArgs)
 				.Padding(3.0f)
 				[
 					SNew(SImage) 
-					.Image(SWwisePicker::ProjectIcon.Get())
+					.Image(FAudiokineticToolsStyle::GetBrush(EWwiseTreeItemType::Project))
 				]
 
 				+ SHorizontalBox::Slot()
@@ -285,28 +246,6 @@ void SWwisePicker::ExpandParents(TSharedPtr<FWwiseTreeItem> Item)
 	}
 }
 
-FSlateBrush* GetIcon(EWwiseTreeItemType::Type ItemType)
-{
-	switch(ItemType)
-	{
-	case EWwiseTreeItemType::Event:
-		return SWwisePicker::EventIcon.Get();
-	case EWwiseTreeItemType::AuxBus:
-		return SWwisePicker::AuxBusIcon.Get();
-	case EWwiseTreeItemType::Bus:
-		return SWwisePicker::BusIcon.Get();
-	case EWwiseTreeItemType::Folder:
-		return SWwisePicker::FolderIcon.Get();
-	case EWwiseTreeItemType::PhysicalFolder:
-		return SWwisePicker::PhysicalFolderIcon.Get();
-	case EWwiseTreeItemType::StandaloneWorkUnit:
-	case EWwiseTreeItemType::NestedWorkUnit:
-		return SWwisePicker::WorkUnitIcon.Get();
-	default:
-		return NULL;
-	}
-}
-
 TSharedRef<ITableRow> SWwisePicker::GenerateRow( TSharedPtr<FWwiseTreeItem> TreeItem, const TSharedRef<STableViewBase>& OwnerTable )
 {
 	check(TreeItem.IsValid());
@@ -325,7 +264,7 @@ TSharedRef<ITableRow> SWwisePicker::GenerateRow( TSharedPtr<FWwiseTreeItem> Tree
 			.VAlign(VAlign_Center)
 			[
 				SNew(SImage) 
-				.Image(GetIcon(TreeItem->ItemType))
+				.Image(FAudiokineticToolsStyle::GetBrush(TreeItem->ItemType))
 			]
 
 			+ SHorizontalBox::Slot()

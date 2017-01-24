@@ -27,6 +27,8 @@
 #include "AkEventAssetBroker.h"
 #include "ComponentAssetBroker.h"
 #include "WwisePicker/SWwisePicker.h"
+#include "WwisePicker/WwiseTreeItem.h"
+#include "AudiokineticToolsStyle.h"
 #include "WorkspaceMenuStructureModule.h"
 #include "SDockTab.h"
 #include "AssetRegistryModule.h"
@@ -42,7 +44,7 @@ class FAudiokineticToolsModule : public IAudiokineticTools
 	{
 		return
 			SNew(SDockTab)
-			.Icon(SWwisePicker::WwiseIcon.Get())
+			.Icon(FSlateIcon(FAudiokineticToolsStyle::GetStyleSetName(), "AudiokineticTools.WwisePickerTabIcon").GetIcon())
 			.Label(LOCTEXT("AkAudioWwisePickerTabTitle", "Wwise Picker"))
 			.TabRole(ETabRole::NomadTab)
 			.ContentPadding(5)
@@ -226,11 +228,16 @@ class FAudiokineticToolsModule : public IAudiokineticTools
 			PackagingSettings->UpdateDefaultConfigFile();
 		}
 
+		FAudiokineticToolsStyle::Initialize();
 		FGlobalTabmanager::Get()->RegisterNomadTabSpawner(SWwisePicker::WwisePickerTabName, FOnSpawnTab::CreateRaw(this, &FAudiokineticToolsModule::CreateWwisePickerWindow))
-			.SetGroup(WorkspaceMenu::GetMenuStructure().GetLevelEditorCategory());
+			.SetGroup(WorkspaceMenu::GetMenuStructure().GetLevelEditorCategory())
+			.SetIcon(FSlateIcon(FAudiokineticToolsStyle::GetStyleSetName(), "AudiokineticTools.WwisePickerTabIcon"));
+
 
 		FAssetRegistryModule& AssetRegistryModule = FModuleManager::LoadModuleChecked<FAssetRegistryModule>(TEXT("AssetRegistry"));
 		VerifyAnimNotifiesHandle = AssetRegistryModule.Get().OnFilesLoaded().AddRaw(this, &FAudiokineticToolsModule::VerifyAnimNotifies);
+
+		FEditorDelegates::EndPIE.AddRaw(this, &FAudiokineticToolsModule::OnEndPIE);
 	}
 
 	virtual void ShutdownModule() override
@@ -264,6 +271,9 @@ class FAudiokineticToolsModule : public IAudiokineticTools
 		}
 
 		FGlobalTabmanager::Get()->UnregisterTabSpawner("Wwise Picker");
+		FAudiokineticToolsStyle::Shutdown();
+
+		FEditorDelegates::EndPIE.RemoveAll(this);
 	}
 
 	/**
@@ -290,6 +300,11 @@ private:
 				GetMutableDefault<UAkSettings>()
 				);
 		}
+	}
+
+	void OnEndPIE(const bool bIsSimulating)
+	{
+		FAkAudioDevice::Get()->StopAllSounds(true);
 	}
 
 	/** Asset type actions for Audiokinetic assets.  Cached here so that we can unregister it during shutdown. */

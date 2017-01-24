@@ -9,6 +9,7 @@
 #include "WwisePicker/SWwisePicker.h"
 #include "WwisePicker/WwiseEventDragDropOp.h"
 #include "ContentBrowserModule.h"
+#include "AudiokineticToolsStyle.h"
 
 #define LOCTEXT_NAMESPACE "AkAudio"
 
@@ -33,19 +34,10 @@ TSharedRef<FWwiseEventDragDropOp> FWwiseEventDragDropOp::New(const TArray<TShare
 
 	if (i == InAssets.Num())
 	{
-		switch (ItemType)
-		{
-		case EWwiseTreeItemType::Event:
-			Operation->Icon = SWwisePicker::EventIcon;
-			break;
-		case EWwiseTreeItemType::AuxBus:
-			Operation->Icon = SWwisePicker::AuxBusIcon;
-			break;
-		}
+		Operation->Icon = FAudiokineticToolsStyle::GetBrush(ItemType);
 	}
 
 	Operation->Construct();
-
 	
 	FAssetViewDragAndDropExtender::FOnDropDelegate DropDelegate = FAssetViewDragAndDropExtender::FOnDropDelegate::CreateRaw(RawPointer, &FWwiseEventDragDropOp::OnAssetViewDrop);
 	FAssetViewDragAndDropExtender::FOnDragOverDelegate DragOverDelegate = FAssetViewDragAndDropExtender::FOnDragOverDelegate::CreateRaw(RawPointer, &FWwiseEventDragDropOp::OnAssetViewDragOver);
@@ -211,7 +203,7 @@ TSharedPtr<SWidget> FWwiseEventDragDropOp::GetDefaultDecorator() const
 			.VAlign(VAlign_Center)
 			[
 				SNew(SImage)
-				.Image(Icon.Get())
+				.Image(Icon)
 			]
 
 			// Right slot is for tooltip

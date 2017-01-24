@@ -21,15 +21,8 @@
 //		 File location is resolved using simple path concatenation logic
 //		 (implemented in CAkFileLocationBase).
 //-----------------------------------------------------------------------------
-#if PLATFORM_ANDROID || PLATFORM_LINUX || PLATFORM_MAC || PLATFORM_IOS
-#include "../Common/AkFileLocationBase.h"
-
 class CAkUnrealIOHookDeferred :	public AK::StreamMgr::IAkFileLocationResolver
 								,public AK::StreamMgr::IAkIOHookDeferred
-								,public CAkFileLocationBase
-#else
-class CAkUnrealIOHookDeferred : public CAkDefaultIOHookDeferred
-#endif
 {
 public:
 
@@ -53,8 +46,7 @@ public:
 	 * @return	AK_Success if initialization was successful, error code otherwise
 	 */
 	AKRESULT Init(
-		const AkDeviceSettings &	in_deviceSettings,	
-		bool						in_bAsyncOpen=false
+		const AkDeviceSettings &	in_deviceSettings
 		);
 
 	/**
@@ -121,14 +113,13 @@ public:
 		AkAsyncIOTransferInfo & io_transferInfo
 		);
 
-#if PLATFORM_ANDROID || PLATFORM_LINUX || PLATFORM_MAC || PLATFORM_IOS
     // Writes data to a file (asynchronous).
     virtual AKRESULT Write(
 		AkFileDesc &			in_fileDesc,        // File descriptor.
 		const AkIoHeuristics &	in_heuristics,		// Heuristics for this data transfer.
 		AkAsyncIOTransferInfo & io_transferInfo		// Platform-specific asynchronous IO operation info.
 		);
-#endif
+
     /**
 	 * Notifies that a transfer request is cancelled. It will be flushed by the streaming device when completed.
 	 *
@@ -152,7 +143,6 @@ public:
         AkFileDesc &			in_fileDesc
         );
 
-#if PLATFORM_ANDROID || PLATFORM_LINUX || PLATFORM_MAC || PLATFORM_IOS
     // Returns the block size for the file or its storage device. 
     virtual AkUInt32 GetBlockSize(
         AkFileDesc &  			in_fileDesc			// File descriptor.
@@ -165,8 +155,6 @@ public:
 	
 	// Returns custom profiling data: 1 if file opens are asynchronous, 0 otherwise.
 	virtual AkUInt32 GetDeviceData();
-#endif
-
 
 	struct AkDeferredIOInfo
 	{
@@ -175,6 +163,35 @@ public:
 		uint64 RequestIndex;
 		FThreadSafeCounter Counter;
 	};
+
+	// Base path is prepended to all file names.
+	// Audio source path is appended to base path whenever uCompanyID is AK and uCodecID specifies an audio source.
+	// Bank path is appended to base path whenever uCompanyID is AK and uCodecID specifies a sound bank.
+	// Language specific dir name is appended to path whenever "bIsLanguageSpecific" is true.
+	AKRESULT SetBasePath(
+		const FString&   in_pszBasePath
+		);
+
+	// String overload.
+	// Returns AK_Success if input flags are supported and the resulting path is not too long.
+	// Returns AK_Fail otherwise.
+	AKRESULT GetFullFilePath(
+		const FString&		in_szFileName,		// File name.
+		AkFileSystemFlags * in_pFlags,			// Special flags. Can be NULL.
+		AkOpenMode			in_eOpenMode,		// File open mode (read, write, ...).
+		FString*			out_szFullFilePath	// Full file path.
+		);
+
+	// ID overload.
+	// Returns AK_Success if input flags are supported and the resulting path is not too long.
+	// Returns AK_Fail otherwise.
+	AKRESULT GetFullFilePath(
+		AkFileID			in_fileID,			// File ID.
+		AkFileSystemFlags * in_pFlags,			// Special flags. Can be NULL.
+		AkOpenMode			in_eOpenMode,		// File open mode (read, write, ...).
+		FString*			out_szFullFilePath	// Full file path.
+		);
+
 
 protected:
 	/**
@@ -201,9 +218,11 @@ protected:
 	/** Array for pending transfers. */
 	static AkDeferredIOInfo aPendingTransfers[AK_UNREAL_MAX_CONCURRENT_IO];
 
-	/** Critical section used to syncronize access to pending transfers array */
-	FCriticalSection* CriticalSection;
+	/** Critical section used to synchronize access to pending transfers array */
+	FCriticalSection CriticalSection;
 
+	// Base path, where the SoundBanks are located.
+	FString			m_szBasePath;
 
 private:
 	/** 
@@ -219,7 +238,7 @@ private:
 	 * @param in_szFullFilePath The path of the file
 	 * @param out_fileDesc The file descriptor
 	 */
-	AKRESULT FillFileDescriptorHelper(const AkOSChar* in_szFullFilePath, AkFileDesc& out_fileDesc );
+	AKRESULT FillFileDescriptorHelper(const FString* in_szFullFilePath, AkFileDesc& out_fileDesc );
 
 	/**
 	 * Perform the open, whether we have a file ID or a file Name
@@ -240,9 +259,7 @@ private:
 		AkFileDesc &    out_fileDesc        // Returned file descriptor.
 		);
 
-#if PLATFORM_ANDROID || PLATFORM_LINUX || PLATFORM_MAC || PLATFORM_IOS
 	AkDeviceID			m_deviceID;
 	bool				m_bAsyncOpen;	// If true, opens files asynchronously when it can.
-#endif
 
 };

@@ -27,7 +27,7 @@ void FAkComponentVisualizer::DrawVisualization( const UActorComponent* Component
 		}
 
 #ifdef AK_SOUNDFRAME
-		TArray<int32> soundIdsToListenTo;
+		TArray<AkUniqueID> soundIdsToListenTo;
 
 		FAkAudioDevice* AkAudioDevice = FAkAudioDevice::Get();
 		if ( !AkAudioDevice )
@@ -52,32 +52,25 @@ void FAkComponentVisualizer::DrawVisualization( const UActorComponent* Component
 					while ( AK::SoundFrame::IAction * pAction = pActionList->Next() )
 					{
 						const AkUniqueID & SoundID = pAction->GetSoundObjectID();
-						if ( SoundID == AK_INVALID_UNIQUE_ID )
+						if ( SoundID != AK_INVALID_UNIQUE_ID )
 						{
-							continue;
+							soundIdsToListenTo.Add(SoundID);
 						}
-						soundIdsToListenTo.Add(SoundID);
 					}
 
 					// Reset the sounds we're listening to, if required
 					if ( soundIdsToListenTo.Num() )
 					{
-						AkUniqueID * pIDs = new AkUniqueID[ soundIdsToListenTo.Num() ];
+						SoundFrame->ListenAttenuation(&soundIdsToListenTo.Top(), soundIdsToListenTo.Num());
+
+						// Obtain the attenuations for the component's sounds
 						for ( int32 i = 0; i < soundIdsToListenTo.Num(); ++i )
 						{
-							pIDs[ i ] = soundIdsToListenTo[i];
-						}
-						SoundFrame->ListenAttenuation(pIDs, soundIdsToListenTo.Num());
-						delete [] pIDs;
-					}
-
-					// Obtain the attenuations for the component's sounds
-					for ( int32 i = 0; i < soundIdsToListenTo.Num(); ++i )
-					{
-						AK::SoundFrame::ISoundObject * pSoundObject;
-						if ( SoundFrame->GetSoundObject( soundIdsToListenTo[i], &pSoundObject ) )
-						{
-							radius = pSoundObject->AttenuationMaxDistance() * AkComponent->AttenuationScalingFactor;
+							AK::SoundFrame::ISoundObject * pSoundObject;
+							if ( SoundFrame->GetSoundObject( soundIdsToListenTo[i], &pSoundObject ) )
+							{
+								radius = pSoundObject->AttenuationMaxDistance() * AkComponent->AttenuationScalingFactor;
+							}
 						}
 					}
 				}

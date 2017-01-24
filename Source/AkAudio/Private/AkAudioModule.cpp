@@ -9,6 +9,9 @@ void FAkAudioModule::StartupModule()
 {
 	AkAudioDevice = new FAkAudioDevice;
 
+	if (!AkAudioDevice)
+		return;
+
 	if (!AkAudioDevice->Init())
 	{
 		delete AkAudioDevice;
@@ -18,6 +21,8 @@ void FAkAudioModule::StartupModule()
 
 	OnTick = FTickerDelegate::CreateRaw( AkAudioDevice, &FAkAudioDevice::Update);
 	TickDelegateHandle = FTicker::GetCoreTicker().AddTicker( OnTick );
+
+	FCoreDelegates::OnPreExit.AddLambda([]{FAkAudioDevice::SetEngineExiting(true);});
 
 }
 

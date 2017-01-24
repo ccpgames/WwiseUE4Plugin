@@ -52,16 +52,6 @@ public:
 	SWwisePicker(void);
 	~SWwisePicker();
 
-	/** Various icons used in the picker */
-	static TSharedPtr<FSlateDynamicImageBrush > EventIcon;
-	static TSharedPtr<FSlateDynamicImageBrush > AuxBusIcon;
-	static TSharedPtr<FSlateDynamicImageBrush > BusIcon;
-	static TSharedPtr<FSlateDynamicImageBrush > FolderIcon;
-	static TSharedPtr<FSlateDynamicImageBrush > PhysicalFolderIcon;
-	static TSharedPtr<FSlateDynamicImageBrush > WorkUnitIcon;
-	static TSharedPtr<FSlateDynamicImageBrush > ProjectIcon;
-	static TSharedPtr<FSlateDynamicImageBrush > WwiseIcon;
-
 	AUDIOKINETICTOOLS_API static const FName WwisePickerTabName;
 
 	AUDIOKINETICTOOLS_API void ForceRefresh();

@@ -10,8 +10,8 @@ UAkSettings::UAkSettings(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
 	, MaxSimultaneousReverbVolumes(4)
 {
-	TCHAR WwiseDir[MAX_PATH];
-	FPlatformMisc::GetEnvironmentVariable(TEXT("WWISEROOT"), WwiseDir, MAX_PATH);
+	TCHAR WwiseDir[AK_MAX_PATH];
+	FPlatformMisc::GetEnvironmentVariable(TEXT("WWISEROOT"), WwiseDir, AK_MAX_PATH);
 
 	WwiseWindowsInstallationPath.Path = FString(WwiseDir);
     bRequestRefresh = false;
@@ -54,7 +54,13 @@ void UAkSettings::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedE
 			WwiseWindowsInstallationPath.Path = PreviousWwiseWindowsPath;
 		}
 
-		if (!FPaths::DirectoryExists(WwiseWindowsInstallationPath.Path))
+		FString tempPath(WwiseWindowsInstallationPath.Path);
+
+		if (FPaths::IsRelative(WwiseWindowsInstallationPath.Path))
+		{
+			tempPath = FPaths::ConvertRelativePathToFull(FPaths::GameDir(), WwiseWindowsInstallationPath.Path);
+		}
+		if (!FPaths::DirectoryExists(tempPath))
 		{
 			FMessageDialog::Open(EAppMsgType::Ok, FText::FromString("Please enter a valid Wwise Authoring Windows executable path"));
 			WwiseWindowsInstallationPath.Path = PreviousWwiseWindowsPath;
@@ -72,7 +78,13 @@ void UAkSettings::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedE
 			WwiseMacInstallationPath.FilePath = PreviousWwiseMacPath;
 		}
 
-		if (!FPaths::DirectoryExists(WwiseMacInstallationPath.FilePath))
+		FString tempPath(WwiseMacInstallationPath.FilePath);
+
+		if (FPaths::IsRelative(WwiseMacInstallationPath.FilePath))
+		{
+			tempPath = FPaths::ConvertRelativePathToFull(FPaths::GameDir(), WwiseMacInstallationPath.FilePath);
+		}
+		if (!FPaths::DirectoryExists(tempPath))
 		{
 			FMessageDialog::Open(EAppMsgType::Ok, FText::FromString("Please enter a valid Wwise Authoring Mac executable path"));
 			WwiseMacInstallationPath.FilePath = PreviousWwiseMacPath;

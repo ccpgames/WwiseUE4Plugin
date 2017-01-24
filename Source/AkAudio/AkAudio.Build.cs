@@ -67,9 +67,6 @@ public class AkAudio : ModuleRules
             }
         );
 
-        // Uncomment this line to use the UE4 I/O system
-        Definitions.Add("AK_USE_UNREAL_IO");
-
         // These definitions can be set as platform-specific.
         Definitions.Add("AK_UNREAL_MAX_CONCURRENT_IO=8");
         Definitions.Add("AK_UNREAL_IO_GRANULARITY=32768");
@@ -261,6 +258,7 @@ public class AkAudio : ModuleRules
         AddWwiseLib(Target, "AkConvolutionReverbFX");
         AddWwiseLib(Target, "AkRecorderFX");
 
+		// CCP MOD BEGIN
 		AddWwiseLib(Target, "iZHybridReverbFX");
 		AddWwiseLib(Target, "iZTrashBoxModelerFX");
 		AddWwiseLib(Target, "iZTrashDelayFX");
@@ -276,6 +274,7 @@ public class AkAudio : ModuleRules
 			AddWwiseLib(Target, "AuroHeadphoneFX");
 			AddWwiseLib(Target, "AuroPannerMixer");
 		}
+		// CCP MOD END
 
 		if ((Target.Platform != UnrealTargetPlatform.Android) && (Target.Platform != UnrealTargetPlatform.Linux) && (Target.Platform != UnrealTargetPlatform.Mac) && (Target.Platform != UnrealTargetPlatform.IOS))
         {

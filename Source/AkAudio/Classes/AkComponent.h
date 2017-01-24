@@ -10,6 +10,10 @@
 #include "AkInclude.h"
 #include "AkComponent.generated.h"
 
+// PostEvent functions need to return the PlayingID (uint32), but Blueprints only work with int32.
+// Make sure AkPlayingID is always 32 bits, or else we're gonna have a bad time.
+static_assert(sizeof(AkPlayingID) == sizeof(int32), "AkPlayingID is not 32 bits anymore. Change return value of PostEvent functions!");
+
 /*------------------------------------------------------------------------------------
 	UAkComponent
 ------------------------------------------------------------------------------------*/
@@ -29,7 +33,7 @@ public:
 	 *
 	 */
 	UFUNCTION(BlueprintCallable, Category="Audiokinetic|AkComponent")
-	void PostAssociatedAkEvent();
+	int32 PostAssociatedAkEvent();
 	
 	/**
 	 * Posts an event to Wwise, using this component as the game object source
@@ -37,7 +41,7 @@ public:
 	 * @param AkEvent		The event to post
 	 */
 	UFUNCTION(BlueprintCallable, Category="Audiokinetic|AkComponent", meta = (AdvancedDisplay = "1"))
-	void PostAkEvent( class UAkAudioEvent * AkEvent, const FString& in_EventName );
+	int32 PostAkEvent( class UAkAudioEvent * AkEvent, const FString& in_EventName );
 	
 	/**
 	 * Posts an event to Wwise using its name, using this component as the game object source
@@ -45,7 +49,7 @@ public:
 	 * @param AkEvent		The event to post
 	 */
 	UFUNCTION(BlueprintCallable, Category="Audiokinetic|AkComponent", meta = (DeprecatedFunction, DeprecationMessage = "Please use the \"Event Name\" field of Post Ak Event"))
-	void PostAkEventByName( const FString& in_EventName );
+	int32 PostAkEventByName( const FString& in_EventName );
 	
 	AkPlayingID PostAkEventByNameWithCallback(const FString& in_EventName, AkUInt32 in_uFlags = 0, AkCallbackFunc in_pfnUserCallback = NULL, void * in_pUserCookie = NULL);
 
@@ -196,9 +200,7 @@ public:
 	void SetAutoDestroy(bool in_AutoDestroy) { bAutoDestroy = in_AutoDestroy; }
 
 	/** Thread safe counter for number of active events */
-	// CCP MOD BEGIN
-	TSharedPtr<FThreadSafeCounter, ESPMode::ThreadSafe> NumActiveEvents;
-	// CCP MOD END
+	FThreadSafeCounter NumActiveEvents;
 
 private:
 	/**
@@ -277,17 +279,25 @@ private:
 		/** Copy of the user callback flags, for use in our own callback */
 		uint32 uUserFlags;
 
-		// CCP MOD BEGIN
-		TSharedPtr<FThreadSafeCounter, ESPMode::ThreadSafe> NumActiveEvents;
+		FThreadSafeCounter* pNumActiveEvents;
 
-		AkComponentCallbackPackage(AkCallbackFunc in_cbFunc, void* in_Cookie, uint32 in_Flags, const TSharedPtr<FThreadSafeCounter, ESPMode::ThreadSafe>& numActiveEvents)
+		/** Pointers to the list of pending callbacks and its associated critical section, so we can remove ourselves from it */
+		TSet<AkComponentCallbackPackage*>* pPendingCallbackPackagesOnAkComponent;
+		FCriticalSection* pPendingCallbackPackagesCriticalSection;
+
+		AkComponentCallbackPackage(AkCallbackFunc in_cbFunc, void* in_Cookie, uint32 in_Flags, FThreadSafeCounter* in_Counter, TSet<AkComponentCallbackPackage*>* in_PendingCallbacks, FCriticalSection* in_pPendingCallbacksCriticalSection)
 			: pfnUserCallback(in_cbFunc)
 			, pUserCookie(in_Cookie)
 			, uUserFlags(in_Flags)
-			, NumActiveEvents(numActiveEvents)
+			, pNumActiveEvents(in_Counter)
+			, pPendingCallbackPackagesOnAkComponent(in_PendingCallbacks)
+			, pPendingCallbackPackagesCriticalSection(in_pPendingCallbacksCriticalSection)
 		{}
-		// CCP MOD END
 	};
+
+	/** List of pending callbacks, so we can cancel them if we get destroyed, and the associated critical section that goes with it */
+	FCriticalSection PendingCallbackPackagesCriticalSection;
+	TSet<AkComponentCallbackPackage*> PendingCallbackPackages;
 
 	/** Whether an event was posted on the component. Never reset to false. */
 	bool bStarted;
@@ -304,6 +314,7 @@ private:
 	 * @param DeltaTime		Time elasped since last function call.
 	 */
 	void SetOcclusion(const float DeltaTime);
+	void ClearOcclusionValues();
 
 	/** Last time occlusion was refreshed */
 	float LastOcclusionRefresh;
@@ -319,7 +330,7 @@ private:
 	};
 
 	TArray< FAkListenerOcclusion > ListenerOcclusionInfo;
-
+	bool ClearingOcclusion;
 	static const float OCCLUSION_FADE_RATE;
 
 #endif

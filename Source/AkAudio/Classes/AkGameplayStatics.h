@@ -5,7 +5,13 @@
 =============================================================================*/
 #pragma once
 
+#include "AkInclude.h"
 #include "AkGameplayStatics.generated.h"
+
+// PostEvent functions need to return the PlayingID (uint32), but Blueprints only work with int32.
+// Make sure AkPlayingID is always 32 bits, or else we're gonna have a bad time.
+static_assert(sizeof(AkPlayingID) == sizeof(int32), "AkPlayingID is not 32 bits anymore. Change return value of PostEvent functions!");
+
 
 UCLASS()
 class AKAUDIO_API UAkGameplayStatics : public UBlueprintFunctionLibrary
@@ -25,7 +31,7 @@ class AKAUDIO_API UAkGameplayStatics : public UBlueprintFunctionLibrary
 	 * @param bStopWhenAttachedToDestroyed - Specifies whether the sound should stop playing when the owner of the attach to component is destroyed.
 	 */
 	UFUNCTION(BlueprintCallable, meta=(DeprecatedFunction), Category="Audiokinetic|Actor", meta = (AdvancedDisplay = "3"))
-	static void PostEventAttached(	class UAkAudioEvent* AkEvent, 
+	static int32 PostEventAttached(	class UAkAudioEvent* AkEvent, 
 									class AActor* Actor, 
 									FName AttachPointName = NAME_None,
 									bool bStopWhenAttachedToDestroyed = false,
@@ -37,7 +43,7 @@ class AKAUDIO_API UAkGameplayStatics : public UBlueprintFunctionLibrary
 	 * @param bStopWhenAttachedToDestroyed - Specifies whether the sound should stop playing when the owner of the attach to component is destroyed.
 	 */
 	UFUNCTION(BlueprintCallable, Category="Audiokinetic|Actor", meta=(AdvancedDisplay="3"))
-	static void PostEvent(	class UAkAudioEvent* AkEvent, 
+	static int32 PostEvent(	class UAkAudioEvent* AkEvent, 
 							class AActor* Actor, 
 							bool bStopWhenAttachedToDestroyed = false,
 							FString EventName = FString(""));
@@ -58,7 +64,7 @@ class AKAUDIO_API UAkGameplayStatics : public UBlueprintFunctionLibrary
 	 * @param Orientation - Orientation of the event.
 	 */
 	UFUNCTION(BlueprintCallable, Category="Audiokinetic", meta=(WorldContext="WorldContextObject", AdvancedDisplay = "3"))
-	static void PostEventAtLocation(class UAkAudioEvent* AkEvent, FVector Location, FRotator Orientation, const FString& EventName, UObject* WorldContextObject );
+	static int32 PostEventAtLocation(class UAkAudioEvent* AkEvent, FVector Location, FRotator Orientation, const FString& EventName, UObject* WorldContextObject );
 
 	/** Posts a Wwise Event by name at the specified location. This is a fire and forget sound, created on a temporary Wwise Game Object. Replication is also not handled at this point.
 	 * @param AkEvent - Wwise Event to post.

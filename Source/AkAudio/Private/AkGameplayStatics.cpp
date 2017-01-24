@@ -35,18 +35,18 @@ class UAkComponent * UAkGameplayStatics::GetAkComponent( class USceneComponent* 
 	return NULL;
 }
 
-void UAkGameplayStatics::PostEventAttached(class UAkAudioEvent* in_pAkEvent, class AActor* in_pActor, FName in_attachPointName, bool in_stopWhenAttachedToDestroyed, FString EventName)
+int32 UAkGameplayStatics::PostEventAttached(class UAkAudioEvent* in_pAkEvent, class AActor* in_pActor, FName in_attachPointName, bool in_stopWhenAttachedToDestroyed, FString EventName)
 {
 	if (in_pAkEvent == NULL && EventName.IsEmpty())
 	{
 		UE_LOG(LogScript, Warning, TEXT("UAkGameplayStatics::PostEventAttached: No Event specified!"));
-		return;
+		return AK_INVALID_PLAYING_ID;
 	}
 
 	if ( in_pActor == NULL )
 	{
 		UE_LOG(LogScript, Warning, TEXT("UAkGameplayStatics::PostEventAttached: NULL Actor specified!"));
-		return;
+		return AK_INVALID_PLAYING_ID;
 	}
 
 	FAkAudioDevice * AkAudioDevice = FAkAudioDevice::Get();
@@ -55,27 +55,29 @@ void UAkGameplayStatics::PostEventAttached(class UAkAudioEvent* in_pAkEvent, cla
 	{
 		if (in_pAkEvent != NULL) 
 		{
-			AkAudioDevice->PostEvent(in_pAkEvent, in_pActor, 0, NULL, NULL, in_stopWhenAttachedToDestroyed);
+			return AkAudioDevice->PostEvent(in_pAkEvent, in_pActor, 0, NULL, NULL, in_stopWhenAttachedToDestroyed);
 		}
 		else
 		{
-			AkAudioDevice->PostEvent(EventName, in_pActor, 0, NULL, NULL, in_stopWhenAttachedToDestroyed);
+			return AkAudioDevice->PostEvent(EventName, in_pActor, 0, NULL, NULL, in_stopWhenAttachedToDestroyed);
 		}
 	}
+
+	return AK_INVALID_PLAYING_ID;
 }
 
-void UAkGameplayStatics::PostEvent(class UAkAudioEvent* in_pAkEvent, class AActor* in_pActor, bool in_stopWhenAttachedToDestroyed, FString EventName)
+int32 UAkGameplayStatics::PostEvent(class UAkAudioEvent* in_pAkEvent, class AActor* in_pActor, bool in_stopWhenAttachedToDestroyed, FString EventName)
 {
 	if (in_pAkEvent == NULL && EventName.IsEmpty())
 	{
 		UE_LOG(LogScript, Warning, TEXT("UAkGameplayStatics::PostEvent: No Event specified!"));
-		return;
+		return AK_INVALID_PLAYING_ID;
 	}
 
 	if ( in_pActor == NULL )
 	{
 		UE_LOG(LogScript, Warning, TEXT("UAkGameplayStatics::PostEvent: NULL Actor specified!"));
-		return;
+		return AK_INVALID_PLAYING_ID;
 	}
 
 	FAkAudioDevice * AkAudioDevice = FAkAudioDevice::Get();
@@ -84,13 +86,15 @@ void UAkGameplayStatics::PostEvent(class UAkAudioEvent* in_pAkEvent, class AActo
 	{
 		if (in_pAkEvent != NULL)
 		{
-			AkAudioDevice->PostEvent(in_pAkEvent, in_pActor, 0, NULL, NULL, in_stopWhenAttachedToDestroyed);
+			return AkAudioDevice->PostEvent(in_pAkEvent, in_pActor, 0, NULL, NULL, in_stopWhenAttachedToDestroyed);
 		}
 		else
 		{
-			AkAudioDevice->PostEvent(EventName, in_pActor, 0, NULL, NULL, in_stopWhenAttachedToDestroyed);
+			return AkAudioDevice->PostEvent(EventName, in_pActor, 0, NULL, NULL, in_stopWhenAttachedToDestroyed);
 		}
 	}
+
+	return AK_INVALID_PLAYING_ID;
 }
 
 void UAkGameplayStatics::PostEventByName(const FString& EventName, class AActor* in_pActor, bool in_stopWhenAttachedToDestroyed)
@@ -109,12 +113,12 @@ void UAkGameplayStatics::PostEventByName(const FString& EventName, class AActor*
 	}
 }
 
-void UAkGameplayStatics::PostEventAtLocation( class UAkAudioEvent* in_pAkEvent, FVector Location, FRotator Orientation, const FString& EventName, UObject* WorldContextObject )
+int32 UAkGameplayStatics::PostEventAtLocation( class UAkAudioEvent* in_pAkEvent, FVector Location, FRotator Orientation, const FString& EventName, UObject* WorldContextObject )
 {
 	if ( in_pAkEvent == NULL && EventName.IsEmpty() )
 	{
 		UE_LOG(LogScript, Warning, TEXT("UAkGameplayStatics::PostEventAtLocation: No Event specified!"));
-		return;
+		return AK_INVALID_PLAYING_ID;
 	}
 
 	FAkAudioDevice * AkAudioDevice = FAkAudioDevice::Get();
@@ -123,13 +127,15 @@ void UAkGameplayStatics::PostEventAtLocation( class UAkAudioEvent* in_pAkEvent, 
 	{
 		if (in_pAkEvent != NULL)
 		{
-			AkAudioDevice->PostEventAtLocation(in_pAkEvent, Location, Orientation, GEngine->GetWorldFromContextObject(WorldContextObject));
+			return AkAudioDevice->PostEventAtLocation(in_pAkEvent, Location, Orientation, GEngine->GetWorldFromContextObject(WorldContextObject));
 		}
 		else
 		{
-			AkAudioDevice->PostEventAtLocation(EventName, Location, Orientation, GEngine->GetWorldFromContextObject(WorldContextObject));
+			return AkAudioDevice->PostEventAtLocation(EventName, Location, Orientation, GEngine->GetWorldFromContextObject(WorldContextObject));
 		}
 	}
+
+	return AK_INVALID_PLAYING_ID;
 }
 
 void UAkGameplayStatics::PostEventAtLocationByName( const FString& EventName, FVector Location, FRotator Orientation, UObject* WorldContextObject )
@@ -206,7 +212,7 @@ void UAkGameplayStatics::UseReverbVolumes(bool inUseReverbVolumes, class AActor*
 {
 	if ( Actor == NULL )
 	{
-		UE_LOG(LogScript, Warning, TEXT("UAkGameplayStatics::SetOcclusionRefreshInterval: NULL Actor specified!"));
+		UE_LOG(LogScript, Warning, TEXT("UAkGameplayStatics::UseReverbVolumes: NULL Actor specified!"));
 		return;
 	}
 
