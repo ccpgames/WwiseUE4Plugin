@@ -17,7 +17,7 @@ static_assert(sizeof(AkPlayingID) == sizeof(int32), "AkPlayingID is not 32 bits 
 /*------------------------------------------------------------------------------------
 	UAkComponent
 ------------------------------------------------------------------------------------*/
-UCLASS(ClassGroup=Audiokinetic, BlueprintType, hidecategories=(Transform,Rendering,Mobility,LOD,Component,Activation), AutoExpandCategories=AkComponent, meta=(BlueprintSpawnableComponent))
+UCLASS(ClassGroup=Audiokinetic, BlueprintType, Blueprintable, hidecategories=(Transform,Rendering,Mobility,LOD,Component,Activation), AutoExpandCategories=AkComponent, meta=(BlueprintSpawnableComponent))
 class AKAUDIO_API UAkComponent: public USceneComponent
 {
 	GENERATED_UCLASS_BODY()
@@ -99,7 +99,7 @@ public:
 	 *
 	 * @param in_uListenerMask	Bitmask representing the active listeners (LSB = Listener 0, set to 1 means active)
 	 */
-	UFUNCTION(BlueprintCallable, Category="Audiokinetic|AkComponent")
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category="Audiokinetic|AkComponent")
 	void SetActiveListeners( int32 in_uListenerMask );
 
 	// Reverb volumes functions
@@ -130,7 +130,7 @@ public:
 	float AttenuationScalingFactor;
 
 	/** Sets the attenuation scaling factor, which modifies the attenuation computations on this game object to simulate sounds with a a larger or smaller area of effect. */
-	UFUNCTION(BlueprintCallable, Category = "Audiokinetic|AkComponent")
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Audiokinetic|AkComponent")
 	void SetAttenuationScalingFactor(float Value);
 
 	/** Time interval between occlusion/obstruction checks. Set to 0 to disable occlusion on this component. */
@@ -140,7 +140,7 @@ public:
 	/**
 	 * Return the real attenuation radius for this component (AttenuationScalingFactor * AkAudioEvent->MaxAttenuationRadius)
 	 */
-	UFUNCTION(BlueprintCallable, Category="Audiokinetic|AkComponent")
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category="Audiokinetic|AkComponent")
 	float GetAttenuationRadius() const;
 
 	/** Modifies the attenuation computations on this game object to simulate sounds with a a larger or smaller area of effect. */
@@ -150,6 +150,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, AdvancedDisplay, Category = "AkComponent")
 	FString EventName;
 
+	UFUNCTION(BlueprintNativeEvent, Category = "Audiokinetic|AkComponent")
+	void UpdateGameObjectPosition();
 
 #if CPP
 
@@ -212,8 +214,6 @@ private:
 	 * Unregister the component from Wwise
 	 */
 	void UnregisterGameObject();
-
-	void UpdateGameObjectPosition();
 
 	// Reverb Volume features ---------------------------------------------------------------------
 

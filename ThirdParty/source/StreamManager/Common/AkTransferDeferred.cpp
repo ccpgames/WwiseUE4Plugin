@@ -9,8 +9,8 @@ may use this file in accordance with the end user license agreement provided
 with the software or, alternatively, in accordance with the terms contained in a
 written agreement between you and Audiokinetic Inc.
 
-  Version: v2016.2.1  Build: 5995
-  Copyright (c) 2006-2016 Audiokinetic Inc.
+  Version: v2016.2.2  Build: 6022
+  Copyright (c) 2006-2017 Audiokinetic Inc.
 *******************************************************************************/
 
 //////////////////////////////////////////////////////////////////////
@@ -44,7 +44,7 @@ void CAkStmMemViewDeferred::Update( AKRESULT in_eResult, bool in_bRequiredLowLev
 void CAkStmMemViewDeferred::Cancel(
 	IAkIOHookDeferred * in_pLowLevelHook, 
 	bool in_bCallLowLevelIO, 
-	bool in_bAllCancelled 
+	bool & io_bAllCancelled 
 	)
 {
 	CAkLowLevelTransferDeferred * pLowLevelTransfer = NULL;
@@ -66,7 +66,13 @@ void CAkStmMemViewDeferred::Cancel(
 			{
 				// Need to proceed with cancellation. Untag mem block while still locked.
 				pDevice->OnLowLevelTransferCancelled( m_pBlock );
-				pLowLevelTransfer->Cancel(in_pLowLevelHook, in_bCallLowLevelIO, in_bAllCancelled);
+				bool bAllCancelled = io_bAllCancelled;
+				pLowLevelTransfer->Cancel(in_pLowLevelHook, in_bCallLowLevelIO, io_bAllCancelled);
+				if (io_bAllCancelled && !bAllCancelled)
+				{
+					AKASSERT(!"Illegal for low-level IO to change io_bAllCancelled from false to true");
+					io_bAllCancelled = false;
+				}
 			}
 		}
 	}

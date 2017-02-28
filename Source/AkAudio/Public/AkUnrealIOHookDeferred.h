@@ -54,6 +54,8 @@ public:
 	 */
 	void Term();
 
+	void Update();
+
 	//
 	// IAkFileLocationAware interface.
 	//-----------------------------------------------------------------------------
@@ -156,14 +158,6 @@ public:
 	// Returns custom profiling data: 1 if file opens are asynchronous, 0 otherwise.
 	virtual AkUInt32 GetDeviceData();
 
-	struct AkDeferredIOInfo
-	{
-		AkAsyncIOTransferInfo AkTransferInfo;
-		void* pCustomParam;
-		uint64 RequestIndex;
-		FThreadSafeCounter Counter;
-	};
-
 	// Base path is prepended to all file names.
 	// Audio source path is appended to base path whenever uCompanyID is AK and uCodecID specifies an audio source.
 	// Bank path is appended to base path whenever uCompanyID is AK and uCodecID specifies a sound bank.
@@ -194,29 +188,96 @@ public:
 
 
 protected:
+
+	enum GlobalCallbackLocation_Constant { GlobalCallbackLocation = AkGlobalCallbackLocation_BeginRender, };
+
 	/**
 	 * Global callback to Sound Engine.
 	 */
 	static void GlobalCallback(AK::IAkGlobalPluginContext * in_pContext, AkGlobalCallbackLocation in_eLocation, void * in_pCookie);
 
 	/** True if global callback was registered to the sound engine. */
-	bool		m_bCallbackRegistered;
+	bool m_bCallbackRegistered;
 	
-	/** Get a free index in the pending transfer arrays 
+	/** Lists possible states used by Thread-safe counter. */
+	enum EAkIOState
+	{
+		// There are no pending requests/ all requests have been fulfilled.
+		IOState_ReadyFor_Requests = -1,
+
+		// Initial request has completed and finalization needs to be kicked off.
+		IOState_ReadyFor_Callback = 0,
+
+		// We're currently loading in data.
+		IOState_InProgress_Loading = 1,
+	};
+
+	struct AkDeferredReadInfo
+	{
+		AkDeferredReadInfo()
+			: State(IOState_ReadyFor_Requests)
+		{
+			RequestIndex = 0;
+		}
+
+#if AK_SUPPORTS_EVENT_DRIVEN_LOADING
+		bool SetupRequest(IAsyncReadFileHandle* IORequestHandle, AkAsyncIOTransferInfo& transferInfo)
+		{
+			AsyncReadRequest = IORequestHandle->ReadRequest(transferInfo.uFilePosition, transferInfo.uRequestedSize, AIOP_High, &AsyncFileCallBack, (uint8*)transferInfo.pBuffer);
+			if (!AsyncReadRequest)
+			{
+				SetState(IOState_ReadyFor_Requests);
+				return false;
+			}
+
+			return true;
+		}
+#endif
+
+		AkAsyncIOTransferInfo AkTransferInfo;
+		FThreadSafeCounter State;
+
+		void SetState(const EAkIOState& state) { State.Set(state); }
+		bool IsInState(const EAkIOState& state) const { return State.GetValue() == state; }
+
+		union
+		{
+			uint64 RequestIndex;
+
+#if AK_SUPPORTS_EVENT_DRIVEN_LOADING
+			IAsyncReadRequest* AsyncReadRequest;
+#endif
+		};
+
+		void CallAkTransferInfoCallback()
+		{
+			if (AkTransferInfo.pCallback)
+				AkTransferInfo.pCallback(&AkTransferInfo, AK_Success);
+
+			SetState(IOState_ReadyFor_Requests);
+		}
+
+	private:
+#if AK_SUPPORTS_EVENT_DRIVEN_LOADING
+		FAsyncFileCallBack AsyncFileCallBack = [this](bool bWasCancelled, IAsyncReadRequest* Req) { CallAkTransferInfoCallback(); };
+#endif
+	};
+
+	/** Get a free index in the pending transfer arrays
 	 *
 	 * @return An index pointer to a free entry. -1 if no free entry. Not thread-safe.
 	 */
-	int32 GetFreeTransferIndex();
+	AkDeferredReadInfo* GetFreeTransfer();
 
 	/**
 	 * Find a transfer, using the custom param pointer as key, in the pending transfer arrays
 	 * @param pCustomParam	The custom param pointer for the file we are searching
 	 * @return The index of the transfer. -1 if not found. Not thread-safe.
 	 */
-	int32 FindTransfer(void* pBuffer);
+	AkDeferredReadInfo* FindTransfer(void* pBuffer);
 
 	/** Array for pending transfers. */
-	static AkDeferredIOInfo aPendingTransfers[AK_UNREAL_MAX_CONCURRENT_IO];
+	AkDeferredReadInfo aPendingTransfers[AK_UNREAL_MAX_CONCURRENT_IO];
 
 	/** Critical section used to synchronize access to pending transfers array */
 	FCriticalSection CriticalSection;
@@ -231,14 +292,6 @@ private:
 	 * @param out_fileDesc The file descriptor
 	 */
 	void CleanFileDescriptor( AkFileDesc& out_fileDesc );
-
-	/** 
-	 * Fill the file descriptor
-	 *
-	 * @param in_szFullFilePath The path of the file
-	 * @param out_fileDesc The file descriptor
-	 */
-	AKRESULT FillFileDescriptorHelper(const FString* in_szFullFilePath, AkFileDesc& out_fileDesc );
 
 	/**
 	 * Perform the open, whether we have a file ID or a file Name

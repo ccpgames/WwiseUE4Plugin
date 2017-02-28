@@ -7,3 +7,4 @@
 
 #include "UnrealEd.h"
 #include "IAudiokineticTools.h"
+#include "AkUEFeatures.h"

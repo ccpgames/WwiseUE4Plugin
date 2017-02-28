@@ -55,6 +55,7 @@ TSharedRef< FSlateStyleSet > FAudiokineticToolsStyle::Create()
 		Style.Set("AudiokineticTools.PhysicalFolderIcon", new IMAGE_BRUSH("WwisePicker/physical_folder_nor", Icon16x16));
 		Style.Set("AudiokineticTools.WorkUnitIcon", new IMAGE_BRUSH("WwisePicker/workunit_nor", Icon16x16));
 		Style.Set("AudiokineticTools.ProjectIcon", new IMAGE_BRUSH("WwisePicker/wproj", Icon16x16));
+		Style.Set("AudiokineticTools.RTPCIcon", new IMAGE_BRUSH("WwisePicker/gameparameter_nor", Icon16x16));
 	}
 
 	return StyleRef;

@@ -14,6 +14,10 @@
 #include "AudiokineticToolsStyle.h"
 #include "DirectoryWatcherModule.h"
 
+#if ENGINE_MAJOR_VERSION == 4 && ENGINE_MINOR_VERSION >= 15
+#include "IDirectoryWatcher.h"
+#endif
+
 #define LOCTEXT_NAMESPACE "AkAudio"
 
 const FName SWwisePicker::WwisePickerTabName = FName("WwisePicker");
