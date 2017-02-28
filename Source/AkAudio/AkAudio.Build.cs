@@ -26,7 +26,8 @@ public class AkAudio : ModuleRules
 
     public AkAudio(TargetInfo Target)
     {
-        PrivateIncludePathModuleNames.Add("Settings");
+        PCHUsage = PCHUsageMode.UseSharedPCHs;
+		PrivateIncludePathModuleNames.Add("Settings");
 
         PrivateIncludePaths.AddRange(
             new string[] {
@@ -50,7 +51,9 @@ public class AkAudio : ModuleRules
                 "Engine",
                 "SlateCore",
                 "NetworkReplayStreaming",
-                "Projects"
+                "Projects",
+                "MovieScene",
+                "MovieSceneTracks"
             });
 
         string akDir = Path.GetFullPath(Path.Combine(ModuleDirectory, "../../ThirdParty"));

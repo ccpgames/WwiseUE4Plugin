@@ -14,6 +14,10 @@
 #include "IProjectManager.h"
 #include "JsonObject.h"
 
+#if ENGINE_MAJOR_VERSION == 4 && ENGINE_MINOR_VERSION >= 15
+#include "ProjectDescriptor.h"
+#endif
+
 #define LOCTEXT_NAMESPACE "AkAudio"
 DEFINE_LOG_CATEGORY_STATIC(LogAkBanks, Log, All);
 
@@ -407,25 +411,67 @@ bool SGenerateSoundBanks::FetchAttenuationInfo(const TMap<FString, TSet<UAkAudio
 			for (int i = 0; i < Events.Num(); i++)
 			{
 				TSharedPtr<FJsonObject> EventObj = Events[i]->AsObject();
-				FString EventRadiusStr;
-				if (EventObj->TryGetStringField("MaxAttenuation", EventRadiusStr))
-				{
-					float EventRadius = FCString::Atof(*EventRadiusStr);
-					FString EventName = EventObj->GetStringField("Name");
+				FString EventName = EventObj->GetStringField("Name");
 
-					for (TSet<UAkAudioEvent*>::TConstIterator EventIt(EventsInBank); EventIt; ++EventIt)
+				UAkAudioEvent* Event = nullptr;
+				for (auto TestEvent : EventsInBank)
+				{
+					if (TestEvent->GetName() == EventName)
 					{
-						UAkAudioEvent* Event = *EventIt;
-						if (Event->GetName() == EventName)
+						Event = TestEvent;
+						break;
+					}
+				}
+
+				if (Event == nullptr)
+					continue;
+
+				bool Changed = false;
+				FString ValueString;
+				if (EventObj->TryGetStringField("MaxAttenuation", ValueString))
+				{
+					const float EventRadius = FCString::Atof(*ValueString);
+					if (Event->MaxAttenuationRadius != EventRadius)
+					{
+						Event->MaxAttenuationRadius = EventRadius;
+						Changed = true;
+					}
+				}
+
+				// if we can't find "DurationType", then we assume infinite
+				const bool IsInfinite = !EventObj->TryGetStringField("DurationType", ValueString) || (ValueString == "Infinite");
+				if (Event->IsInfinite != IsInfinite)
+				{
+					Event->IsInfinite = IsInfinite;
+					Changed = true;
+				}
+
+				if (!IsInfinite)
+				{
+					if (EventObj->TryGetStringField("DurationMin", ValueString))
+					{
+						const float DurationMin = FCString::Atof(*ValueString);
+						if (Event->MinimumDuration != DurationMin)
 						{
-							if (Event->MaxAttenuationRadius != EventRadius)
-							{
-								Event->MaxAttenuationRadius = EventRadius;
-								Event->Modify(true);
-							}
-							break;
+							Event->MinimumDuration = DurationMin;
+							Changed = true;
 						}
 					}
+
+					if (EventObj->TryGetStringField("DurationMax", ValueString))
+					{
+						const float DurationMax = FCString::Atof(*ValueString);
+						if (Event->MaximumDuration != DurationMax)
+						{
+							Event->MaximumDuration = DurationMax;
+							Changed = true;
+						}
+					}
+				}
+
+				if (Changed)
+				{
+					Event->Modify(true);
 				}
 			}
 		}

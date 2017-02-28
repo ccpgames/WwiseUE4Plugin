@@ -24,6 +24,18 @@ public:
 	UPROPERTY(BlueprintReadOnly, Category="AkAudioEvent")
 	float MaxAttenuationRadius;
 
+	/** Whether this event is infinite (looping) or finite (duration parameters are valid) */
+	UPROPERTY(BlueprintReadOnly, Category = "AkAudioEvent")
+	bool IsInfinite;
+
+	/** Minimum duration */
+	UPROPERTY(BlueprintReadOnly, Category = "AkAudioEvent")
+	float MinimumDuration;
+
+	/** Maximum duration */
+	UPROPERTY(BlueprintReadOnly, Category = "AkAudioEvent")
+	float MaximumDuration;
+
 #if CPP
 	/**
 	 * Called after load process is complete.

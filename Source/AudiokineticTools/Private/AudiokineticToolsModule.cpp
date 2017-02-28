@@ -29,11 +29,30 @@
 #include "WwisePicker/SWwisePicker.h"
 #include "WwisePicker/WwiseTreeItem.h"
 #include "AudiokineticToolsStyle.h"
-#include "WorkspaceMenuStructureModule.h"
 #include "SDockTab.h"
 #include "AssetRegistryModule.h"
 
+#if ENGINE_MAJOR_VERSION == 4 && ENGINE_MINOR_VERSION >= 15
+#include "WorkspaceMenuStructure.h"
+#endif
+
+#include "WorkspaceMenuStructureModule.h"
+
+#if AK_SUPPORTS_LEVEL_SEQUENCER
+#include "ISequencerModule.h"
+#include "MovieScene.h"
+#include "MovieSceneAkAudioRTPCTrackEditor.h"
+#include "MovieSceneAkAudioEventTrackEditor.h"
+#endif
+
+#if AK_MATINEE_TO_LEVEL_SEQUENCE_MODULE_MODIFICATIONS
+#include "AkMatineeImportTools.h"
+#include "MatineeToLevelSequenceModule.h"
+#endif
+
 #define LOCTEXT_NAMESPACE "AkAudio"
+
+DEFINE_LOG_CATEGORY_STATIC(LogAudiokineticTools, Log, All);
 
 extern void AddGenerateAkBanksToBuildMenu(FMenuBuilder& MenuBuilder);
 void VerifyAkSettings();
@@ -175,6 +194,45 @@ class FAudiokineticToolsModule : public IAudiokineticTools
 	}
 
 	EAssetTypeCategories::Type AudiokineticAssetCategoryBit;
+
+	void LateRegistrationOfMatineeToLevelSequencer()
+	{
+#if AK_MATINEE_TO_LEVEL_SEQUENCE_MODULE_MODIFICATIONS
+		IMatineeToLevelSequenceModule& Module = FModuleManager::LoadModuleChecked<IMatineeToLevelSequenceModule>(TEXT("MatineeToLevelSequence"));
+
+		ConvertMatineeRTPCTrackHandle = Module.RegisterTrackConverterForMatineeClass(UInterpTrackAkAudioRTPC::StaticClass(), 
+			IMatineeToLevelSequenceModule::FOnConvertMatineeTrack::CreateLambda([](UInterpTrack* Track, FGuid PossessableGuid, UMovieScene* NewMovieScene)
+		{
+			if (Track->GetNumKeyframes() != 0 && PossessableGuid.IsValid())
+			{
+				const UInterpTrackAkAudioRTPC* MatineeAkAudioRTPCTrack = StaticCast<const UInterpTrackAkAudioRTPC*>(Track);
+				UMovieSceneAkAudioRTPCTrack* AkAudioRTPCTrack = NewMovieScene->AddTrack<UMovieSceneAkAudioRTPCTrack>(PossessableGuid);
+				FAkMatineeImportTools::CopyInterpAkAudioRTPCTrack(MatineeAkAudioRTPCTrack, AkAudioRTPCTrack);
+			}
+		}));
+
+		ConvertMatineeEventTrackHandle = Module.RegisterTrackConverterForMatineeClass(UInterpTrackAkAudioEvent::StaticClass(), 
+			IMatineeToLevelSequenceModule::FOnConvertMatineeTrack::CreateLambda([](UInterpTrack* Track, FGuid PossessableGuid, UMovieScene* NewMovieScene)
+		{
+			if (Track->GetNumKeyframes() != 0 && PossessableGuid.IsValid())
+			{
+				const UInterpTrackAkAudioEvent* MatineeAkAudioEventTrack = StaticCast<const UInterpTrackAkAudioEvent*>(Track);
+				UMovieSceneAkAudioEventTrack* AkAudioEventTrack = NewMovieScene->AddTrack<UMovieSceneAkAudioEventTrack>(PossessableGuid);
+				FAkMatineeImportTools::CopyInterpAkAudioEventTrack(MatineeAkAudioEventTrack, AkAudioEventTrack);
+			}
+		}));
+#endif
+
+#if AK_SUPPORTS_LEVEL_SEQUENCER
+		ISequencerModule& SequencerModule = FModuleManager::LoadModuleChecked<ISequencerModule>(TEXT("Sequencer"));
+		RTPCTrackEditorHandle = SequencerModule.RegisterTrackEditor_Handle(FOnCreateTrackEditor::CreateStatic(&FMovieSceneAkAudioRTPCTrackEditor::CreateTrackEditor));
+		EventTrackEditorHandle = SequencerModule.RegisterTrackEditor_Handle(FOnCreateTrackEditor::CreateStatic(&FMovieSceneAkAudioEventTrackEditor::CreateTrackEditor));
+#endif
+
+		FAssetRegistryModule& AssetRegistryModule = FModuleManager::LoadModuleChecked<FAssetRegistryModule>("AssetRegistry");
+		AssetRegistryModule.Get().OnFilesLoaded().Remove(LateRegistrationOfMatineeToLevelSequencerHandle);
+	}
+
 	virtual void StartupModule() override
 	{
 		IAssetTools& AssetTools = FModuleManager::LoadModuleChecked<FAssetToolsModule>("AssetTools").Get();
@@ -202,7 +260,6 @@ class FAudiokineticToolsModule : public IAudiokineticTools
 			MainMenuExtender = MakeShareable(new FExtender);
 			MainMenuExtender->AddMenuExtension("HelpBrowse", EExtensionHook::After, NULL, FMenuExtensionDelegate::CreateRaw(this, &FAudiokineticToolsModule::AddWwiseHelp));
 			LevelEditorModule.GetMenuExtensibilityManager()->AddExtender(MainMenuExtender);
-
 		}
 
 		RegisterSettings();
@@ -237,6 +294,8 @@ class FAudiokineticToolsModule : public IAudiokineticTools
 		FAssetRegistryModule& AssetRegistryModule = FModuleManager::LoadModuleChecked<FAssetRegistryModule>(TEXT("AssetRegistry"));
 		VerifyAnimNotifiesHandle = AssetRegistryModule.Get().OnFilesLoaded().AddRaw(this, &FAudiokineticToolsModule::VerifyAnimNotifies);
 
+		LateRegistrationOfMatineeToLevelSequencerHandle = AssetRegistryModule.Get().OnFilesLoaded().AddRaw(this, &FAudiokineticToolsModule::LateRegistrationOfMatineeToLevelSequencer);
+
 		FEditorDelegates::EndPIE.AddRaw(this, &FAudiokineticToolsModule::OnEndPIE);
 	}
 
@@ -256,7 +315,7 @@ class FAudiokineticToolsModule : public IAudiokineticTools
 		// Remove Audiokinetic build menu extenders
 		if ( FModuleManager::Get().IsModuleLoaded( "LevelEditor" ) )
 		{
-			FLevelEditorModule& LevelEditorModule = FModuleManager::LoadModuleChecked<FLevelEditorModule>( "LevelEditor" );
+			FLevelEditorModule& LevelEditorModule = FModuleManager::GetModuleChecked<FLevelEditorModule>( "LevelEditor" );
 			LevelEditorModule.GetAllLevelEditorToolbarBuildMenuExtenders().RemoveAll([=](const FLevelEditorModule::FLevelEditorMenuExtender& Extender) { return Extender.GetHandle() == LevelViewportToolbarBuildMenuExtenderAkHandle; });
 
 			if (MainMenuExtender.IsValid())
@@ -272,6 +331,25 @@ class FAudiokineticToolsModule : public IAudiokineticTools
 
 		FGlobalTabmanager::Get()->UnregisterTabSpawner("Wwise Picker");
 		FAudiokineticToolsStyle::Shutdown();
+
+#if AK_MATINEE_TO_LEVEL_SEQUENCE_MODULE_MODIFICATIONS
+		auto MatineeToLevelSequenceModule = FModuleManager::GetModulePtr<IMatineeToLevelSequenceModule>(TEXT("MatineeToLevelSequence"));
+		if (0 && MatineeToLevelSequenceModule)
+		{
+			// Currently, UnregisterTrackConverterForMatineeClass crashes
+			MatineeToLevelSequenceModule->UnregisterTrackConverterForMatineeClass(ConvertMatineeRTPCTrackHandle);
+			MatineeToLevelSequenceModule->UnregisterTrackConverterForMatineeClass(ConvertMatineeEventTrackHandle);
+		}
+#endif
+
+#if AK_SUPPORTS_LEVEL_SEQUENCER
+		if (FModuleManager::Get().IsModuleLoaded(TEXT("Sequencer")))
+		{
+			ISequencerModule& SequencerModule = FModuleManager::GetModuleChecked<ISequencerModule>(TEXT("Sequencer"));
+			SequencerModule.UnRegisterTrackEditor_Handle(RTPCTrackEditorHandle);
+			SequencerModule.UnRegisterTrackEditor_Handle(EventTrackEditorHandle);
+		}
+#endif 
 
 		FEditorDelegates::EndPIE.RemoveAll(this);
 	}
@@ -315,6 +393,13 @@ private:
 	FLevelEditorModule::FLevelEditorMenuExtender LevelViewportToolbarBuildMenuExtenderAk;
 	FDelegateHandle LevelViewportToolbarBuildMenuExtenderAkHandle;
 	FDelegateHandle VerifyAnimNotifiesHandle;
+	FDelegateHandle LateRegistrationOfMatineeToLevelSequencerHandle;
+	FDelegateHandle RTPCTrackEditorHandle;
+	FDelegateHandle EventTrackEditorHandle;
+#if AK_MATINEE_TO_LEVEL_SEQUENCE_MODULE_MODIFICATIONS
+	FDelegateHandle ConvertMatineeRTPCTrackHandle;
+	FDelegateHandle ConvertMatineeEventTrackHandle;
+#endif
 
 	/** Allow to create an AkComponent when Drag & Drop of an AkEvent */
 	TSharedPtr<IComponentAssetBroker> AkEventBroker;

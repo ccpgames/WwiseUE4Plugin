@@ -196,7 +196,7 @@ void UAkComponent::SetStopWhenOwnerDestroyed( bool bStopWhenOwnerDestroyed )
 	StopWhenOwnerDestroyed = bStopWhenOwnerDestroyed;
 }
 
-void UAkComponent::SetActiveListeners( int32 ListenerMask )
+void UAkComponent::SetActiveListeners_Implementation( int32 ListenerMask )
 {
 	if ( FAkAudioDevice::Get() )
 	{
@@ -209,7 +209,7 @@ void UAkComponent::UseReverbVolumes(bool inUseReverbVolumes)
 	bUseReverbVolumes = inUseReverbVolumes;
 }
 
-float UAkComponent::GetAttenuationRadius() const
+float UAkComponent::GetAttenuationRadius_Implementation() const
 { 
 	if( AkAudioEvent )
 	{
@@ -420,7 +420,7 @@ void UAkComponent::Activate(bool bReset)
 	}
 }
 
-void UAkComponent::SetAttenuationScalingFactor(float Value)
+void UAkComponent::SetAttenuationScalingFactor_Implementation(float Value)
 {
 	AttenuationScalingFactor = Value;
 	FAkAudioDevice * AudioDevice = FAkAudioDevice::Get();
@@ -569,7 +569,7 @@ void UAkComponent::UpdateAkReverbVolumeList( FVector Loc )
 	}
 }
 
-void UAkComponent::UpdateGameObjectPosition()
+void UAkComponent::UpdateGameObjectPosition_Implementation()
 {
 	FAkAudioDevice * AkAudioDevice = FAkAudioDevice::Get();
 	if ( bIsActive && AkAudioDevice )

@@ -28,12 +28,12 @@ namespace AK
 			/// <summary>
 			/// Wwise SDK sub-minor version
 			/// </summary>
-            public const int SubMinor = 1;
+            public const int SubMinor = 2;
 
 			/// <summary>
 			/// Wwise SDK build number
 			/// </summary>
-            public const int Build = 5995;
+            public const int Build = 6022;
 			
 			/// <summary>
 			/// Wwise SDK build nickname
@@ -58,7 +58,7 @@ namespace AK
             /// <summary>
             /// String representing the Wwise SDK version
             /// </summary>
-            public const string AssemblyVersion = "2016.2.1.5995";
+            public const string AssemblyVersion = "2016.2.1.6022";
 
 			/// <summary>
 			/// String representing the Wwise SDK copyright notice

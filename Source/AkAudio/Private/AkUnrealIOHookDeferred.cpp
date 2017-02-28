@@ -43,7 +43,6 @@
 
 // Device info.
 #define DEFERRED_DEVICE_NAME		("UnrealIODevice")	// Default deferred device name.
-CAkUnrealIOHookDeferred::AkDeferredIOInfo CAkUnrealIOHookDeferred::aPendingTransfers[AK_UNREAL_MAX_CONCURRENT_IO];
 extern CAkUnrealIOHookDeferred g_lowLevelIO;
 
 CAkUnrealIOHookDeferred::CAkUnrealIOHookDeferred() 
@@ -63,14 +62,6 @@ AKRESULT CAkUnrealIOHookDeferred::Init(
 	const AkDeviceSettings &	in_deviceSettings		// Device settings.
 	)
 {
-	{
-		FScopeLock ScopeLock(&CriticalSection);
-
-		for(int32 i = 0; i < AK_UNREAL_MAX_CONCURRENT_IO; i++)
-		{
-			CAkUnrealIOHookDeferred::aPendingTransfers[i].Counter.Set(-1);
-		}
-	}
 	if ( in_deviceSettings.uSchedulerTypeFlags != AK_SCHEDULER_DEFERRED_LINED_UP )
 	{
 		AKASSERT( !"CAkDefaultIOHookDeferred I/O hook only works with AK_SCHEDULER_DEFERRED_LINED_UP devices" );
@@ -98,7 +89,7 @@ void CAkUnrealIOHookDeferred::Term()
 {
 	if ( m_bCallbackRegistered && FAkAudioDevice::Get() )
 	{
-		AK::SoundEngine::UnregisterGlobalCallback( GlobalCallback );
+		AK::SoundEngine::UnregisterGlobalCallback(GlobalCallback, GlobalCallbackLocation);
 		m_bCallbackRegistered = false;
 	}
 
@@ -126,34 +117,46 @@ AKRESULT CAkUnrealIOHookDeferred::PerformOpen(
 	{
 		return AK_NotImplemented;
 	}
-	else if (AK_OpenModeRead == in_eOpenMode)
+
+	FString FilePath;
+	if (GetFullFilePath(in_fileDescriptor, in_pFlags, in_eOpenMode, &FilePath) != AK_Success || FilePath.IsEmpty())
+		return AK_Fail;
+
+	if (AK_OpenModeRead == in_eOpenMode)
 	{
-		io_bSyncOpen = true;
-		FString* FilePath = new FString();
-
-		// Get the full file path, using path concatenation logic.
-
-		if (GetFullFilePath(in_fileDescriptor, in_pFlags, in_eOpenMode, FilePath) == AK_Success)
+		out_fileDesc.iFileSize = IFileManager::Get().FileSize(*FilePath);
+		if (out_fileDesc.iFileSize > 0)
 		{
-			return FillFileDescriptorHelper(FilePath, out_fileDesc);
-		}
-
-		delete FilePath;
-	}
-	else // Write
-	{
-		FString FilePath;
-		if (GetFullFilePath(in_fileDescriptor, in_pFlags, in_eOpenMode, &FilePath) == AK_Success)
-		{
-			io_bSyncOpen = true;
-			IPlatformFile& PlatformFile = FPlatformFileManager::Get().GetPlatformFile();
-			IFileHandle* FileHandle = PlatformFile.OpenWrite(*FilePath);
-			if (FileHandle)
+#if AK_SUPPORTS_EVENT_DRIVEN_LOADING
+			if (GNewAsyncIO)
 			{
-				out_fileDesc.pCustomParam = (void*)FileHandle;
-				out_fileDesc.uCustomParamSize = 1;
+				auto IORequestHandle = FPlatformFileManager::Get().GetPlatformFile().OpenAsyncRead(*FilePath);
+				if (!IORequestHandle)
+					return AK_Fail;
+
+				out_fileDesc.pCustomParam = (void*)IORequestHandle;
+				out_fileDesc.uCustomParamSize = AK_OpenModeRead;
 				return AK_Success;
 			}
+			else
+#endif
+			{
+				//io_bSyncOpen = true;
+				out_fileDesc.pCustomParam = (void*)(new FString(FilePath));
+				out_fileDesc.uCustomParamSize = AK_OpenModeRead;
+				return AK_Success;
+			}
+		}
+	}
+	else if (AK_OpenModeWrite == in_eOpenMode || AK_OpenModeWriteOvrwr == in_eOpenMode)
+	{
+		IFileHandle* FileHandle = FPlatformFileManager::Get().GetPlatformFile().OpenWrite(*FilePath);
+		if (FileHandle)
+		{
+			io_bSyncOpen = true;
+			out_fileDesc.pCustomParam = (void*)FileHandle;
+			out_fileDesc.uCustomParamSize = AK_OpenModeWrite;
+			return AK_Success;
 		}
 	}
 
@@ -185,30 +188,31 @@ AKRESULT CAkUnrealIOHookDeferred::Open(
 	return PerformOpen(in_fileID, in_eOpenMode, in_pFlags, io_bSyncOpen, out_fileDesc);
 }
 
-int32 CAkUnrealIOHookDeferred::GetFreeTransferIndex()
+CAkUnrealIOHookDeferred::AkDeferredReadInfo* CAkUnrealIOHookDeferred::GetFreeTransfer()
 {
-	for(int32 i = 0; i < AK_UNREAL_MAX_CONCURRENT_IO; i++)
+	for (auto& PendingTransfer : aPendingTransfers)
 	{
-		if( CAkUnrealIOHookDeferred::aPendingTransfers[i].Counter.GetValue() == -1 )
+		if (PendingTransfer.IsInState(IOState_ReadyFor_Requests))
 		{
-			return i;
+			PendingTransfer.SetState(IOState_InProgress_Loading);
+			return &PendingTransfer;
 		}
 	}
 
-	return -1;
+	return nullptr;
 }
 
-int32 CAkUnrealIOHookDeferred::FindTransfer(void* pBuffer)
+CAkUnrealIOHookDeferred::AkDeferredReadInfo* CAkUnrealIOHookDeferred::FindTransfer(void* pBuffer)
 {
-	for(int32 i = 0; i < AK_UNREAL_MAX_CONCURRENT_IO; i++)
+	for (auto& PendingTransfer : aPendingTransfers)
 	{
-		if( CAkUnrealIOHookDeferred::aPendingTransfers[i].AkTransferInfo.pBuffer == pBuffer )
+		if (PendingTransfer.AkTransferInfo.pBuffer == pBuffer)
 		{
-			return i;
+			return &PendingTransfer;
 		}
 	}
 
-	return -1;
+	return nullptr;
 }
 
 
@@ -223,48 +227,50 @@ AKRESULT CAkUnrealIOHookDeferred::Read(
 	AkAsyncIOTransferInfo & io_transferInfo		// Asynchronous data transfer info.
 	)
 {
+	if (!in_fileDesc.pCustomParam || in_fileDesc.uCustomParamSize != AK_OpenModeRead)
+		return AK_NotImplemented;
+
 	FScopeLock ScopeLock(&CriticalSection);
-	// in_fileDesc.uCustomParamSize == 0 if opened in read mode
-	if( in_fileDesc.pCustomParam && in_fileDesc.uCustomParamSize == 0 )
+
+	auto PendingTransfer = GetFreeTransfer();
+	AKASSERT(PendingTransfer);
+	if (!PendingTransfer)
+		return AK_Fail;
+
+	PendingTransfer->AkTransferInfo = io_transferInfo;
+
+#if AK_SUPPORTS_EVENT_DRIVEN_LOADING
+	if (GNewAsyncIO)
+	{
+		auto&& IORequestHandle = (IAsyncReadFileHandle*)in_fileDesc.pCustomParam;
+		return PendingTransfer->SetupRequest(IORequestHandle, io_transferInfo) ? AK_Success : AK_Fail;
+	}
+	else
+#endif
 	{
 		// Register the global callback, if not already done
-		if( !m_bCallbackRegistered && FAkAudioDevice::Get() )
+		if (!m_bCallbackRegistered && FAkAudioDevice::Get())
 		{
-			if ( AK::SoundEngine::RegisterGlobalCallback( GlobalCallback ) != AK_Success )
+			if (AK::SoundEngine::RegisterGlobalCallback(GlobalCallback, GlobalCallbackLocation, this) != AK_Success)
 			{
-				AKASSERT( !"Failed registering to global callback" );
+				AKASSERT(!"Failed registering to global callback");
 				return AK_Fail;
 			}
+
 			m_bCallbackRegistered = true;
 		}
 
-		int32 TransferIndex = GetFreeTransferIndex();
-		AKASSERT( TransferIndex != -1 );
+		auto&& Filename = *(FString*)(in_fileDesc.pCustomParam);
+		PendingTransfer->RequestIndex = FIOSystem::Get().LoadData(Filename,
+			io_transferInfo.uFilePosition,
+			io_transferInfo.uRequestedSize,
+			io_transferInfo.pBuffer,
+			&PendingTransfer->State,
+			AIOP_High
+		);
 
-		CAkUnrealIOHookDeferred::aPendingTransfers[TransferIndex].pCustomParam = in_fileDesc.pCustomParam;
-		CAkUnrealIOHookDeferred::aPendingTransfers[TransferIndex].AkTransferInfo = io_transferInfo;
-		CAkUnrealIOHookDeferred::aPendingTransfers[TransferIndex].Counter.Set(1);
-
-		{
-			FIOSystem & IO = FIOSystem::Get();
-			CAkUnrealIOHookDeferred::aPendingTransfers[TransferIndex].RequestIndex = IO.LoadData( 
-				*((FString*)in_fileDesc.pCustomParam), 
-				(int64) io_transferInfo.uFilePosition, 
-				io_transferInfo.uRequestedSize, 
-				io_transferInfo.pBuffer, 
-				&CAkUnrealIOHookDeferred::aPendingTransfers[TransferIndex].Counter, 
-				AIOP_High
-				);
-		}
-		if( CAkUnrealIOHookDeferred::aPendingTransfers[TransferIndex].RequestIndex == 0 )
-		{
-			return AK_Fail;
-		}
-
-		return AK_Success;
+		return (PendingTransfer->RequestIndex == 0) ? AK_Fail : AK_Success;
 	}
-
-	return AK_NotImplemented;
 }
 
 AKRESULT CAkUnrealIOHookDeferred::Write(
@@ -273,10 +279,9 @@ AKRESULT CAkUnrealIOHookDeferred::Write(
 	AkAsyncIOTransferInfo & io_transferInfo		// Platform-specific asynchronous IO operation info.
 	)
 {
-	// in_fileDesc.uCustomParamSize == 1 if opened in read mode
-	if (in_fileDesc.pCustomParam && in_fileDesc.uCustomParamSize == 1)
+	if (in_fileDesc.pCustomParam && in_fileDesc.uCustomParamSize == AK_OpenModeWrite)
 	{
-		IFileHandle* FileHandle = (IFileHandle*)in_fileDesc.pCustomParam;
+		auto FileHandle = (IFileHandle*)in_fileDesc.pCustomParam;
 		FileHandle->Seek(io_transferInfo.uFilePosition);
 		bool result = FileHandle->Write((uint8*)io_transferInfo.pBuffer, io_transferInfo.uBufferSize);
 		if (result)
@@ -300,19 +305,27 @@ void CAkUnrealIOHookDeferred::Cancel(
 	)
 {
 	FScopeLock ScopeLock(&CriticalSection);
-	if (in_fileDesc.uCustomParamSize == 0)
+	if (in_fileDesc.uCustomParamSize == AK_OpenModeRead)
 	{
-		FIOSystem & IO = FIOSystem::Get();
-		int32 TransferIndex = FindTransfer(io_transferInfo.pBuffer);
-
-		if (TransferIndex != -1)
+		auto PendingTransfer = FindTransfer(io_transferInfo.pBuffer);
+		if (PendingTransfer)
 		{
-			// Cancel the request. This decrements the thread-safe counter, so our global callback
-			// will call the callback function automatically. The transfer will thus be handled correctly.
-			IO.CancelRequests(&CAkUnrealIOHookDeferred::aPendingTransfers[TransferIndex].RequestIndex, 1);
+#if AK_SUPPORTS_EVENT_DRIVEN_LOADING
+			if (GNewAsyncIO)
+			{
+				if (PendingTransfer->AsyncReadRequest)
+					PendingTransfer->AsyncReadRequest->Cancel();
+			}
+			else
+#endif
+			{
+				// Cancel the request. This decrements the thread-safe counter, so our global callback
+				// will call the callback function automatically. The transfer will thus be handled correctly.
+				FIOSystem::Get().CancelRequests(&PendingTransfer->RequestIndex, 1);
 
-			// We only cancelled one request, and not all of them.
-			io_bCancelAllTransfersForThisFile = false;
+				// We only canceled one request, and not all of them.
+				io_bCancelAllTransfersForThisFile = false;
+			}
 		}
 	}
 }
@@ -322,42 +335,53 @@ AKRESULT CAkUnrealIOHookDeferred::Close(
     AkFileDesc & in_fileDesc      // File descriptor.
     )
 {
+	if (!in_fileDesc.pCustomParam)
+		return AK_Success;
+
 	FScopeLock ScopeLock(&CriticalSection);
-	if (in_fileDesc.uCustomParamSize == 0)
+	if (in_fileDesc.uCustomParamSize == AK_OpenModeRead)
 	{
-		FString* Filename = (FString*)in_fileDesc.pCustomParam;
-		if (Filename)
+#if AK_SUPPORTS_EVENT_DRIVEN_LOADING
+		if (GNewAsyncIO)
 		{
-			FIOSystem & IO = FIOSystem::Get();
-			IO.HintDoneWithFile(*Filename);
+			delete (IAsyncReadFileHandle*)in_fileDesc.pCustomParam;
+		}
+		else
+#endif
+		{
+			FString* Filename = (FString*)in_fileDesc.pCustomParam;
+			FIOSystem::Get().HintDoneWithFile(*Filename);
 			delete (FString*)Filename;
-			in_fileDesc.pCustomParam = nullptr;
 		}
 	}
-	else if (in_fileDesc.uCustomParamSize == 1)
+	else if (in_fileDesc.uCustomParamSize == AK_OpenModeWrite)
 	{
 		delete (IFileHandle*)in_fileDesc.pCustomParam;
-		in_fileDesc.pCustomParam = nullptr;
 	}
 
+	in_fileDesc.pCustomParam = nullptr;
 	return AK_Success;
 }
 
-void CAkUnrealIOHookDeferred::GlobalCallback(AK::IAkGlobalPluginContext * in_pContext, AkGlobalCallbackLocation in_eLocation, void * in_pCookie)
+void CAkUnrealIOHookDeferred::Update()
 {
 	// Loop through all our pending transfers to see if some are done.
-	FScopeLock ScopeLock(&g_lowLevelIO.CriticalSection);
-	for (int32 i = 0; i < AK_UNREAL_MAX_CONCURRENT_IO; i++)
+	FScopeLock ScopeLock(&CriticalSection);
+	for (auto& PendingTransfer : aPendingTransfers)
 	{
-		if( CAkUnrealIOHookDeferred::aPendingTransfers[i].Counter.GetValue() == 0 )
+		if (PendingTransfer.IsInState(IOState_ReadyFor_Callback))
 		{
-			AKASSERT(CAkUnrealIOHookDeferred::aPendingTransfers[i].AkTransferInfo.pCallback);
-
-			CAkUnrealIOHookDeferred::aPendingTransfers[i].AkTransferInfo.pCallback(&CAkUnrealIOHookDeferred::aPendingTransfers[i].AkTransferInfo, AK_Success);
-
-			// Release the slot for this transfer. We are done for now.
-			CAkUnrealIOHookDeferred::aPendingTransfers[i].Counter.Set(-1);
+			PendingTransfer.CallAkTransferInfoCallback();
 		}
+	}
+}
+
+void CAkUnrealIOHookDeferred::GlobalCallback(AK::IAkGlobalPluginContext* in_pContext, AkGlobalCallbackLocation in_eLocation, void* in_pCookie)
+{
+	auto self = (CAkUnrealIOHookDeferred*)in_pCookie;
+	if (self != nullptr)
+	{
+		self->Update();
 	}
 }
 
@@ -366,27 +390,11 @@ void CAkUnrealIOHookDeferred::CleanFileDescriptor( AkFileDesc& out_fileDesc )
 {
 	out_fileDesc.uSector			= 0;
 	out_fileDesc.deviceID			= m_deviceID;
-	out_fileDesc.uCustomParamSize	= 0;	// not used.
-	out_fileDesc.pCustomParam		= NULL;
+	out_fileDesc.uCustomParamSize	= -1;	// not used.
+	out_fileDesc.pCustomParam		= nullptr;
 	out_fileDesc.iFileSize			= 0;
 }
 
-AKRESULT CAkUnrealIOHookDeferred::FillFileDescriptorHelper(const FString* in_szFullFilePath, AkFileDesc& out_fileDesc )
-{
-	if(in_szFullFilePath && !in_szFullFilePath->IsEmpty())
-	{
-		out_fileDesc.iFileSize	= IFileManager::Get().FileSize( **in_szFullFilePath);
-		if( out_fileDesc.iFileSize > 0 )
-		{
-			out_fileDesc.uCustomParamSize	= 0; // 0 for read, 1 for write
-			// We need the file name to pass UE4's IO module. Use the custom param to remember it.
-			out_fileDesc.pCustomParam = (void*)in_szFullFilePath;
-
-			return AK_Success;
-		}
-	}
-	return AK_Fail;
-}
 
 // Returns the block size for the file or its storage device. 
 AkUInt32 CAkUnrealIOHookDeferred::GetBlockSize(
@@ -438,7 +446,7 @@ AKRESULT CAkUnrealIOHookDeferred::GetFullFilePath(
 
 	// Prepend string path (basic file system logic).
 	int32 uiPathSize = in_szFileName.Len();
-	if (in_szFileName.Len() >= AK_MAX_PATH)
+	if (uiPathSize >= AK_MAX_PATH)
 	{
 		AKASSERT(!"Input string too large");
 		return AK_InvalidParameter;

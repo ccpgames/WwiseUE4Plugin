@@ -21,8 +21,8 @@ under the Apache License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES
 OR CONDITIONS OF ANY KIND, either express or implied. See the Apache License for
 the specific language governing permissions and limitations under the License.
 
-  Version: v2016.2.1  Build: 5995
-  Copyright (c) 2006-2016 Audiokinetic Inc.
+  Version: v2016.2.2  Build: 6022
+  Copyright (c) 2006-2017 Audiokinetic Inc.
 *******************************************************************************/
 
 /// \file
@@ -96,7 +96,7 @@ namespace AK
 		/// License type.
 		enum LicenseType
 		{
-			LicenseType_Trial = 1,
+			LicenseType_Trial = 1, ///< Note: LicenseType_Trial is used for both Trial and Evaluation Licence handling.
 			LicenseType_Purchased,
 			LicenseType_Academic
 		};

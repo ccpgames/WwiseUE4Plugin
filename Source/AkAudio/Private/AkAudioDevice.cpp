@@ -231,7 +231,7 @@ bool FAkAudioDevice::Init( void )
 	YouWhatBruv time(TEXT("FAkAudioDevice::Init"));
 	// CCP MOD END
 
-#if DEDICATED_SERVER
+#if UE_SERVER
 	return false;
 #endif
 	AkBankManager = NULL;
@@ -1504,7 +1504,10 @@ void FAkAudioDevice::UnregisterComponent( UAkComponent * in_pComponent )
 
 UAkComponent* FAkAudioDevice::GetAkComponent( class USceneComponent* AttachToComponent, FName AttachPointName, const FVector * Location, EAttachLocation::Type LocationType )
 {
-	check( AttachToComponent );
+	if (!AttachToComponent)
+	{
+		return NULL;
+	}
 
 	UAkComponent* AkComponent = NULL;
 #if ENGINE_MAJOR_VERSION == 4 && ENGINE_MINOR_VERSION >= 12

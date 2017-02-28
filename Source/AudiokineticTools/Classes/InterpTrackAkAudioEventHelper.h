@@ -4,6 +4,11 @@
 
 #include "AkAudioEvent.h"
 #include "Matinee/InterpTrack.h"
+
+#if ENGINE_MAJOR_VERSION == 4 && ENGINE_MINOR_VERSION >= 15
+#include "IMatinee.h"
+#endif
+
 #include "InterpTrackHelper.h"
 #include "InterpTrackAkAudioEventHelper.generated.h"
 
