@@ -150,9 +150,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, AdvancedDisplay, Category = "AkComponent")
 	FString EventName;
 
-	UFUNCTION(BlueprintNativeEvent, Category = "Audiokinetic|AkComponent")
-	void UpdateGameObjectPosition();
-
 #if CPP
 
 	/*------------------------------------------------------------------------------------
@@ -214,6 +211,8 @@ private:
 	 * Unregister the component from Wwise
 	 */
 	void UnregisterGameObject();
+
+	void UpdateGameObjectPosition();
 
 	// Reverb Volume features ---------------------------------------------------------------------
 

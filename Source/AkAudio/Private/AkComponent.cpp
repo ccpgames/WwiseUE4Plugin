@@ -569,7 +569,7 @@ void UAkComponent::UpdateAkReverbVolumeList( FVector Loc )
 	}
 }
 
-void UAkComponent::UpdateGameObjectPosition_Implementation()
+void UAkComponent::UpdateGameObjectPosition()
 {
 	FAkAudioDevice * AkAudioDevice = FAkAudioDevice::Get();
 	if ( bIsActive && AkAudioDevice )
