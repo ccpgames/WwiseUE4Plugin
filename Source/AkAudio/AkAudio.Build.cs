@@ -40,7 +40,9 @@ public class AkAudio : ModuleRules
             {
                 "Core",
                 "CoreUObject",
-                "Engine"
+                "Engine",
+                "MovieScene",
+                "MovieSceneTracks"
             });
 
         PrivateDependencyModuleNames.AddRange(
@@ -52,8 +54,6 @@ public class AkAudio : ModuleRules
                 "SlateCore",
                 "NetworkReplayStreaming",
                 "Projects",
-                "MovieScene",
-                "MovieSceneTracks"
             });
 
         string akDir = Path.GetFullPath(Path.Combine(ModuleDirectory, "../../ThirdParty"));
@@ -73,6 +73,7 @@ public class AkAudio : ModuleRules
         // These definitions can be set as platform-specific.
         Definitions.Add("AK_UNREAL_MAX_CONCURRENT_IO=8");
         Definitions.Add("AK_UNREAL_IO_GRANULARITY=32768");
+        Definitions.Add("_XBOX_VER=0");
 
         string samplesSoundEngineBasePath = Path.Combine(akDir, "samples" + Path.DirectorySeparatorChar + "SoundEngine");
 

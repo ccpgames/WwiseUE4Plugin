@@ -52,16 +52,11 @@ public class AudiokineticTools : ModuleRules
 				"DirectoryWatcher",
                 "Projects",
 				"Sequencer",
-                "PropertyEditor"
+                "PropertyEditor",
+                "MovieScene",
+                "MovieSceneTools",
+                "MovieSceneTracks"
             });
-
-        PrivateDependencyModuleNames.AddRange(
-            new string[]
-            {
-				"MovieScene",
-				"MovieSceneTools",
-				"MovieSceneTracks"
-			});
 
 		BuildVersion Version;
 		if (BuildVersion.TryRead(GetDefaultVersionFileName(), out Version))
