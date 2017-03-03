@@ -1071,6 +1071,21 @@ void FAkAudioDevice::RemoveAkReverbVolumeFromList(class AAkReverbVolume* in_Volu
 	}
 }
 
+// CCP MOD BEGIN - Enable culture switching
+void FAkAudioDevice::SetCulture(const FString& culture)
+{
+	static TMap<FString, const AkOSChar*> cultureTable([]
+	{
+		TMap<FString, const AkOSChar*> c;
+		c[TEXT("de")] = AKTEXT("German");
+		c[TEXT("ja")] = AKTEXT("Japanese");
+		return c;
+	}());
+
+	auto akCulture = cultureTable.Find(culture);
+	AK::StreamMgr::SetCurrentLanguage(akCulture ? *akCulture : AKTEXT("English(US)"));
+}
+// CCP MOD END - Enable culture switching
 
 /** Get a sorted list of AkAuxSendValue at a location
  *
