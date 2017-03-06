@@ -723,6 +723,10 @@ public:
 	/** Remove a AkReverbVolume from the active volumes linked list. */
 	void RemoveAkReverbVolumeFromList(class AAkReverbVolume* in_VolumeToRemove);
 
+// CCP MOD BEGIN - Enable culture switching
+	void SetCulture(const FString& culture);
+// CCP MOD END - Enable culture switching
+
 private:
 	bool EnsureInitialized();
 
