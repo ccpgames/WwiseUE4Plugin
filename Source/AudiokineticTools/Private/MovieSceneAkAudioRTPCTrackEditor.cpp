@@ -22,6 +22,9 @@
 
 #include "ScopedTransaction.h"
 
+// CCP MOD BEGIN - Fix compile issues
+#include "SequencerSectionPainter.h"
+// CCP MOD END - Fix compile issues
 
 #define LOCTEXT_NAMESPACE "MovieSceneAkAudioRTPCTrackEditor"
 

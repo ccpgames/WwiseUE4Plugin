@@ -1,6 +1,9 @@
 // Copyright 1998-2016 Epic Games, Inc. All Rights Reserved.
 #pragma once
 
+// CCP MOD BEGIN - Fix compile issues
+#include "WwisePicker/WwiseTreeItem.h"
+// CCP MOD END - Fix compile issues
 
 /**
 * Implements the visual style of LogVisualizer.
