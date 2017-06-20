@@ -10,6 +10,14 @@
 #include "WwisePicker/WwiseEventDragDropOp.h"
 #include "ContentBrowserModule.h"
 #include "AudiokineticToolsStyle.h"
+// CCP MOD BEGIN - Fix compiler error
+#include "AkAudioEventFactory.h"
+#include "AkAudioEvent.h"
+#include "AkAuxBusFactory.h"
+#include "AkAuxBus.h"
+#include "AssetToolsModule.h"
+#include "IAssetTools.h"
+// CCP MOD END - Fix compiler error
 
 #define LOCTEXT_NAMESPACE "AkAudio"
 

@@ -5,6 +5,9 @@
 ------------------------------------------------------------------------------------*/
 #pragma once
 
+// CCP MOD BEGIN - Fix compiler error
+#include "ContentBrowserDelegates.h"
+// CCP MOD END - Fix compiler error
 #include "DecoratedDragDropOp.h"
 
 class FWwiseEventDragDropOp : public FDecoratedDragDropOp
