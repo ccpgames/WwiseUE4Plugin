@@ -86,8 +86,11 @@ namespace AK
 #define AK_THREAD_PRIORITY_ABOVE_NORMAL			sched_get_priority_max( SCHED_FIFO )
 #define AK_THREAD_PRIORITY_BELOW_NORMAL			sched_get_priority_min( SCHED_FIFO )
 
-#define AK_THREAD_AFFINITY_DEFAULT				0xFFFF
-
+#if PLATFORM_PS4
+#define AK_THREAD_AFFINITY_DEFAULT				0b01110000
+#else
+#define AK_THREAD_AFFINITY_DEFAULT				0xffff
+#endif
 
 // NULL objects
 #define AK_NULL_THREAD                          0
