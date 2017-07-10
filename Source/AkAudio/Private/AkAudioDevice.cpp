@@ -1891,7 +1891,7 @@ bool FAkAudioDevice::EnsureInitialized()
 
 // HYDRA BEGIN - We want to change thread affinities
 #if PLATFORM_PS4
-	platformInitSettings.threadLEngine.dwAffinityMask = AK_THREAD_AFFINITY_DEFAULT;
+	platformInitSettings.threadLEngine.dwAffinityMask = 0b00010000;
 	platformInitSettings.threadBankManager.dwAffinityMask = AK_THREAD_AFFINITY_DEFAULT;
 	platformInitSettings.threadMonitor.dwAffinityMask = AK_THREAD_AFFINITY_DEFAULT;
 #endif
