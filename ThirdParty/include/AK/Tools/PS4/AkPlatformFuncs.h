@@ -80,7 +80,7 @@ namespace AK
 #define AK_THREAD_PRIORITY_BELOW_NORMAL			SCE_KERNEL_PRIO_FIFO_LOWEST
 
 #define AK_THREAD_AFFINITY_ALL					63; // from binary 111111 setting the 6 available core to true. (ex: 4 << 1)
-#define	AK_THREAD_AFFINITY_DEFAULT				0b01100000
+#define	AK_THREAD_AFFINITY_DEFAULT				0b01110000
 
 // On PS4 this needs to be called regularly.
 #define	AK_RELEASE_GPU_OFFLINE_FRAME			sce::Gnm::submitDone();
