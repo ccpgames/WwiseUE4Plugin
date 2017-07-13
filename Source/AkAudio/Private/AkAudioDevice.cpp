@@ -82,6 +82,8 @@
 
 #include <AK/Plugin/AuroHeadphoneFXFactory.h>
 #include <AK/Plugin/AuroPannerMixerFactory.h>
+
+#include "Internationalization.h"
 // CCP MOD END
 
 #if PLATFORM_XBOXONE
@@ -1077,8 +1079,12 @@ void FAkAudioDevice::SetCulture(const FString& culture)
 	static TMap<FString, const AkOSChar*> cultureTable([]
 	{
 		TMap<FString, const AkOSChar*> c;
-		c[TEXT("de")] = AKTEXT("German");
-		c[TEXT("ja")] = AKTEXT("Japanese");
+		c.Emplace(TEXT("en"), AKTEXT("English(US)"));
+		c.Emplace(TEXT("fr"), AKTEXT("French(France)"));
+		c.Emplace(TEXT("de"), AKTEXT("German"));
+		c.Emplace(TEXT("it"), AKTEXT("Italian"));
+		c.Emplace(TEXT("ja"), AKTEXT("Japanese"));
+		c.Emplace(TEXT("es"), AKTEXT("Spanish(Spain)"));
 		return c;
 	}());
 
@@ -2060,7 +2066,10 @@ void FAkAudioDevice::SetBankDirectory()
 #endif
 	g_lowLevelIO.SetBasePath( pszPath );
 
-	AK::StreamMgr::SetCurrentLanguage( AKTEXT("English(US)") );
+	// CCP MOD BEGIN - Enable culture switching
+	SetCulture(FInternationalization::Get().GetCurrentCulture()->GetTwoLetterISOLanguageName());
+//	AK::StreamMgr::SetCurrentLanguage(AKTEXT("English(US)"));
+	// CCP MOD END - Enable culture switching
 }
 
 /**
