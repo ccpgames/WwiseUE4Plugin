@@ -11,15 +11,17 @@
 #include "MovieSceneAkAudioRTPCSection.h"
 #include "MovieSceneAkAudioRTPCTrack.h"
 
+#if AK_SUPPORTS_LEVEL_SEQUENCER_TEMPLATES
+#include "MovieSceneAkAudioRTPCTemplate.h"
 
+FMovieSceneEvalTemplatePtr UMovieSceneAkAudioRTPCTrack::CreateTemplateForSection(const UMovieSceneSection& InSection) const
+{
+	return InSection.GenerateTemplate();
+}
+#else
 TSharedPtr<IMovieSceneTrackInstance> UMovieSceneAkAudioRTPCTrack::CreateInstance()
 {
 	return MakeShareable(new UMovieSceneAkTrackInstance<UMovieSceneAkAudioRTPCTrack>(*this));
-}
-
-UMovieSceneSection* UMovieSceneAkAudioRTPCTrack::CreateNewSection()
-{
-	return NewObject<UMovieSceneSection>(this, UMovieSceneAkAudioRTPCSection::StaticClass(), NAME_None, RF_Transactional);
 }
 
 void UMovieSceneAkAudioRTPCTrack::Update(EMovieSceneUpdateData& UpdateData, const TArray<TWeakObjectPtr<UObject>>& RuntimeObjects, IMovieScenePlayer& Player, FMovieSceneSequenceInstance& SequenceInstance)
@@ -63,6 +65,12 @@ void UMovieSceneAkAudioRTPCTrack::Update(EMovieSceneUpdateData& UpdateData, cons
 		AudioDevice->SetRTPCValue(RTPCNameString, Value, 0, nullptr);
 	}
 }
+#endif // AK_SUPPORTS_LEVEL_SEQUENCER_TEMPLATES
+
+UMovieSceneSection* UMovieSceneAkAudioRTPCTrack::CreateNewSection()
+{
+	return NewObject<UMovieSceneSection>(this, UMovieSceneAkAudioRTPCSection::StaticClass(), NAME_None, RF_Transactional);
+}
 
 #if WITH_EDITORONLY_DATA
 FText UMovieSceneAkAudioRTPCTrack::GetDisplayName() const
@@ -76,5 +84,4 @@ FName UMovieSceneAkAudioRTPCTrack::GetTrackName() const
 	const auto Section = CastChecked<UMovieSceneAkAudioRTPCSection>(MovieSceneHelpers::FindNearestSectionAtTime(Sections, 0));
 	return (Section != nullptr) ? FName(*Section->GetRTPCName()) : FName(NAME_None);
 }
-
 #endif // AK_SUPPORTS_LEVEL_SEQUENCER

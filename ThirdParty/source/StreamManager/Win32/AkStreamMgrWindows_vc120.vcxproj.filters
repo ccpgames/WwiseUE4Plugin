@@ -2,7 +2,7 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="Common">
-      <UniqueIdentifier>{FAE9F9A1-EBE7-E24D-9953-CD3F4079CF36}</UniqueIdentifier>
+      <UniqueIdentifier>{661B4DD2-50D6-3742-8020-52C364DF4B4C}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

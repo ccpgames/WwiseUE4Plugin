@@ -11,6 +11,7 @@
 #include "AkAudioClasses.h"
 #include "AkAudioBankFactory.h"
 #include "AkAudioEventFactory.h"
+#include "ActorFactoryAkAmbientSound.h"
 #include "AkComponentVisualizer.h"
 #include "MatineeModule.h"
 #include "MatineeClasses.h"
@@ -31,8 +32,12 @@
 #include "AudiokineticToolsStyle.h"
 #include "SDockTab.h"
 #include "AssetRegistryModule.h"
+#include "UnrealEdMisc.h"
+#include "Editor/UnrealEdEngine.h"
+#include "Settings/ProjectPackagingSettings.h"
 
-#if ENGINE_MAJOR_VERSION == 4 && ENGINE_MINOR_VERSION >= 15
+#if UE_4_15_OR_LATER
+#include "UnrealEdGlobals.h"
 #include "WorkspaceMenuStructure.h"
 #endif
 
@@ -225,9 +230,14 @@ class FAudiokineticToolsModule : public IAudiokineticTools
 
 #if AK_SUPPORTS_LEVEL_SEQUENCER
 		ISequencerModule& SequencerModule = FModuleManager::LoadModuleChecked<ISequencerModule>(TEXT("Sequencer"));
+#if UE_4_16_OR_LATER
+		RTPCTrackEditorHandle = SequencerModule.RegisterTrackEditor(FOnCreateTrackEditor::CreateStatic(&FMovieSceneAkAudioRTPCTrackEditor::CreateTrackEditor));
+		EventTrackEditorHandle = SequencerModule.RegisterTrackEditor(FOnCreateTrackEditor::CreateStatic(&FMovieSceneAkAudioEventTrackEditor::CreateTrackEditor));
+#else
 		RTPCTrackEditorHandle = SequencerModule.RegisterTrackEditor_Handle(FOnCreateTrackEditor::CreateStatic(&FMovieSceneAkAudioRTPCTrackEditor::CreateTrackEditor));
 		EventTrackEditorHandle = SequencerModule.RegisterTrackEditor_Handle(FOnCreateTrackEditor::CreateStatic(&FMovieSceneAkAudioEventTrackEditor::CreateTrackEditor));
-#endif
+#endif // UE_4_16_OR_LATER
+#endif // AK_SUPPORTS_LEVEL_SEQUENCER
 
 		FAssetRegistryModule& AssetRegistryModule = FModuleManager::LoadModuleChecked<FAssetRegistryModule>("AssetRegistry");
 		AssetRegistryModule.Get().OnFilesLoaded().Remove(LateRegistrationOfMatineeToLevelSequencerHandle);
@@ -297,6 +307,16 @@ class FAudiokineticToolsModule : public IAudiokineticTools
 		LateRegistrationOfMatineeToLevelSequencerHandle = AssetRegistryModule.Get().OnFilesLoaded().AddRaw(this, &FAudiokineticToolsModule::LateRegistrationOfMatineeToLevelSequencer);
 
 		FEditorDelegates::EndPIE.AddRaw(this, &FAudiokineticToolsModule::OnEndPIE);
+
+		// Since we are initialized in the PostEngineInit phase, our Ambient Sound actor factory is not registered. We need to register it ourselves.
+		if (GEditor)
+		{
+			UActorFactoryAkAmbientSound* NewFactory = NewObject<UActorFactoryAkAmbientSound>();
+			if (NewFactory)
+			{
+				GEditor->ActorFactories.Add(NewFactory);
+			}
+		}
 	}
 
 	virtual void ShutdownModule() override
@@ -346,8 +366,13 @@ class FAudiokineticToolsModule : public IAudiokineticTools
 		if (FModuleManager::Get().IsModuleLoaded(TEXT("Sequencer")))
 		{
 			ISequencerModule& SequencerModule = FModuleManager::GetModuleChecked<ISequencerModule>(TEXT("Sequencer"));
+#if UE_4_16_OR_LATER
+			SequencerModule.UnRegisterTrackEditor(RTPCTrackEditorHandle);
+			SequencerModule.UnRegisterTrackEditor(EventTrackEditorHandle);
+#else
 			SequencerModule.UnRegisterTrackEditor_Handle(RTPCTrackEditorHandle);
 			SequencerModule.UnRegisterTrackEditor_Handle(EventTrackEditorHandle);
+#endif // UE_4_16_OR_LATER
 		}
 #endif 
 
@@ -382,7 +407,11 @@ private:
 
 	void OnEndPIE(const bool bIsSimulating)
 	{
-		FAkAudioDevice::Get()->StopAllSounds(true);
+		FAkAudioDevice* AkAudioDevice = FAkAudioDevice::Get();
+		if (AkAudioDevice)
+		{
+			AkAudioDevice->StopAllSounds(true);
+		}
 	}
 
 	/** Asset type actions for Audiokinetic assets.  Cached here so that we can unregister it during shutdown. */
@@ -414,11 +443,18 @@ void VerifyAkSettings()
 	UAkSettings* AkSettings = GetMutableDefault<UAkSettings>();
 	if( AkSettings )
 	{
-		if( AkSettings->WwiseProjectPath.FilePath.IsEmpty() )
+		if (AkSettings->WwiseProjectPath.FilePath.IsEmpty())
 		{
-			if( EAppReturnType::Yes == FMessageDialog::Open( EAppMsgType::YesNo, LOCTEXT("SettingsNotSet", "Wwise settings do not seem to be set. Would you like to open the settings window to set them?") ) )
+			if (!AkSettings->SuppressWwiseProjectPathWarnings)
 			{
-				FModuleManager::LoadModuleChecked<ISettingsModule>("Settings").ShowViewer(FName("Project"), FName("Plugins"), FName("Wwise"));
+				if (EAppReturnType::Yes == FMessageDialog::Open(EAppMsgType::YesNo, LOCTEXT("SettingsNotSet", "Wwise settings do not seem to be set. Would you like to open the settings window to set them?")))
+				{
+					FModuleManager::LoadModuleChecked<ISettingsModule>("Settings").ShowViewer(FName("Project"), FName("Plugins"), FName("Wwise"));
+				}
+			}
+			else
+			{
+				UE_LOG(LogAudiokineticTools, Log, TEXT("Wwise project not found. The Wwise picker will not be usable."));
 			}
 		}
 		else
@@ -428,10 +464,88 @@ void VerifyAkSettings()
 			FString TempPath = FPaths::ConvertRelativePathToFull(FullGameDir, AkSettings->WwiseProjectPath.FilePath);
 			if (!FPaths::FileExists(TempPath))
 			{
-				AkSettings->WwiseProjectPath.FilePath.Empty();
-				if (EAppReturnType::Ok == FMessageDialog::Open(EAppMsgType::Ok, LOCTEXT("ResetWwisePath", "The Wwise UE4 Integration plug-in's update process requires the Wwise Project Path to be set in the Project Settings dialog.")))
+				if (!AkSettings->SuppressWwiseProjectPathWarnings)
 				{
-					FModuleManager::LoadModuleChecked<ISettingsModule>("Settings").ShowViewer(FName("Project"), FName("Plugins"), FName("Wwise"));
+					TSharedPtr<SWindow> Dialog = SNew(SWindow)
+						.Title(LOCTEXT("ResetWwisePath", "Re-set Wwise Path"))
+						.SupportsMaximize(false)
+						.SupportsMinimize(false)
+						.FocusWhenFirstShown(true)
+						.SizingRule(ESizingRule::Autosized);
+
+					TSharedRef<SWidget> DialogContent = SNew(SVerticalBox)
+						+ SVerticalBox::Slot()
+						.FillHeight(0.25f)
+						[
+							SNew(SSpacer)
+						]
+						+ SVerticalBox::Slot()
+						.AutoHeight()
+						[
+							SNew(STextBlock)
+							.Text(LOCTEXT("AkUpdateWwisePath", "The Wwise UE4 Integration plug-in's update process requires the Wwise Project Path to be set in the Project Settings dialog. Would you like to open the Project Settings?"))
+						.AutoWrapText(true)
+						]
+						+ SVerticalBox::Slot()
+						.FillHeight(0.75f)
+						[
+							SNew(SSpacer)
+						]
+						+ SVerticalBox::Slot()
+						.AutoHeight()
+						[
+							SNew(SCheckBox)
+							.Padding(FMargin(6.0, 2.0))
+							.OnCheckStateChanged_Lambda([&](ECheckBoxState DontAskState) {
+								AkSettings->SuppressWwiseProjectPathWarnings = (DontAskState == ECheckBoxState::Checked);
+							})
+							[
+								SNew(STextBlock)
+								.Text(LOCTEXT("AkDontShowAgain", "Don't show this again"))
+							]
+						]
+						+ SVerticalBox::Slot()
+						.AutoHeight()
+						[
+							SNew(SHorizontalBox)
+							+ SHorizontalBox::Slot()
+							.FillWidth(1.0f)
+							[
+								SNew(SSpacer)
+							]
+							+ SHorizontalBox::Slot()
+							.AutoWidth()
+							.Padding(0.0f, 3.0f, 0.0f, 3.0f)
+							[
+								SNew(SButton)
+								.Text(LOCTEXT("Yes", "Yes"))
+								.OnClicked_Lambda([&]() -> FReply {
+									FModuleManager::LoadModuleChecked<ISettingsModule>("Settings").ShowViewer(FName("Project"), FName("Plugins"), FName("Wwise"));
+									Dialog->RequestDestroyWindow();
+									AkSettings->UpdateDefaultConfigFile();
+									return FReply::Handled();
+								})
+							]
+							+ SHorizontalBox::Slot()
+							.AutoWidth()
+							.Padding(0.0f, 3.0f, 0.0f, 3.0f)
+							[
+								SNew(SButton)
+								.Text(LOCTEXT("No", "No"))
+								.OnClicked_Lambda([&]() -> FReply {
+									Dialog->RequestDestroyWindow();
+									AkSettings->UpdateDefaultConfigFile();
+									return FReply::Handled();
+								})
+							]
+						];
+
+					Dialog->SetContent(DialogContent);
+					FSlateApplication::Get().AddModalWindow(Dialog.ToSharedRef(), nullptr);
+				}
+				else
+				{
+					UE_LOG(LogAudiokineticTools, Log, TEXT("Wwise project not found. The Wwise picker will not be usable."));
 				}
 			}
 			else

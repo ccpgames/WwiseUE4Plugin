@@ -5,6 +5,7 @@
 =============================================================================*/
 #pragma once
 
+#include "GameFramework/Actor.h"
 #include "AkAmbientSound.generated.h"
 
 /*------------------------------------------------------------------------------------
@@ -45,19 +46,23 @@ class AKAUDIO_API AAkAmbientSound : public AActor
 	class UAkComponent* AkComponent;
 	
 	/** Stop playback if the owner is destroyed */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=AkAmbientSound, SimpleDisplay)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = AkAmbientSound, SimpleDisplay)
 	bool StopWhenOwnerIsDestroyed;
+
+	/** Automatically post the associated AkAudioEvent on BeginPlay */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = AkAmbientSound, SimpleDisplay)
+	bool AutoPost;
 
 	/*
 	 * Start an Ak ambient sound.
 	 */
-	UFUNCTION(BlueprintCallable, Category="Audiokinetic|AkAmbientSound")
+	UFUNCTION(BlueprintCallable, BlueprintCosmetic, Category="Audiokinetic|AkAmbientSound")
 	void StartAmbientSound();
 
 	/*
 	 * Stop an Ak ambient sound.
 	 */
-	UFUNCTION(BlueprintCallable, Category="Audiokinetic|AkAmbientSound")
+	UFUNCTION(BlueprintCallable, BlueprintCosmetic, Category="Audiokinetic|AkAmbientSound")
 	void StopAmbientSound();
 
 
@@ -86,6 +91,9 @@ protected:
 	/*------------------------------------------------------------------------------------
 		AActor interface.
 	------------------------------------------------------------------------------------*/
+
+	virtual void BeginPlay() override;
+
 #if WITH_EDITOR
 	/**
 	 * Check for errors

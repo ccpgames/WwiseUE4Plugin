@@ -5,6 +5,7 @@
 =============================================================================*/
 #pragma once
 
+#include "ActorFactories/ActorFactory.h"
 #include "ActorFactoryAkAmbientSound.generated.h"
 
 /*------------------------------------------------------------------------------------

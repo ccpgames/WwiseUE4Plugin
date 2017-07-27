@@ -3,6 +3,9 @@
 #include "AkAudioDevice.h"
 #include "AkAudioModule.h"
 
+#if UE_4_14_OR_LATER
+#include "Misc/CoreDelegates.h"
+#endif
 IMPLEMENT_MODULE( FAkAudioModule, AkAudio )
 
 void FAkAudioModule::StartupModule()

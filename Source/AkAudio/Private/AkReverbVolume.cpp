@@ -7,7 +7,7 @@
 #include "AkAudioDevice.h"
 #include "AkAudioClasses.h"
 #include "Net/UnrealNetwork.h"
-
+#include "Components/BrushComponent.h"
 /*------------------------------------------------------------------------------------
 	AAkReverbVolume
 ------------------------------------------------------------------------------------*/

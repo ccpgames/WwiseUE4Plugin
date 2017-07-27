@@ -10,11 +10,26 @@
 	AkAudioDevice system headers
 ------------------------------------------------------------------------------------*/
 
-#include "Engine.h"
-
 #include "AkInclude.h"
 #include "AkBankManager.h"
-#include "SoundDefinitions.h"
+#include "Engine/EngineBaseTypes.h"
+#include "Engine/EngineTypes.h"
+
+
+#define GET_AK_EVENT_NAME(AkEvent, EventName) ((AkEvent) ? ((AkEvent)->GetName()) : (EventName))
+
+#ifndef AK_SUPPORT_WCHAR
+	#define TCHAR_TO_AK(Text) (const ANSICHAR*)(TCHAR_TO_ANSI(Text))
+#else
+	#define TCHAR_TO_AK(Text) (const WIDECHAR*)(Text)
+#endif
+
+#if !defined(AK_SUPPORT_WCHAR) || defined(AK_PS4) || defined(AK_LINUX) || defined(AK_MAC_OS_X) || defined(AK_IOS) || defined(AK_NX)
+	#define TCHAR_TO_AK_OS(Text) (const ANSICHAR*)(TCHAR_TO_ANSI(Text))
+#else
+	#define TCHAR_TO_AK_OS(Text) (const WIDECHAR*)(Text)
+#endif
+
 
 DECLARE_LOG_CATEGORY_EXTERN(LogAkAudio, Log, All);
 
@@ -23,6 +38,12 @@ DECLARE_LOG_CATEGORY_EXTERN(LogAkAudio, Log, All);
 ------------------------------------------------------------------------------------*/
 
 class UAkComponent;
+class FAkComponentCallbackManager;
+class CAkUnrealIOHookDeferred;
+class CAkDiskPackage;
+
+template <class T_LLIOHOOK_FILELOC, class T_PACKAGE>
+class CAkFilePackageLowLevelIO;
 
 #define DUMMY_GAMEOBJ ((AkGameObjectID)0x2)
 #define SOUNDATLOCATION_GAMEOBJ ((AkGameObjectID)0x3)
@@ -35,6 +56,7 @@ namespace AK {
 	}
 }
 #endif
+
 
 /*------------------------------------------------------------------------------------
 	Audiokinetic audio device.
@@ -217,11 +239,25 @@ public:
 	AKRESULT LoadInitBank(void);
 
 	/**
+	* Load all file packages found in the SoundBanks base path
+	*
+	* @return operation success
+	*/
+	bool LoadAllFilePackages(void);
+
+	/**
 	 * Unload the audiokinetic 'init' bank
 	 *
 	 * @return Result from ak sound engine 
 	 */
 	AKRESULT UnloadInitBank(void);
+
+	/**
+	* Unload all file packages found in the SoundBanks base path
+	*
+	* @return operation success
+	*/
+	bool UnloadAllFilePackages(void);
 
 	/**
 	 * Load all banks currently being referenced
@@ -271,6 +307,24 @@ public:
 		AkCallbackFunc in_pfnCallback = NULL,
 		void * in_pCookie = NULL,
 		bool in_bStopWhenOwnerDestroyed = false
+		);
+
+	/**
+	* Post an event to ak soundengine by name
+	*
+	* @param in_EventName		Name of the event to post
+	* @param in_pComponent		AkComponent on which to play the event
+	* @param in_uFlags			Bitmask: see \ref AkCallbackType
+	* @param in_pfnCallback	Callback function
+	* @param in_pCookie		Callback cookie that will be sent to the callback function along with additional information.
+	* @return ID assigned by ak soundengine
+	*/
+	AkPlayingID PostEvent(
+		const FString& in_EventName,
+		UAkComponent* in_pComponent,
+		AkUInt32 in_uFlags = 0,
+		AkCallbackFunc in_pfnCallback = NULL,
+		void * in_pCookie = NULL
 		);
 
 	/**
@@ -493,6 +547,10 @@ public:
 	 */
 	void StopProfilerCapture();
 
+	/**
+	* Gets the path where the SoundBanks are located on disk
+	*/
+	FString GetBasePath();
 
 
 #ifdef AK_SOUNDFRAME
@@ -732,7 +790,9 @@ private:
 
 	uint8 MaxAuxBus;
 
-	FAkBankManager * AkBankManager;
+	FAkComponentCallbackManager* CallbackManager;
+	FAkBankManager* AkBankManager;
+	CAkFilePackageLowLevelIO<CAkUnrealIOHookDeferred, CAkDiskPackage>* LowLevelIOHook;
 
 	static bool m_EngineExiting;
 

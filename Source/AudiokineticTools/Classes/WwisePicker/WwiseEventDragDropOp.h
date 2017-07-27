@@ -6,6 +6,7 @@
 #pragma once
 
 #include "DecoratedDragDropOp.h"
+#include "ContentBrowserDelegates.h"
 
 class FWwiseEventDragDropOp : public FDecoratedDragDropOp
 {

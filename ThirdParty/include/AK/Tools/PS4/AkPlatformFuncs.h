@@ -21,7 +21,7 @@ under the Apache License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES
 OR CONDITIONS OF ANY KIND, either express or implied. See the Apache License for
 the specific language governing permissions and limitations under the License.
 
-  Version: v2016.2.2  Build: 6021
+  Version: v2016.2.4  Build: 6097
   Copyright (c) 2006-2017 Audiokinetic Inc.
 *******************************************************************************/
 
@@ -535,6 +535,13 @@ namespace AKPLATFORM
 #ifdef AK_ENABLE_INSTRUMENT
 
 #include <perf.h>
+#include <sdk_version.h>
+#if SCE_ORBIS_SDK_VERSION >= 0x04500000
+	#include <razorcpu.h>
+	#ifndef SCE_RAZOR_MARKER_DISABLE_HUD
+		#define SCE_RAZOR_MARKER_DISABLE_HUD 0
+	#endif
+#endif
 
 class AkInstrumentScope
 {

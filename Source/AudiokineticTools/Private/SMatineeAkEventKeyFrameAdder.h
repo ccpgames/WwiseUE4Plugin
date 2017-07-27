@@ -10,6 +10,7 @@
 ------------------------------------------------------------------------------------*/
 #include "AkAudioEvent.h"
 #include "Delegate.h"
+#include "Widgets/Input/SButton.h"
 
 /** Delegate used when the user clicks OK */
 DECLARE_DELEGATE_TwoParams(FOnAkEventSet, UAkAudioEvent *, const FString&);

@@ -10,6 +10,19 @@
 #include "WwisePicker/WwiseEventDragDropOp.h"
 #include "ContentBrowserModule.h"
 #include "AudiokineticToolsStyle.h"
+#include "Factories/Factory.h"
+#include "AkAudioEvent.h"
+#include "AkAuxBus.h"
+#include "AkAudioEventFactory.h"
+#include "AkAuxBusFactory.h"
+#include "IAssetTools.h"
+#include "AssetToolsModule.h"
+#include "ModuleManager.h"
+
+#if AK_SPATIAL_AUDIO_AVAILABLE
+#include "AkAcousticTexture.h"
+#include "AkAcousticTextureFactory.h"
+#endif
 
 #define LOCTEXT_NAMESPACE "AkAudio"
 
