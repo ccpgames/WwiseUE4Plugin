@@ -105,6 +105,7 @@
 #include <AK/Plugin/AuroPannerMixerFactory.h>
 
 #include "Internationalization.h"
+#include "Culture.h"
 // CCP MOD END
 
 #if PLATFORM_XBOXONE
@@ -129,25 +130,6 @@ bool FAkAudioDevice::m_EngineExiting = false;
 #define GAME_OBJECT_MAX_STRING_SIZE 512
 #define AK_READ_SIZE DVD_MIN_READ_SIZE
 
-// CCP MOD BEGIN
-class YouWhatBruv
-{
-public:
-	YouWhatBruv(FString name):
-		BeginTime(FPlatformTime::Seconds()),
-		Name(name)
-	{
-	}
-	~YouWhatBruv()
-	{
-		UE_LOG(LogTemp, Log, TEXT("%s took %fs"), *Name, static_cast<float>(FPlatformTime::Seconds() - BeginTime));
-	}
-
-private:
-	double BeginTime;
-	FString Name;
-};
-// CCP MOD END
 /*------------------------------------------------------------------------------------
 	Memory hooks
 ------------------------------------------------------------------------------------*/
@@ -266,10 +248,6 @@ static void AkRegisterGameObjectInternal(AkGameObjectID in_gameObjId, const FStr
  */
 bool FAkAudioDevice::Init( void )
 {
-	// CCP MOD BEGIN
-	YouWhatBruv time(TEXT("FAkAudioDevice::Init"));
-	// CCP MOD END
-
 #if UE_SERVER
 	return false;
 #endif
@@ -343,10 +321,6 @@ bool FAkAudioDevice::Update( float DeltaTime )
  */
 void FAkAudioDevice::Teardown()
 {
-	// CCP MOD BEGIN
-	YouWhatBruv time(TEXT("FAkAudioDevice::Teardown"));
-	// CCP MOD END
-
 	if (m_bSoundEngineInitialized == true)
 	{
 		// Unload all loaded banks before teardown
@@ -547,10 +521,6 @@ void FAkAudioDevice::Flush(UWorld* WorldToFlush)
  */
 AKRESULT FAkAudioDevice::ClearBanks()
 {
-	// CCP MOD BEGIN
-	YouWhatBruv time(TEXT("FAkAudioDevice::ClearBanks"));
-	// CCP MOD END
-
 	if ( m_bSoundEngineInitialized )
 	{
 		AKRESULT eResult = AK::SoundEngine::ClearBanks();
@@ -582,10 +552,6 @@ AKRESULT FAkAudioDevice::LoadBank(
 	AkBankID &          out_bankID
 	)
 {
-	// CCP MOD BEGIN
-	YouWhatBruv time(FString::Printf(TEXT("FAkAudioDevice::LoadBank (by reference) \'%s\'"), *(in_Bank->GetName())));
-	// CCP MOD END
-
 	AKRESULT eResult = LoadBank(in_Bank->GetName(), in_memPoolId, out_bankID);
 	if( eResult == AK_Success && AkBankManager != NULL)
 	{
@@ -609,10 +575,6 @@ AKRESULT FAkAudioDevice::LoadBank(
 	AkBankID &          out_bankID
 	)
 {
-	// CCP MOD BEGIN
-	YouWhatBruv time(FString::Printf(TEXT("FAkAudioDevice::LoadBank (by name) \'%s\'"), *in_BankName));
-	// CCP MOD END
-
 	AKRESULT eResult = AK_Fail;
 	if( EnsureInitialized() ) // ensure audiolib is initialized
 	{
@@ -673,10 +635,6 @@ AKRESULT FAkAudioDevice::LoadBank(
 	AkBankID &          out_bankID
     )
 {
-	// CCP MOD BEGIN
-	YouWhatBruv time(FString::Printf(TEXT("FAkAudioDevice::LoadBank (async by reference) \'%s\'"), *(in_Bank->GetName())));
-	// CCP MOD END
-
 	if( EnsureInitialized() ) // ensure audiolib is initialized
 	{
 		FString name = in_Bank->GetName();
@@ -712,10 +670,6 @@ AKRESULT FAkAudioDevice::UnloadBank(
     AkMemPoolId *       out_pMemPoolId		    ///< Returned memory pool ID used with LoadBank() (can pass NULL)
     )
 {
-	// CCP MOD BEGIN
-	YouWhatBruv time(FString::Printf(TEXT("FAkAudioDevice::UnloadBank (by reference) \'%s\'"), *(in_Bank->GetName())));
-	// CCP MOD END
-
 	AKRESULT eResult = UnloadBank(in_Bank->GetName(), out_pMemPoolId);
 	if( eResult == AK_Success && AkBankManager != NULL)
 	{
@@ -737,10 +691,6 @@ AKRESULT FAkAudioDevice::UnloadBank(
     AkMemPoolId *       out_pMemPoolId		    ///< Returned memory pool ID used with LoadBank() (can pass NULL)
     )
 {
-	// CCP MOD BEGIN
-	YouWhatBruv time(FString::Printf(TEXT("FAkAudioDevice::UnloadBank (by name) \'%s\'"), *in_BankName));
-	// CCP MOD END
-
 	AKRESULT eResult = AK_Fail;
 	if ( m_bSoundEngineInitialized )
 	{
@@ -798,10 +748,6 @@ AKRESULT FAkAudioDevice::UnloadBank(
 	void *              in_pCookie
     )
 {
-	// CCP MOD BEGIN
-	YouWhatBruv time(FString::Printf(TEXT("FAkAudioDevice::UnloadBank (async by reference) \'%s\'"), *(in_Bank->GetName())));
-	// CCP MOD END
-
 	if ( m_bSoundEngineInitialized )
 	{
 		FString name = in_Bank->GetName();
@@ -830,10 +776,6 @@ AKRESULT FAkAudioDevice::UnloadBank(
  */
 AKRESULT FAkAudioDevice::LoadInitBank(void)
 {
-	// CCP MOD BEGIN
-	YouWhatBruv time(TEXT("FAkAudioDevice::LoadInitBank"));
-	// CCP MOD END
-
 	AkBankID BankID;
 	auto szString = TCHAR_TO_AK(INITBANKNAME);
 	return AK::SoundEngine::LoadBank( szString, AK_DEFAULT_POOL_ID, BankID );
@@ -856,10 +798,6 @@ bool FAkAudioDevice::UnloadAllFilePackages()
  */
 AKRESULT FAkAudioDevice::UnloadInitBank(void)
 {
-	// CCP MOD BEGIN
-	YouWhatBruv time(TEXT("FAkAudioDevice::UnloadInitBank"));
-	// CCP MOD END
-
 	auto szString = TCHAR_TO_AK(INITBANKNAME);
 	return AK::SoundEngine::UnloadBank( szString, NULL );
 }
@@ -869,10 +807,6 @@ AKRESULT FAkAudioDevice::UnloadInitBank(void)
  */
 void FAkAudioDevice::LoadAllReferencedBanks()
 {
-	// CCP MOD BEGIN
-	YouWhatBruv time(TEXT("FAkAudioDevice::LoadAllReferencedBanks"));
-	// CCP MOD END
-
 	LoadAllFilePackages();
 	LoadInitBank();
 
