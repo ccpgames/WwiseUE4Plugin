@@ -10,6 +10,13 @@
 #include "AkAudioClasses.h"
 #include "PropertyCustomizationHelpers.h"
 #include "SMatineeAkEventKeyFrameAdder.h"
+#include "EditorModeInterpolation.h"
+#include "EditorModeManager.h"
+#include "EditorModes.h"
+#include "Engine/Selection.h"
+#include "Editor.h"
+#include "Framework/Application/SlateApplication.h"
+#include "Framework/Application/MenuStack.h"
 #define LOCTEXT_NAMESPACE "Audiokinetic"
 
 static TWeakPtr< class IMenu > EntryMenu;

@@ -22,6 +22,10 @@ class AKAUDIO_API UAkSettings : public UObject
     // Wwise Installation Path (Mac Authoring tool)
     UPROPERTY(Config, EditAnywhere, Category="Installation", meta=(FilePathFilter="app", AbsolutePath))
     FFilePath WwiseMacInstallationPath;
+
+	UPROPERTY(Config)
+	bool SuppressWwiseProjectPathWarnings;
+
     
 protected:
 #if WITH_EDITOR

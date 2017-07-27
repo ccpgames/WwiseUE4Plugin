@@ -10,6 +10,15 @@
 #include "MovieSceneAkAudioEventSection.h"
 #include "MovieSceneAkAudioEventTrack.h"
 
+
+#if AK_SUPPORTS_LEVEL_SEQUENCER_TEMPLATES
+#include "MovieSceneAkAudioEventTemplate.h"
+
+FMovieSceneEvalTemplatePtr UMovieSceneAkAudioEventTrack::CreateTemplateForSection(const UMovieSceneSection& InSection) const
+{
+	return InSection.GenerateTemplate();
+}
+#else
 namespace AkAudioEventTrackHelper
 {
 	void PostEventCallback(AkCallbackType in_eType, AkCallbackInfo* in_pCallbackInfo)
@@ -36,7 +45,6 @@ namespace AkAudioEventTrackHelper
 		}
 	}
 }
-
 
 class UMovieSceneAkAudioEventTrackInstance : public UMovieSceneAkTrackInstance<UMovieSceneAkAudioEventTrack>
 {
@@ -66,37 +74,9 @@ TSharedPtr<IMovieSceneTrackInstance> UMovieSceneAkAudioEventTrack::CreateInstanc
 	return MakeShareable(new UMovieSceneAkAudioEventTrackInstance(*this));
 }
 
-UMovieSceneSection* UMovieSceneAkAudioEventTrack::CreateNewSection()
-{
-	return NewObject<UMovieSceneSection>(this, UMovieSceneAkAudioEventSection::StaticClass(), NAME_None, RF_Transactional);
-}
-
-bool UMovieSceneAkAudioEventTrack::AddNewEvent(float Time, UAkAudioEvent* Event, const FString& EventName)
-{
-	if (Event == nullptr && EventName.IsEmpty())
-		return false;
-
-	auto NewSection = CastChecked<UMovieSceneAkAudioEventSection>(CreateNewSection());
-	ensure(NewSection);
-
-	NewSection->SetEvent(Event, EventName);
-
-	const auto Duration = NewSection->GetAudioDuration();
-	NewSection->InitialPlacement(GetAllSections(), Time, Time + Duration.GetUpperBoundValue(), SupportsMultipleRows());
-	AddSection(*NewSection);
-
-	return true;
-}
-
 void UMovieSceneAkAudioEventTrack::Update(EMovieSceneUpdateData& UpdateData, const TArray<TWeakObjectPtr<UObject>>& RuntimeObjects, IMovieScenePlayer& Player, FMovieSceneSequenceInstance& SequenceInstance)
 {
 	if (Sections.Num() == 0)
-	{
-		return;
-	}
-
-	const bool Backwards = UpdateData.Position < UpdateData.LastPosition;
-	if (Backwards ? !bFireEventsWhenBackwards : !bFireEventsWhenForwards)
 	{
 		return;
 	}
@@ -216,6 +196,29 @@ void UMovieSceneAkAudioEventTrack::ClearInstance()
 	AkComponents.Empty();
 #endif // AKAUDIOEVENTTRACK_CACHE_AKCOMPONENTS
 }
+#endif // AK_SUPPORTS_LEVEL_SEQUENCER_TEMPLATES
+
+UMovieSceneSection* UMovieSceneAkAudioEventTrack::CreateNewSection()
+{
+	return NewObject<UMovieSceneSection>(this, UMovieSceneAkAudioEventSection::StaticClass(), NAME_None, RF_Transactional);
+}
+
+bool UMovieSceneAkAudioEventTrack::AddNewEvent(float Time, UAkAudioEvent* Event, const FString& EventName)
+{
+	if (Event == nullptr && EventName.IsEmpty())
+		return false;
+
+	auto NewSection = CastChecked<UMovieSceneAkAudioEventSection>(CreateNewSection());
+	ensure(NewSection);
+
+	NewSection->SetEvent(Event, EventName);
+
+	const auto Duration = NewSection->GetAudioDuration();
+	NewSection->InitialPlacement(GetAllSections(), Time, Time + Duration.GetUpperBoundValue(), SupportsMultipleRows());
+	AddSection(*NewSection);
+
+	return true;
+}
 
 #if WITH_EDITORONLY_DATA
 FText UMovieSceneAkAudioEventTrack::GetDisplayName() const
@@ -229,5 +232,4 @@ FName UMovieSceneAkAudioEventTrack::GetTrackName() const
 	static FName TrackName("AkAudioEvents");
 	return TrackName;
 }
-
 #endif // AK_SUPPORTS_LEVEL_SEQUENCER

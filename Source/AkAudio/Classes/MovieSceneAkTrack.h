@@ -56,6 +56,7 @@ protected:
 	uint32 bIsAMasterTrack : 1;
 };
 
+#if !AK_SUPPORTS_LEVEL_SEQUENCER_TEMPLATES
 /**
 * Instance of a UMovieSceneAkTrack
 */
@@ -82,3 +83,4 @@ public:
 protected:
 	TrackType* AkTrack;
 };
+#endif // AK_SUPPORTS_LEVEL_SEQUENCER_TEMPLATES

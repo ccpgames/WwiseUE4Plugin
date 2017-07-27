@@ -6,9 +6,13 @@ using System.Collections.Generic;
 
 public class AkAudio : ModuleRules
 {
+#if WITH_FORWARDED_MODULE_RULES_CTOR
+    private void AddWwiseLib(ReadOnlyTargetRules Target, string in_libName)
+#else
     private void AddWwiseLib(TargetInfo Target, string in_libName)
+#endif
     {
-        if (Target.Platform == UnrealTargetPlatform.PS4 || Target.Platform == UnrealTargetPlatform.Android || Target.Platform == UnrealTargetPlatform.Linux || Target.Platform == UnrealTargetPlatform.IOS)
+        if (Target.Platform == UnrealTargetPlatform.PS4 || Target.Platform == UnrealTargetPlatform.Android || Target.Platform == UnrealTargetPlatform.Linux || Target.Platform == UnrealTargetPlatform.IOS || Target.Platform == SwitchTargetPlatform)
         {
             PublicAdditionalLibraries.Add( in_libName );
         }
@@ -24,10 +28,35 @@ public class AkAudio : ModuleRules
 
     string akLibPath = string.Empty;
 
+	UnrealTargetPlatform	SwitchTargetPlatform;
+    WindowsCompiler         VS2013Compiler;
+#if WITH_FORWARDED_MODULE_RULES_CTOR
+    public AkAudio(ReadOnlyTargetRules Target) : base(Target)
+#else
     public AkAudio(TargetInfo Target)
+#endif
+
     {
         PCHUsage = PCHUsageMode.UseSharedPCHs;
 		PrivateIncludePathModuleNames.Add("Settings");
+		
+		try
+		{
+			SwitchTargetPlatform = (UnrealTargetPlatform)Enum.Parse(typeof(UnrealTargetPlatform), "Switch");
+		}
+		catch(Exception)
+		{
+			SwitchTargetPlatform = UnrealTargetPlatform.Unknown;
+		}
+
+        try
+        {
+            VS2013Compiler = (WindowsCompiler)Enum.Parse(typeof(WindowsCompiler), "VisualStudio2013");
+        }
+        catch(Exception)
+        {
+            VS2013Compiler = (WindowsCompiler)(-1);
+        }
 
         PrivateIncludePaths.AddRange(
             new string[] {
@@ -71,7 +100,16 @@ public class AkAudio : ModuleRules
         );
 
         // These definitions can be set as platform-specific.
-        Definitions.Add("AK_UNREAL_MAX_CONCURRENT_IO=8");
+        if (UEBuildConfiguration.bBuildEditor == true)
+        {
+            // Boost the number of IO for the editor, since it uses the old IO system
+            Definitions.Add("AK_UNREAL_MAX_CONCURRENT_IO=256");
+        }
+        else
+        {
+            Definitions.Add("AK_UNREAL_MAX_CONCURRENT_IO=32");
+        }
+
         Definitions.Add("AK_UNREAL_IO_GRANULARITY=32768");
         Definitions.Add("_XBOX_VER=0");
 
@@ -80,16 +118,13 @@ public class AkAudio : ModuleRules
         if (Target.Platform == UnrealTargetPlatform.Win32 || Target.Platform == UnrealTargetPlatform.Win64)
         {
             string VSVersion;
-            switch (WindowsPlatform.Compiler)
+            if (WindowsPlatform.Compiler == VS2013Compiler)
             {
-                case WindowsCompiler.VisualStudio2013:
-                    VSVersion = "vc120";
-                    break;
-
-                case WindowsCompiler.VisualStudio2015:
-                default:
-                    VSVersion = "vc140";
-                    break;
+                VSVersion = "vc120";
+            }
+            else /*if(WindowsPlatform.Compiler == WindowsCompiler.VisualStudio2015)*/
+            { 
+                VSVersion = "vc140";
             }
 
             akPlatformLibDir = (Target.Platform == UnrealTargetPlatform.Win32) ? "Win32_" : "x64_";
@@ -150,6 +185,12 @@ public class AkAudio : ModuleRules
             PublicIncludePaths.Add(Path.Combine(samplesSoundEngineBasePath, "Android"));
             PublicIncludePaths.Add(Path.Combine(samplesSoundEngineBasePath, "POSIX"));
             Definitions.Add("__ANDROID__");
+        }
+        else if (Target.Platform == SwitchTargetPlatform)
+        {
+            akPlatformLibDir = "NX64";
+            PublicIncludePaths.Add(Path.Combine(samplesSoundEngineBasePath, "NX"));
+            Definitions.Add("NN_NINTENDO_SDK");
         }
 
         if (Target.Platform == UnrealTargetPlatform.Win32 ||
@@ -280,7 +321,7 @@ public class AkAudio : ModuleRules
 		}
 		// CCP MOD END
 
-		if ((Target.Platform != UnrealTargetPlatform.Android) && (Target.Platform != UnrealTargetPlatform.Linux) && (Target.Platform != UnrealTargetPlatform.Mac) && (Target.Platform != UnrealTargetPlatform.IOS))
+        if ((Target.Platform != UnrealTargetPlatform.Android) && (Target.Platform != UnrealTargetPlatform.Linux) && (Target.Platform != UnrealTargetPlatform.Mac) && (Target.Platform != UnrealTargetPlatform.IOS) && (Target.Platform != SwitchTargetPlatform))
         {
             AddWwiseLib(Target, "AkMotionGenerator");
             AddWwiseLib(Target, "AkRumble");
@@ -304,6 +345,12 @@ public class AkAudio : ModuleRules
             PublicAdditionalFrameworks.Add(new UEBuildFramework("AudioToolbox"));
             PublicAdditionalFrameworks.Add(new UEBuildFramework("CoreAudio"));
             AddWwiseLib(Target, "AkAACDecoder");
+        }
+
+        // Need to use Enum.Parse because Switch is not present in UE < 4.15
+        if (Target.Platform == SwitchTargetPlatform)
+        {
+            AddWwiseLib(Target, "AkOpusDecoder");
         }
 
         if (Definitions.Contains("AK_OPTIMIZED") == false && Target.Platform != UnrealTargetPlatform.Linux)

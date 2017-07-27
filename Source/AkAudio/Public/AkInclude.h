@@ -11,11 +11,14 @@
 #pragma once
 
 #include "AkUEFeatures.h"
+#if !UE_4_15_OR_LATER
+#include "Engine.h"
+#endif
 
 // Currently, Wwise SDK builds with the default 8 byte alignment, whereas Unreal builds with 4 byte alignment under VC.
 // This causes data corruption if the headers are not included with forced alignment directives.
 // http://msdn.microsoft.com/en-us/library/xh3e3fd0%28VS.80%29.aspx
-#if PLATFORM_WINDOWS
+#if defined(PLATFORM_WINDOWS) && PLATFORM_WINDOWS
 #pragma pack(push, 8)
 #include "AllowWindowsPlatformTypes.h"
 
@@ -23,9 +26,11 @@
 #include "AllowWindowsPlatformAtomics.h"
 #endif
 
-#elif PLATFORM_XBOXONE
+#elif defined(PLATFORM_XBOXONE) && PLATFORM_XBOXONE
+#if ENGINE_MAJOR_VERSION == 4 && ENGINE_MINOR_VERSION <= 14
 #pragma pack(push, 8)
 #include "XboxOneAllowPlatformTypes.h"
+#endif
 #endif // PLATFORM_WINDOWS || PLATFORM_XBOXONE
 
 #include <AK/AkWwiseSDKVersion.h>
@@ -47,10 +52,7 @@
 	#include <AK/SoundEngine/Common/AkQueryParameters.h>
 #endif
 
-// Stream IO hooks
-#include "AkUnrealIOHookDeferred.h"
-
-#if PLATFORM_WINDOWS
+#if defined(PLATFORM_WINDOWS) && PLATFORM_WINDOWS
 #include "HideWindowsPlatformTypes.h"
 
 #if ENGINE_MAJOR_VERSION == 4 && ENGINE_MINOR_VERSION >= 15
@@ -58,7 +60,9 @@
 #endif
 
 #pragma pack(pop)
-#elif  PLATFORM_XBOXONE
+#elif defined(PLATFORM_XBOXONE) && PLATFORM_XBOXONE
+#if ENGINE_MAJOR_VERSION == 4 && ENGINE_MINOR_VERSION <= 14
 #include "XboxOneHidePlatformTypes.h"
 #pragma pack(pop)
+#endif
 #endif // PLATFORM_WINDOWS || PLATFORM_XBOXONE

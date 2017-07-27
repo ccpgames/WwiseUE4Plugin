@@ -9,6 +9,7 @@
 #include "ContentBrowserDelegates.h"
 // CCP MOD END - Fix compiler error
 #include "DecoratedDragDropOp.h"
+#include "ContentBrowserDelegates.h"
 
 class FWwiseEventDragDropOp : public FDecoratedDragDropOp
 {

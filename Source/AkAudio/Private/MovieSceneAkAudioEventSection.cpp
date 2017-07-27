@@ -12,6 +12,10 @@
 
 #include "MovieSceneAkAudioEventSection.h"
 
+#if AK_SUPPORTS_LEVEL_SEQUENCER_TEMPLATES
+#include "MovieSceneAkAudioEventTemplate.h"
+#endif // AK_SUPPORTS_LEVEL_SEQUENCER_TEMPLATES
+
 
 namespace AkAudioEventSectionHelper
 {
@@ -44,7 +48,12 @@ FFloatRange UMovieSceneAkAudioEventSection::GetAudioDuration()
 	return AkAudioEventSectionHelper::GetDuration(Event);
 }
 
-
+#if AK_SUPPORTS_LEVEL_SEQUENCER_TEMPLATES
+FMovieSceneEvalTemplatePtr UMovieSceneAkAudioEventSection::GenerateTemplate() const
+{
+	return FMovieSceneAkAudioEventTemplate(this);
+}
+#else
 void UMovieSceneAkAudioEventSection::StopAllPlayingEvents(FAkAudioDevice* AudioDevice)
 {
 	if (AudioDevice)
@@ -72,5 +81,6 @@ void UMovieSceneAkAudioEventSection::StopAllPlayingEvents(FAkAudioDevice* AudioD
 		}
 	}
 }
+#endif // AK_SUPPORTS_LEVEL_SEQUENCER_TEMPLATES
 
 #endif // AK_SUPPORTS_LEVEL_SEQUENCER

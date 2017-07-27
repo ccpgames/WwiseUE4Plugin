@@ -2,6 +2,7 @@
 #pragma once
 
 #include "ModuleManager.h"
+#include "Containers/Ticker.h"
 
 /**
  * The public interface to this module.  In most cases, this interface is only public to sibling modules 

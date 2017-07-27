@@ -21,7 +21,7 @@ under the Apache License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES
 OR CONDITIONS OF ANY KIND, either express or implied. See the Apache License for
 the specific language governing permissions and limitations under the License.
 
-  Version: v2016.2.2  Build: 6022
+  Version: v2016.2.4  Build: 6098
   Copyright (c) 2006-2017 Audiokinetic Inc.
 *******************************************************************************/
 
@@ -103,6 +103,9 @@ the specific language governing permissions and limitations under the License.
 #endif
 #ifdef AK_VITA
 #include <AK/Plugin/AkATRAC9Factory.h>		// Note: Useable only on Vita. Ok to include it on other platforms as long as it is not referenced.
+#endif
+#ifdef AK_NX
+#include <AK/Plugin/AkOpusFactory.h>		// Note: Useable only on NX. Ok to include it on other platforms as long as it is not referenced.
 #endif
 
 // Mixer plugins

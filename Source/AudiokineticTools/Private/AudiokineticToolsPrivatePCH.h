@@ -5,6 +5,8 @@
 =============================================================================*/
 #pragma once
 
-#include "UnrealEd.h"
 #include "IAudiokineticTools.h"
 #include "AkUEFeatures.h"
+#if !UE_4_15_OR_LATER
+#include "UnrealEd.h"
+#endif

@@ -8,38 +8,17 @@
 #include "AkInclude.h"
 #include "AkAudioClasses.h"
 #include "Net/UnrealNetwork.h"
-
+#include "Engine/Texture2D.h"
+#include "Components/BillboardComponent.h"
+#include "GameFramework/PlayerController.h"
+#include "Engine/World.h"
+#include "DrawDebugHelpers.h"
+#include "AkComponentCallbackManager.h"
 
 /*------------------------------------------------------------------------------------
 	UAkComponent
 ------------------------------------------------------------------------------------*/
 
-void UAkComponent::AkComponentCallback( AkCallbackType in_eType, AkCallbackInfo* in_pCallbackInfo )
-{
-	AkComponentCallbackPackage* pPackage = ((AkComponentCallbackPackage *)in_pCallbackInfo->pCookie);
-	if (pPackage)
-	{
-		if (pPackage->pfnUserCallback && (pPackage->uUserFlags & in_eType) != 0)
-		{
-			in_pCallbackInfo->pCookie = pPackage->pUserCookie;
-			pPackage->pfnUserCallback(in_eType, in_pCallbackInfo);
-			in_pCallbackInfo->pCookie = pPackage;
-		}
-
-		if (in_eType == AK_EndOfEvent)
-		{
-			if (pPackage->pNumActiveEvents)
-			{
-				pPackage->pNumActiveEvents->Decrement();
-			}
-			{
-				FScopeLock Lock(pPackage->pPendingCallbackPackagesCriticalSection);
-				pPackage->pPendingCallbackPackagesOnAkComponent->Remove(pPackage);
-			}
-			delete pPackage;
-		}
-	}
-}
 
 UAkComponent::UAkComponent(const class FObjectInitializer& ObjectInitializer) :
 Super(ObjectInitializer)
@@ -54,7 +33,7 @@ Super(ObjectInitializer)
 	PrimaryComponentTick.TickGroup = TG_DuringPhysics;
 	PrimaryComponentTick.bAllowTickOnDedicatedServer = false;
 	bTickInEditor = true;
-	
+
 	bAutoActivate = true;
 	bNeverNeedsRenderUpdate = true;
 	bWantsOnUpdateTransform = true;
@@ -66,7 +45,6 @@ Super(ObjectInitializer)
 	AttenuationScalingFactor = 1.0f;
 	bAutoDestroy = false;
 	bStarted = false;
-	NumActiveEvents.Reset();
 }
 
 int32 UAkComponent::PostAssociatedAkEvent()
@@ -76,14 +54,7 @@ int32 UAkComponent::PostAssociatedAkEvent()
 
 int32 UAkComponent::PostAkEvent( class UAkAudioEvent * AkEvent, const FString& in_EventName )
 {
-	if ( AkEvent )
-	{
-		return PostAkEventByName(AkEvent->GetName());
-	}
-	else
-	{
-		return PostAkEventByName(in_EventName);
-	}
+	return PostAkEventByName(GET_AK_EVENT_NAME(AkEvent, in_EventName));
 }
 
 int32 UAkComponent::PostAkEventByName(const FString& in_EventName)
@@ -91,52 +62,40 @@ int32 UAkComponent::PostAkEventByName(const FString& in_EventName)
 	return PostAkEventByNameWithCallback(in_EventName);
 }
 
-AkPlayingID UAkComponent::PostAkEventByNameWithCallback(const FString& in_EventName, AkUInt32 in_uFlags /*= 0*/, AkCallbackFunc in_pfnUserCallback /*= NULL*/, void * in_pUserCookie /*= NULL*/)
+bool UAkComponent::VerifyEventName(const FString& in_EventName) const
 {
-	UWorld* CurrentWorld = GetWorld();
-	AkPlayingID playingID = AK_INVALID_PLAYING_ID;
-	if (in_EventName.IsEmpty())
+	const bool IsEventNameEmpty = in_EventName.IsEmpty();
+	if (IsEventNameEmpty)
 	{
-		FString OwnerName = GetOwner() ? GetOwner()->GetName() : FString(TEXT(""));
-		UE_LOG(LogAkAudio, Warning, TEXT("[%s.%s] AkComponent: Attempted to post an empty AkEvent name."), *OwnerName, *GetFName().ToString());
-		return playingID;
+		FString OwnerName = FString(TEXT(""));
+		FString ObjectName = GetFName().ToString();
+
+		const auto owner = GetOwner();
+		if (owner)
+			OwnerName = owner->GetName();
+
+		UE_LOG(LogAkAudio, Warning, TEXT("[%s.%s] AkComponent: Attempted to post an empty AkEvent name."), *OwnerName, *ObjectName);
 	}
 
-	if (CurrentWorld->AllowAudioPlayback() && FAkAudioDevice::Get())
-	{
-#ifndef AK_SUPPORT_WCHAR
-		ANSICHAR* szEventName = TCHAR_TO_ANSI(*in_EventName);
-#else
-		const WIDECHAR * szEventName = *in_EventName;
-#endif
-		if (OcclusionRefreshInterval > 0.0f)
-		{
-			CalculateOcclusionValues(false);
-		}
+	return !IsEventNameEmpty;
+}
 
-		AkComponentCallbackPackage* cbPackage = new AkComponentCallbackPackage(in_pfnUserCallback, in_pUserCookie, in_uFlags, &NumActiveEvents, &PendingCallbackPackages, &PendingCallbackPackagesCriticalSection);
-		if (cbPackage)
-		{
-			playingID = AK::SoundEngine::PostEvent(szEventName, (AkGameObjectID) this, in_uFlags | AK_EndOfEvent, &UAkComponent::AkComponentCallback, cbPackage);
-			if (playingID != AK_INVALID_PLAYING_ID)
-			{
-				NumActiveEvents.Increment();
-				bStarted = true;
-				{
-					FScopeLock Lock(&PendingCallbackPackagesCriticalSection);
-					PendingCallbackPackages.Add(cbPackage);
-				}
-			}
-			else
-			{
-				delete cbPackage;
-			}
-		}
-		else
-		{
-			// We weren't able to allocate our own callback cookie, so just call PostEvent with the User's callback directly.
-			playingID = AK::SoundEngine::PostEvent(szEventName, (AkGameObjectID) this, in_uFlags, in_pfnUserCallback, in_pUserCookie);
-		}
+bool UAkComponent::AllowAudioPlayback() const
+{
+	UWorld* CurrentWorld = GetWorld();
+	return (CurrentWorld && CurrentWorld->AllowAudioPlayback() && !IsBeingDestroyed());
+}
+
+AkPlayingID UAkComponent::PostAkEventByNameWithCallback(const FString& in_EventName, AkUInt32 in_uFlags /*= 0*/, AkCallbackFunc in_pfnUserCallback /*= NULL*/, void * in_pUserCookie /*= NULL*/)
+{
+	AkPlayingID playingID = AK_INVALID_PLAYING_ID;
+
+	auto AudioDevice = FAkAudioDevice::Get();
+	if (AudioDevice)
+	{
+		playingID = AudioDevice->PostEvent(in_EventName, this, in_uFlags, in_pfnUserCallback, in_pUserCookie);
+		if (playingID != AK_INVALID_PLAYING_ID)
+			bStarted = true;
 	}
 
 	return playingID;
@@ -146,7 +105,7 @@ void UAkComponent::Stop()
 {
 	if (  FAkAudioDevice::Get() )
 	{
-		AK::SoundEngine::StopAll( (AkGameObjectID) this );
+		AK::SoundEngine::StopAll(GetAkGameObjectID());
 	}
 }
 
@@ -154,12 +113,8 @@ void UAkComponent::SetRTPCValue( FString RTPC, float Value, int32 InterpolationT
 {
 	if ( FAkAudioDevice::Get() )
 	{
-#ifndef AK_SUPPORT_WCHAR
-		ANSICHAR* szRTPC = TCHAR_TO_ANSI(*RTPC);
-#else
-		const WIDECHAR * szRTPC = *RTPC;
-#endif
-		AK::SoundEngine::SetRTPCValue( szRTPC, Value, (AkGameObjectID) this, InterpolationTimeMs );
+		auto szRTPC = TCHAR_TO_AK(*RTPC);
+		AK::SoundEngine::SetRTPCValue( szRTPC, Value, GetAkGameObjectID(), InterpolationTimeMs );
 	}
 }
 
@@ -167,12 +122,8 @@ void UAkComponent::PostTrigger( FString Trigger )
 {
 	if ( FAkAudioDevice::Get() )
 	{
-#ifndef AK_SUPPORT_WCHAR
-		ANSICHAR* szTrigger = TCHAR_TO_ANSI(*Trigger);
-#else
-		const WIDECHAR * szTrigger = *Trigger;
-#endif
-		AK::SoundEngine::PostTrigger( szTrigger, (AkGameObjectID) this );
+		auto szTrigger = TCHAR_TO_AK(*Trigger);
+		AK::SoundEngine::PostTrigger( szTrigger, GetAkGameObjectID());
 	}
 }
 
@@ -180,14 +131,10 @@ void UAkComponent::SetSwitch( FString SwitchGroup, FString SwitchState )
 {
 	if ( FAkAudioDevice::Get() )
 	{
-#ifndef AK_SUPPORT_WCHAR
-		ANSICHAR* szSwitchGroup = TCHAR_TO_ANSI(*SwitchGroup);
-		ANSICHAR* szSwitchState = TCHAR_TO_ANSI(*SwitchState);
-#else
-		const WIDECHAR * szSwitchGroup = *SwitchGroup;
-		const WIDECHAR * szSwitchState = *SwitchState;
-#endif
-		AK::SoundEngine::SetSwitch( szSwitchGroup, szSwitchState, (AkGameObjectID) this );
+		auto szSwitchGroup = TCHAR_TO_AK(*SwitchGroup);
+		auto szSwitchState = TCHAR_TO_AK(*SwitchState);
+
+		AK::SoundEngine::SetSwitch( szSwitchGroup, szSwitchState, GetAkGameObjectID());
 	}
 }
 
@@ -324,25 +271,14 @@ void UAkComponent::ApplyAkReverbVolumeList(float DeltaTime)
 			}
 		}
 
-		// Sort the list of active AkReverbVolumes by desecnding priority, if necessary
+		// Sort the list of active AkReverbVolumes by descending priority, if necessary
 		if(CurrentAkReverbVolumes.Num() > 1 )
 		{
-			struct FCompareAkReverbVolumeByPriorityAndFade
+			CurrentAkReverbVolumes.Sort([](const AkReverbVolumeFadeControl& A, const AkReverbVolumeFadeControl& B)
 			{
-				FORCEINLINE bool operator()( const AkReverbVolumeFadeControl& A, const AkReverbVolumeFadeControl& B ) const 
-				{ 
-					// Ensure the fading out buffers are sent to the end of the array
-					if( A.bIsFadingOut == B.bIsFadingOut )
-					{
-						return A.Priority > B.Priority; 
-					}
-					else
-					{
-						return A.bIsFadingOut < B.bIsFadingOut;
-					}
-				}
-			};
-			CurrentAkReverbVolumes.Sort(FCompareAkReverbVolumeByPriorityAndFade());
+				// Ensure the fading out buffers are sent to the end of the array
+				return (A.bIsFadingOut == B.bIsFadingOut) ? (A.Priority > B.Priority) : (A.bIsFadingOut < B.bIsFadingOut);
+			});
 		}
 	}
 
@@ -361,7 +297,7 @@ void UAkComponent::ApplyAkReverbVolumeList(float DeltaTime)
 			AkReverbVolumes.Add(TmpSendValue);
 		}
 
-		AkAudioDevice->SetAuxSends((AkGameObjectID) this, AkReverbVolumes);
+		AkAudioDevice->SetAuxSends(GetAkGameObjectID(), AkReverbVolumes);
 	}
 
 }
@@ -392,7 +328,7 @@ void UAkComponent::TickComponent(float DeltaTime, enum ELevelTick TickType, FAct
 			ClearOcclusionValues();
 		}
 
-		if( NumActiveEvents.GetValue() == 0 && bAutoDestroy && bStarted)
+		if( !HasActiveEvents() && bAutoDestroy && bStarted)
 		{
 			DestroyComponent();
 		}
@@ -444,90 +380,47 @@ void UAkComponent::OnUpdateTransform(EUpdateTransformFlags UpdateTransformFlags,
 	UpdateGameObjectPosition();
 }
 
+bool UAkComponent::HasActiveEvents() const
+{
+	auto CallbackManager = FAkComponentCallbackManager::GetInstance();
+	return (CallbackManager != nullptr) && CallbackManager->HasActiveEvents(GetAkGameObjectID());
+}
+
+AkGameObjectID UAkComponent::GetAkGameObjectID() const
+{
+	return (AkGameObjectID)this;
+}
+
 void UAkComponent::RegisterGameObject()
 {
 	FAkAudioDevice* AkAudioDevice = FAkAudioDevice::Get();
 	if ( AkAudioDevice )
 	{
-		AkAudioDevice->RegisterComponent( this );
+		AkAudioDevice->RegisterComponent(this);
 	}
 }
 
 void UAkComponent::UnregisterGameObject()
 {
 	FAkAudioDevice* AkAudioDevice = FAkAudioDevice::Get();
-	if ( AkAudioDevice )
-	{
-		AkAudioDevice->UnregisterComponent( this );
-		
-		{
-			FScopeLock Lock(&PendingCallbackPackagesCriticalSection);
-			for (auto It =PendingCallbackPackages.CreateConstIterator(); It; ++It)
-			{
-				AkAudioDevice->CancelEventCallbackCookie(*It);
-				delete *It;
-			}
-
-			PendingCallbackPackages.Empty();
-		}
-
-	}
+	if (AkAudioDevice)
+		AkAudioDevice->UnregisterComponent(this);
 }
 
 int32 UAkComponent::FindNewAkReverbVolumeInCurrentlist(uint32 AuxBusId)
 {
-	struct FAkNewReverbVolumeMatcher
+	return CurrentAkReverbVolumes.IndexOfByPredicate([=](const AkReverbVolumeFadeControl& Candidate)
 	{
-	private:
-		/** Target for comparison in the TArray */
-		const uint32& AuxBusId;
-
-	public:
-		FAkNewReverbVolumeMatcher(const uint32& AkAuxBusId) :
-			AuxBusId(AkAuxBusId)
-		{
-		}
-
-		/**
-		 * Match a given Aux Bus Id against the one stored in this struct
-		 *
-		 * @return true if they are an exact match, false otherwise
-		 */
-		bool operator()(const AkReverbVolumeFadeControl& Candidate) const
- 		{
-			return AuxBusId == Candidate.AuxBusId;
- 		}
-	};
-	FAkNewReverbVolumeMatcher matcher(AuxBusId);
-	return CurrentAkReverbVolumes.IndexOfByPredicate(matcher);
+		return AuxBusId == Candidate.AuxBusId;
+	});
 }
 
 static int32 FindCurrentAkReverbVolumeInNewlist(TArray<AAkReverbVolume*> FoundVolumes, AkAuxBusID AuxBusId)
 {
-	struct FAkCurrentReverbVolumeMatcher
+	return FoundVolumes.IndexOfByPredicate([=](const AAkReverbVolume* const Candidate)
 	{
-	private:
-		/** Target for comparison in the TArray */
-		const uint32& AuxBusId;
-
-	public:
-		FAkCurrentReverbVolumeMatcher(const uint32& AkAuxBusId) :
-			AuxBusId(AkAuxBusId)
-		{
-		}
-
-		/**
-		 * Match a given Aux Bus Id against the one stored in this struct
-		 *
-		 * @return true if they are an exact match, false otherwise
-		 */
-		bool operator()(const AAkReverbVolume* const Candidate) const
- 		{
-			return AuxBusId == Candidate->GetAuxBusId();
- 		}
-	};
-
-	return FoundVolumes.IndexOfByPredicate( FAkCurrentReverbVolumeMatcher(AuxBusId) );
+		return AuxBusId == Candidate->GetAuxBusId();
+	});
 }
 
 void FindAkReverbVolumesAtLocation(FVector Loc, TArray<AAkReverbVolume*>& FoundVolumes, const UWorld* in_World);
@@ -535,7 +428,6 @@ void UAkComponent::UpdateAkReverbVolumeList( FVector Loc )
 {
 	TArray<AAkReverbVolume*> FoundVolumes;
 	FindAkReverbVolumesAtLocation(Loc, FoundVolumes, GetWorld());
-
 
 	// Add the new volumes to the current list
 	for( int32 Idx = 0; Idx < FoundVolumes.Num(); Idx++ )
@@ -575,9 +467,9 @@ void UAkComponent::UpdateGameObjectPosition()
 	if ( bIsActive && AkAudioDevice )
 	{
 		AkSoundPosition soundpos;
-		FAkAudioDevice::FVectorsToAKTransform(ComponentToWorld.GetTranslation(), ComponentToWorld.GetUnitAxis(EAxis::X), ComponentToWorld.GetUnitAxis(EAxis::Z), soundpos);
+			FAkAudioDevice::FVectorsToAKTransform(ComponentToWorld.GetTranslation(), ComponentToWorld.GetUnitAxis(EAxis::X), ComponentToWorld.GetUnitAxis(EAxis::Z), soundpos);
 
-		AK::SoundEngine::SetPosition( (AkGameObjectID) this, soundpos );
+		AK::SoundEngine::SetPosition(GetAkGameObjectID(), soundpos );
 
 		// Find and apply all AkReverbVolumes at this location
 		if( bUseReverbVolumes && AkAudioDevice->GetMaxAuxBus() > 0 )

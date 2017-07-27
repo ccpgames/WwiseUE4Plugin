@@ -21,7 +21,7 @@ under the Apache License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES
 OR CONDITIONS OF ANY KIND, either express or implied. See the Apache License for
 the specific language governing permissions and limitations under the License.
 
-  Version: v2016.2.2  Build: 6022
+  Version: v2016.2.4  Build: 6098
   Copyright (c) 2006-2017 Audiokinetic Inc.
 *******************************************************************************/
 
@@ -66,7 +66,7 @@ namespace AK
 
 			ErrorCode_VorbisDecodeError,
 			ErrorCode_AACDecodeError,
-			
+
 			ErrorCode_xWMACreateDecoderFailed,
 
 			ErrorCode_ATRAC9CreateDecoderFailed,
@@ -145,6 +145,10 @@ namespace AK
 			ErrorCode_ModulatorScopeError_Obj,
 
 			ErrorCode_SeekAfterEndOfPlaylist,
+
+			ErrorCode_OpusRequireSeekTable,
+			ErrorCode_OpusDecodeError,
+			ErrorCode_OpusCreateDecoderFailed,
 
 			Num_ErrorCodes // THIS STAYS AT END OF ENUM
 		};
@@ -333,6 +337,10 @@ namespace AK
 			AKTEXT("Triggered a game-object-scoped modulator in a global context (such as a bus or bus effect).  Modulator will have global scope."), // ErrorCode_ModulatorScopeError_Obj
 
 			AKTEXT("Ignoring seek after end of playlist"), // ErrorCode_SeekAfterEndOfPlaylist
+			
+			AKTEXT("Seek table required to seek in Opus sources. Please update conversion settings."), // ErrorCode_OpusRequireSeekTable,
+			AKTEXT("Opus decoder failure"), // ErrorCode_OpusDecodeError,
+			AKTEXT("Failed creating Opus decoder"), // ErrorCode_OpusCreateDecoderFailed
 		};
 	}
 }

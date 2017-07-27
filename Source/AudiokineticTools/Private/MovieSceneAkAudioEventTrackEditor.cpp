@@ -25,6 +25,11 @@
 #include "SequencerSectionPainter.h"
 #include "IContentBrowserSingleton.h"
 #endif
+#include "IAssetRegistry.h"
+#include "AssetRegistryModule.h"
+
+
+#include "ContentBrowserModule.h"
 
 // CCP MOD BEGIN - Fix compile issues
 #include "AssetRegistryModule.h"

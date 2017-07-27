@@ -9,6 +9,9 @@
 	SGenerateSoundBanks
 ------------------------------------------------------------------------------------*/
 #include "AkAudioBank.h"
+#include "Widgets/SCompoundWidget.h"
+#include "Widgets/Views/SListView.h"
+#include "Widgets/Views/STableRow.h"
 
 class SGenerateSoundBanks : public SCompoundWidget
 {

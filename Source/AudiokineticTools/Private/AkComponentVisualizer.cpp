@@ -8,6 +8,8 @@
 #include "AkComponentVisualizer.h"
 #include "AkAudioDevice.h"
 #include "AkAudioClasses.h"
+#include "SceneView.h"
+#include "SceneManagement.h"
 
 void FAkComponentVisualizer::DrawVisualization( const UActorComponent* Component, const FSceneView* View, FPrimitiveDrawInterface* PDI )
 {

@@ -21,7 +21,7 @@ under the Apache License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES
 OR CONDITIONS OF ANY KIND, either express or implied. See the Apache License for
 the specific language governing permissions and limitations under the License.
 
-  Version: v2016.2.2  Build: 6022
+  Version: v2016.2.4  Build: 6098
   Copyright (c) 2006-2017 Audiokinetic Inc.
 *******************************************************************************/
 
@@ -36,7 +36,11 @@ the specific language governing permissions and limitations under the License.
 
 	#include <AK/SoundEngine/Platforms/3DS/AkTypes.h>
 
-#elif _XBOX_VER >= 200 // Check Xbox before WIN32 because WIN32 might also be defined in some cases in Xbox 360 projects
+#elif defined( NN_NINTENDO_SDK )
+
+	#include <AK/SoundEngine/Platforms/NX/AkTypes.h>
+
+#elif defined( _XBOX_VER ) && _XBOX_VER >= 200 // Check Xbox before WIN32 because WIN32 might also be defined in some cases in Xbox 360 projects
  
 	#include <AK/SoundEngine/Platforms/XBox360/AkTypes.h>
 
@@ -44,7 +48,7 @@ the specific language governing permissions and limitations under the License.
 
 	#include <AK/SoundEngine/Platforms/XboxOne/AkTypes.h>
 
-#elif defined( _WIN32 ) || defined ( _WIN64 ) || defined( WINAPI_FAMILY )
+#elif defined( _WIN32 ) || defined( _WIN64 ) || defined( WINAPI_FAMILY )
 
 	#include <AK/SoundEngine/Platforms/Windows/AkTypes.h>
 
@@ -52,7 +56,7 @@ the specific language governing permissions and limitations under the License.
 
 	#include <AK/SoundEngine/Platforms/Mac/AkTypes.h>
 
-#elif defined (__PPU__) || defined (__SPU__)
+#elif defined( __PPU__ ) || defined( __SPU__ )
 
 	#include <AK/SoundEngine/Platforms/PS3/AkTypes.h>
 

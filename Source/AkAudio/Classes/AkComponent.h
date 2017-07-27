@@ -8,6 +8,7 @@
 
 #include "Runtime/Launch/Resources/Version.h"
 #include "AkInclude.h"
+#include "Components/SceneComponent.h"
 #include "AkComponent.generated.h"
 
 // PostEvent functions need to return the PlayingID (uint32), but Blueprints only work with int32.
@@ -32,7 +33,7 @@ public:
 	 * Posts this component's AkAudioEvent to Wwise, using this component as the game object source
 	 *
 	 */
-	UFUNCTION(BlueprintCallable, Category="Audiokinetic|AkComponent")
+	UFUNCTION(BlueprintCallable, BlueprintCosmetic, Category="Audiokinetic|AkComponent")
 	int32 PostAssociatedAkEvent();
 	
 	/**
@@ -40,7 +41,7 @@ public:
 	 *
 	 * @param AkEvent		The event to post
 	 */
-	UFUNCTION(BlueprintCallable, Category="Audiokinetic|AkComponent", meta = (AdvancedDisplay = "1"))
+	UFUNCTION(BlueprintCallable, BlueprintCosmetic, Category="Audiokinetic|AkComponent", meta = (AdvancedDisplay = "1"))
 	int32 PostAkEvent( class UAkAudioEvent * AkEvent, const FString& in_EventName );
 	
 	/**
@@ -48,7 +49,7 @@ public:
 	 *
 	 * @param AkEvent		The event to post
 	 */
-	UFUNCTION(BlueprintCallable, Category="Audiokinetic|AkComponent", meta = (DeprecatedFunction, DeprecationMessage = "Please use the \"Event Name\" field of Post Ak Event"))
+	UFUNCTION(BlueprintCallable, BlueprintCosmetic, Category="Audiokinetic|AkComponent", meta = (DeprecatedFunction, DeprecationMessage = "Please use the \"Event Name\" field of Post Ak Event"))
 	int32 PostAkEventByName( const FString& in_EventName );
 	
 	AkPlayingID PostAkEventByNameWithCallback(const FString& in_EventName, AkUInt32 in_uFlags = 0, AkCallbackFunc in_pfnUserCallback = NULL, void * in_pUserCookie = NULL);
@@ -56,7 +57,7 @@ public:
 	/**
 	 * Stops playback using this component as the game object to stop
 	 */
-	UFUNCTION(BlueprintCallable, Category="Audiokinetic|AkComponent")
+	UFUNCTION(BlueprintCallable, BlueprintCosmetic, Category="Audiokinetic|AkComponent")
 	void Stop();
 	
 	/**
@@ -66,7 +67,7 @@ public:
 	 * @param Value			The value of the RTPC
 	 * @param InterpolationTimeMs - Duration during which the RTPC is interpolated towards Value (in ms)
 	 */
-	UFUNCTION(BlueprintCallable, Category="Audiokinetic|AkComponent")
+	UFUNCTION(BlueprintCallable, BlueprintCosmetic, Category="Audiokinetic|AkComponent")
 	void SetRTPCValue( FString RTPC, float Value, int32 InterpolationTimeMs );
 	
 	/**
@@ -74,7 +75,7 @@ public:
 	 *
 	 * @param Trigger		The name of the trigger
 	 */
-	UFUNCTION(BlueprintCallable, Category="Audiokinetic|AkComponent")
+	UFUNCTION(BlueprintCallable, BlueprintCosmetic, Category="Audiokinetic|AkComponent")
 	void PostTrigger( FString Trigger );
 	
 	/**
@@ -83,7 +84,7 @@ public:
 	 * @param SwitchGroup	The name of the switch group
 	 * @param SwitchState	The new state of the switch
 	 */
-	UFUNCTION(BlueprintCallable, Category="Audiokinetic|AkComponent")
+	UFUNCTION(BlueprintCallable, BlueprintCosmetic, Category="Audiokinetic|AkComponent")
 	void SetSwitch( FString SwitchGroup, FString SwitchState );
 
 	/**
@@ -91,7 +92,7 @@ public:
 	 *
 	 * @param bStopWhenOwnerDestroyed	Whether or not to stop sounds when the component's owner is destroyed
 	 */
-	UFUNCTION(BlueprintCallable, Category="Audiokinetic|AkComponent")
+	UFUNCTION(BlueprintCallable, BlueprintCosmetic, Category="Audiokinetic|AkComponent")
 	void SetStopWhenOwnerDestroyed( bool bStopWhenOwnerDestroyed );
 
 	/**
@@ -99,7 +100,7 @@ public:
 	 *
 	 * @param in_uListenerMask	Bitmask representing the active listeners (LSB = Listener 0, set to 1 means active)
 	 */
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category="Audiokinetic|AkComponent")
+	UFUNCTION(BlueprintCallable, BlueprintCosmetic, BlueprintNativeEvent, Category="Audiokinetic|AkComponent")
 	void SetActiveListeners( int32 in_uListenerMask );
 
 	// Reverb volumes functions
@@ -109,7 +110,7 @@ public:
 	 *
 	 * @param inUseReverbVolumes	Whether to use reverb volumes or not.
 	 */
-	UFUNCTION(BlueprintCallable, Category="Audiokinetic|AkComponent")
+	UFUNCTION(BlueprintCallable, BlueprintCosmetic, Category="Audiokinetic|AkComponent")
 	void UseReverbVolumes(bool inUseReverbVolumes);
 
 
@@ -119,7 +120,7 @@ public:
 	*
 	* @param BusVolume - Bus volume to set
 	*/
-	UFUNCTION(BlueprintCallable, Category = "Audiokinetic|AkComponent")
+	UFUNCTION(BlueprintCallable, BlueprintCosmetic, Category = "Audiokinetic|AkComponent")
 	void SetOutputBusVolume(float BusVolume);
 
 
@@ -130,7 +131,7 @@ public:
 	float AttenuationScalingFactor;
 
 	/** Sets the attenuation scaling factor, which modifies the attenuation computations on this game object to simulate sounds with a a larger or smaller area of effect. */
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Audiokinetic|AkComponent")
+	UFUNCTION(BlueprintCallable, BlueprintCosmetic, BlueprintNativeEvent, Category = "Audiokinetic|AkComponent")
 	void SetAttenuationScalingFactor(float Value);
 
 	/** Time interval between occlusion/obstruction checks. Set to 0 to disable occlusion on this component. */
@@ -140,7 +141,7 @@ public:
 	/**
 	 * Return the real attenuation radius for this component (AttenuationScalingFactor * AkAudioEvent->MaxAttenuationRadius)
 	 */
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category="Audiokinetic|AkComponent")
+	UFUNCTION(BlueprintCallable, BlueprintCosmetic, BlueprintNativeEvent, Category="Audiokinetic|AkComponent")
 	float GetAttenuationRadius() const;
 
 	/** Modifies the attenuation computations on this game object to simulate sounds with a a larger or smaller area of effect. */
@@ -198,8 +199,13 @@ public:
 
 	void SetAutoDestroy(bool in_AutoDestroy) { bAutoDestroy = in_AutoDestroy; }
 
-	/** Thread safe counter for number of active events */
-	FThreadSafeCounter NumActiveEvents;
+	bool HasActiveEvents() const;
+
+	AkGameObjectID GetAkGameObjectID() const;
+
+	bool AllowAudioPlayback() const;
+
+	bool VerifyEventName(const FString& in_EventName) const;
 
 private:
 	/**
@@ -267,42 +273,8 @@ private:
 	/** Whether to automatically destroy the component when the event is finished */
 	bool bAutoDestroy;
 
-	struct AkComponentCallbackPackage
-	{
-		/** Copy of the user callback, for use in our own callback */
-		AkCallbackFunc pfnUserCallback;
-
-		/** Copy of the user cookie, for use in our own callback */
-		void * pUserCookie;
-
-		/** Copy of the user callback flags, for use in our own callback */
-		uint32 uUserFlags;
-
-		FThreadSafeCounter* pNumActiveEvents;
-
-		/** Pointers to the list of pending callbacks and its associated critical section, so we can remove ourselves from it */
-		TSet<AkComponentCallbackPackage*>* pPendingCallbackPackagesOnAkComponent;
-		FCriticalSection* pPendingCallbackPackagesCriticalSection;
-
-		AkComponentCallbackPackage(AkCallbackFunc in_cbFunc, void* in_Cookie, uint32 in_Flags, FThreadSafeCounter* in_Counter, TSet<AkComponentCallbackPackage*>* in_PendingCallbacks, FCriticalSection* in_pPendingCallbacksCriticalSection)
-			: pfnUserCallback(in_cbFunc)
-			, pUserCookie(in_Cookie)
-			, uUserFlags(in_Flags)
-			, pNumActiveEvents(in_Counter)
-			, pPendingCallbackPackagesOnAkComponent(in_PendingCallbacks)
-			, pPendingCallbackPackagesCriticalSection(in_pPendingCallbacksCriticalSection)
-		{}
-	};
-
-	/** List of pending callbacks, so we can cancel them if we get destroyed, and the associated critical section that goes with it */
-	FCriticalSection PendingCallbackPackagesCriticalSection;
-	TSet<AkComponentCallbackPackage*> PendingCallbackPackages;
-
 	/** Whether an event was posted on the component. Never reset to false. */
 	bool bStarted;
-
-	/** Our own event callback */
-	static void AkComponentCallback(AkCallbackType in_eType, AkCallbackInfo* in_pCallbackInfo);
 
 
 	// Occlusion/obstruction features -------------------------------------------------------------
@@ -338,6 +310,4 @@ private:
 	/** Utility function that updates which texture is displayed on the sprite dependent on the properties of the Audio Component. */
 	void UpdateSpriteTexture();
 #endif
-
-
 };

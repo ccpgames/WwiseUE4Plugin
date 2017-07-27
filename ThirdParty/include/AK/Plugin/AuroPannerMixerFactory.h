@@ -21,7 +21,7 @@ under the Apache License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES
 OR CONDITIONS OF ANY KIND, either express or implied. See the Apache License for
 the specific language governing permissions and limitations under the License.
 
-  Version: v2016.2.2  Build: 6022
+  Version: v2016.2.4  Build: 6098
   Copyright (c) 2006-2017 Audiokinetic Inc.
 *******************************************************************************/
 
@@ -37,7 +37,7 @@ the specific language governing permissions and limitations under the License.
 #ifndef _AUROPANNERMIXERFACTORY_H_
 #define _AUROPANNERMIXERFACTORY_H_
 
-#if (defined AK_WIN && (!defined( AK_USE_METRO_API ) || _MSC_VER >= 1900)) || defined AK_PS4 || defined AK_XBOXONE  || defined AK_ANDROID
+#if (defined AK_WIN && (!defined( AK_USE_METRO_API ) || _MSC_VER >= 1900)) || defined AK_PS4 || defined AK_XBOXONE  || defined AK_ANDROID || defined AK_NX
 
 AK_STATIC_LINK_PLUGIN(AuroPannerMixer)
 AK_STATIC_LINK_PLUGIN(AuroPannerMixerAttachment)

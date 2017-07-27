@@ -10,9 +10,22 @@
 #include "SGenerateSoundBanks.h"
 #include "AkAudioBankGenerationHelpers.h"
 #include "AssetRegistryModule.h"
-#include "TargetPlatform.h"
 #include "IProjectManager.h"
 #include "JsonObject.h"
+#include "Interfaces/ITargetPlatformManagerModule.h"
+#include "Interfaces/ITargetPlatform.h"
+#include "Dialogs/Dialogs.h"
+#include "EditorStyleSet.h"
+#include "Widgets/Input/SButton.h"
+#include "Framework/Application/SlateApplication.h"
+#include "GenericPlatform/GenericPlatformFile.h"
+#include "HAL/PlatformFileManager.h"
+#include "Serialization/JsonReader.h"
+
+#if ENGINE_MAJOR_VERSION == 4 && ENGINE_MINOR_VERSION >= 14
+#include "Misc/FileHelper.h"
+#include "Misc/MessageDialog.h"
+#endif
 
 #if ENGINE_MAJOR_VERSION == 4 && ENGINE_MINOR_VERSION >= 15
 #include "ProjectDescriptor.h"
@@ -203,6 +216,7 @@ void SGenerateSoundBanks::GetWwisePlatforms()
 	AddPlatformIfSupported(SupportedPlatforms, TEXT("PS4"), TEXT("PS4"));
 	AddPlatformIfSupported(SupportedPlatforms, TEXT("WindowsNoEditor"), TEXT("Windows"));
 	AddPlatformIfSupported(SupportedPlatforms, TEXT("XboxOne"), TEXT("XboxOne"));
+	AddPlatformIfSupported(SupportedPlatforms, TEXT("Switch"), TEXT("Switch"));
 }
 
 FReply SGenerateSoundBanks::OnKeyDown( const FGeometry& MyGeometry, const FKeyEvent& InKeyboardEvent )

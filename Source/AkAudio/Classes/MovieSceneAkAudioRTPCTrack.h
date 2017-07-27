@@ -25,10 +25,13 @@ public:
 	}
 
 #if AK_SUPPORTS_LEVEL_SEQUENCER
+#if AK_SUPPORTS_LEVEL_SEQUENCER_TEMPLATES
+	virtual FMovieSceneEvalTemplatePtr CreateTemplateForSection(const UMovieSceneSection& InSection) const override;
+#else
 	void Update(EMovieSceneUpdateData& UpdateData, const TArray<TWeakObjectPtr<UObject>>& RuntimeObjects, IMovieScenePlayer& Player, FMovieSceneSequenceInstance& SequenceInstance);
-
-	/** begin UMovieSceneTrack interface */
 	virtual TSharedPtr<IMovieSceneTrackInstance> CreateInstance() override;
+#endif // AK_SUPPORTS_LEVEL_SEQUENCER_TEMPLATES
+
 	virtual UMovieSceneSection* CreateNewSection() override;
 
 	virtual FName GetTrackName() const override;
@@ -36,6 +39,5 @@ public:
 #if WITH_EDITORONLY_DATA
 	virtual FText GetDisplayName() const override;
 #endif
-	/** end UMovieSceneTrack interface */
 #endif // AK_SUPPORTS_LEVEL_SEQUENCER
 };

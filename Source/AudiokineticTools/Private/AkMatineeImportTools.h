@@ -4,6 +4,8 @@
 #include "AkUEFeatures.h"
 
 #if AK_MATINEE_TO_LEVEL_SEQUENCE_MODULE_MODIFICATIONS
+#include "Editor/UnrealEdEngine.h"
+#include "UnrealEdGlobals.h"
 
 class UInterpTrackAkAudioEvent;
 class UInterpTrackAkAudioRTPC;

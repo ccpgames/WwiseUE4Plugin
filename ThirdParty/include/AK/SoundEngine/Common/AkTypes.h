@@ -21,7 +21,7 @@ under the Apache License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES
 OR CONDITIONS OF ANY KIND, either express or implied. See the Apache License for
 the specific language governing permissions and limitations under the License.
 
-  Version: v2016.2.2  Build: 6022
+  Version: v2016.2.4  Build: 6098
   Copyright (c) 2006-2017 Audiokinetic Inc.
 *******************************************************************************/
 
@@ -701,12 +701,14 @@ namespace AK
 #define AKCODECID_PROFILERCAPTURE		(14)	///< Profiler capture file (.prof) as written through AK::SoundEngine::StartProfilerCapture
 #define AKCODECID_ANALYSISFILE			(15)	///< Analysis file
 #define AKCODECID_MIDI					(16)	///< MIDI file
+#define AKCODECID_OPUS                  (17)    ///< Opus encoding
 
 //The following are internally defined
 #define	AK_WAVE_FORMAT_VAG				0xFFFB
 #define	AK_WAVE_FORMAT_AT9				0xFFFC
 #define	AK_WAVE_FORMAT_VORBIS  			0xFFFF
 #define	AK_WAVE_FORMAT_AAC				0xAAC0
+#define AK_WAVE_FORMAT_OPUS             0x3039
 #define WAVE_FORMAT_XMA2				0x166
 
 class IAkSoftwareCodec;

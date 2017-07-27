@@ -2,6 +2,8 @@
 
 #pragma once
 
+#include "AkInclude.h"
+#include "AkAudioEvent.h"
 #if AK_SUPPORTS_LEVEL_SEQUENCER
 #include "Curves/RichCurve.h"
 #include "MovieSceneSection.h"
@@ -29,7 +31,7 @@ public:
 	*
 	* @param Position	The position in time within the movie scene
 	*/
-	virtual float Eval(float Position) const;
+	AKAUDIO_API virtual float Eval(float Position) const;
 
 	/**
 	* @return The float curve on this section
@@ -41,21 +43,24 @@ public:
 
 	//~ IKeyframeSection interface
 
-	void AddKey(float Time, const float& Value, EMovieSceneKeyInterpolation KeyInterpolation) override;
-	bool NewKeyIsNewData(float Time, const float& Value) const override;
-	bool HasKeys(const float& Value) const override;
-	void SetDefault(const float& Value) override;
-	virtual void ClearDefaults() override;
+	AKAUDIO_API void AddKey(float Time, const float& Value, EMovieSceneKeyInterpolation KeyInterpolation) override;
+	AKAUDIO_API bool NewKeyIsNewData(float Time, const float& Value) const override;
+	AKAUDIO_API bool HasKeys(const float& Value) const override;
+	AKAUDIO_API void SetDefault(const float& Value) override;
+	AKAUDIO_API virtual void ClearDefaults() override;
 
 public:
 
 	//~ UMovieSceneSection interface
 
-	virtual void MoveSection(float DeltaPosition, TSet<FKeyHandle>& KeyHandles) override;
-	virtual void DilateSection(float DilationFactor, float Origin, TSet<FKeyHandle>& KeyHandles) override;
-	virtual void GetKeyHandles(TSet<FKeyHandle>& OutKeyHandles, TRange<float> TimeRange) const override;
-	virtual TOptional<float> GetKeyTime(FKeyHandle KeyHandle) const override;
-	virtual void SetKeyTime(FKeyHandle KeyHandle, float Time) override;
+	AKAUDIO_API virtual void MoveSection(float DeltaPosition, TSet<FKeyHandle>& KeyHandles) override;
+	AKAUDIO_API virtual void DilateSection(float DilationFactor, float Origin, TSet<FKeyHandle>& KeyHandles) override;
+	AKAUDIO_API virtual void GetKeyHandles(TSet<FKeyHandle>& OutKeyHandles, TRange<float> TimeRange) const override;
+	AKAUDIO_API virtual TOptional<float> GetKeyTime(FKeyHandle KeyHandle) const override;
+	AKAUDIO_API virtual void SetKeyTime(FKeyHandle KeyHandle, float Time) override;
+#if AK_SUPPORTS_LEVEL_SEQUENCER_TEMPLATES
+	virtual FMovieSceneEvalTemplatePtr GenerateTemplate() const override;
+#endif // AK_SUPPORTS_LEVEL_SEQUENCER_TEMPLATES
 
 	/** @return the name of the RTPC being modified by this track */
 	const FString& GetRTPCName() const { return Name; }

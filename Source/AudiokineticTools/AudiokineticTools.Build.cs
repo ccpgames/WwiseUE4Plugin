@@ -7,13 +7,24 @@ using System.Collections.Generic;
 
 public class AudiokineticTools : ModuleRules
 {
-	public static string GetDefaultVersionFileName()
+#if WITH_FORWARDED_MODULE_RULES_CTOR
+    public static string GetDefaultVersionFileName(ReadOnlyTargetRules Target)
+	{
+		return Path.Combine(Target.RelativeEnginePath, "Build" + Path.DirectorySeparatorChar + "Build.version");
+	}
+#else
+	public static string GetDefaultVersionFileName(TargetInfo Target)
 	{
 		return Path.Combine(UnrealBuildTool.UnrealBuildTool.EngineDirectory.FullName, "Build" + Path.DirectorySeparatorChar + "Build.version");
 	}
+#endif
 
+#if WITH_FORWARDED_MODULE_RULES_CTOR
+    public AudiokineticTools(ReadOnlyTargetRules Target) : base(Target)
+#else
 	public AudiokineticTools(TargetInfo Target)
-	{
+#endif
+    {
         PCHUsage = PCHUsageMode.UseSharedPCHs;
 		PrivateIncludePaths.Add("AudiokineticTools/Private");
         PrivateIncludePathModuleNames.AddRange(
@@ -59,7 +70,7 @@ public class AudiokineticTools : ModuleRules
             });
 
 		BuildVersion Version;
-		if (BuildVersion.TryRead(GetDefaultVersionFileName(), out Version))
+		if (BuildVersion.TryRead(GetDefaultVersionFileName(Target), out Version))
 		{
 			if (Version.MajorVersion == 4 && Version.MinorVersion >= 15)
 			{

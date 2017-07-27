@@ -21,7 +21,7 @@ under the Apache License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES
 OR CONDITIONS OF ANY KIND, either express or implied. See the Apache License for
 the specific language governing permissions and limitations under the License.
 
-  Version: v2016.2.2  Build: 6022
+  Version: v2016.2.4  Build: 6098
   Copyright (c) 2006-2017 Audiokinetic Inc.
 *******************************************************************************/
 
@@ -42,7 +42,7 @@ inline T ReadBankData(
 						)
 {
 	T l_Value;
-#if defined(AK_IOS) || defined(AK_3DS) || defined(AK_ANDROID) || defined(AK_VITA) || defined(AK_LINUX) || defined(__EMSCRIPTEN__)
+#if defined(AK_IOS) || defined(AK_3DS) || defined(AK_ANDROID) || defined(AK_VITA) || defined(AK_LINUX) || defined(__EMSCRIPTEN__) || defined (AK_NX)
 	typedef struct {T t;} __attribute__((__packed__)) packedStruct;
 	l_Value = ((packedStruct *)in_rptr)->t;
 #else

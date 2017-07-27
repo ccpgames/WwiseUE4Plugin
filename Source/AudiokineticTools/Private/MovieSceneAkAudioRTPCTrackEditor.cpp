@@ -16,11 +16,16 @@
 #include "ISequencerObjectChangeListener.h"
 #include "ISectionLayoutBuilder.h"
 #include "FloatCurveKeyArea.h"
+#include "SequencerSectionPainter.h"
 
 #include "AkMatineeImportTools.h"
 #include "AudiokineticToolsStyle.h"
 
 #include "ScopedTransaction.h"
+#include "Layout/SBorder.h"
+#include "Input/SEditableTextBox.h"
+#include "EditorStyleSet.h"
+#include "Editor.h"
 
 // CCP MOD BEGIN - Fix compile issues
 #include "SequencerSectionPainter.h"

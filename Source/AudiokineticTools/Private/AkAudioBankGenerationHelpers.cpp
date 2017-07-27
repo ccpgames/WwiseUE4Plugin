@@ -10,6 +10,7 @@
 #include "SGenerateSoundBanks.h"
 #include "MainFrame.h"
 #include "AkSettings.h"
+#include "Interfaces/IMainFrameModule.h"
 
 #define LOCTEXT_NAMESPACE "AkAudio"
 

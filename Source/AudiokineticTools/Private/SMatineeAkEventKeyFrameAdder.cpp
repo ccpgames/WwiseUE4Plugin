@@ -10,6 +10,10 @@
 #include "PropertyEditorModule.h"
 #include "PropertyCustomizationHelpers.h"
 #include "SMatineeAkEventKeyFrameAdder.h"
+#include "Images/SImage.h"
+#include "Text/STextBlock.h"
+#include "Input/SEditableTextBox.h"
+#include "AssetData.h"
 
 #define LOCTEXT_NAMESPACE "AkAudio"
 

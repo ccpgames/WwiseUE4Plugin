@@ -13,6 +13,10 @@
 
 #include "AkInclude.h"
 
+#if UE_4_13_OR_LATER
+#include "Async/AsyncFileHandle.h"
+#endif
+
 //-----------------------------------------------------------------------------
 // Name: class CAkUnrealIOHookDeferred.
 // Desc: Implements IAkIOHookDeferred low-level I/O hook, and 
@@ -42,18 +46,20 @@ public:
 	 * it creates a streaming device with scheduler type AK_SCHEDULER_DEFERRED_LINED_UP.
 	 *
 	 * @param in_deviceSettings		Device settings.
-	 * @param in_bAsyncOpen			If true, files are opened asynchronously when possible.
-	 * @return	AK_Success if initialization was successful, error code otherwise
+	 * @return	true if initialization was successful, false otherwise
 	 */
-	AKRESULT Init(
-		const AkDeviceSettings &	in_deviceSettings
-		);
+	bool Init(const AkDeviceSettings& in_deviceSettings);
 
 	/**
 	 * Terminate.
 	 */
 	void Term();
 
+	// Base path is prepended to all file names.
+	// Audio source path is appended to base path whenever uCompanyID is AK and uCodecID specifies an audio source.
+	// Bank path is appended to base path whenever uCompanyID is AK and uCodecID specifies a sound bank.
+	// Language specific dir name is appended to path whenever "bIsLanguageSpecific" is true.
+	bool SetBasePath(const FString&   in_pszBasePath);
 	void Update();
 
 	//
@@ -158,13 +164,6 @@ public:
 	// Returns custom profiling data: 1 if file opens are asynchronous, 0 otherwise.
 	virtual AkUInt32 GetDeviceData();
 
-	// Base path is prepended to all file names.
-	// Audio source path is appended to base path whenever uCompanyID is AK and uCodecID specifies an audio source.
-	// Bank path is appended to base path whenever uCompanyID is AK and uCodecID specifies a sound bank.
-	// Language specific dir name is appended to path whenever "bIsLanguageSpecific" is true.
-	AKRESULT SetBasePath(
-		const FString&   in_pszBasePath
-		);
 
 	// String overload.
 	// Returns AK_Success if input flags are supported and the resulting path is not too long.
@@ -217,22 +216,12 @@ protected:
 		AkDeferredReadInfo()
 			: State(IOState_ReadyFor_Requests)
 		{
-			RequestIndex = 0;
-		}
-
 #if AK_SUPPORTS_EVENT_DRIVEN_LOADING
-		bool SetupRequest(IAsyncReadFileHandle* IORequestHandle, AkAsyncIOTransferInfo& transferInfo)
-		{
-			AsyncReadRequest = IORequestHandle->ReadRequest(transferInfo.uFilePosition, transferInfo.uRequestedSize, AIOP_High, &AsyncFileCallBack, (uint8*)transferInfo.pBuffer);
-			if (!AsyncReadRequest)
-			{
-				SetState(IOState_ReadyFor_Requests);
-				return false;
-			}
-
-			return true;
-		}
+			AsyncReadRequest = nullptr;
+#else
+			RequestIndex = 0;
 #endif
+		}
 
 		AkAsyncIOTransferInfo AkTransferInfo;
 		FThreadSafeCounter State;
@@ -249,19 +238,54 @@ protected:
 #endif
 		};
 
-		void CallAkTransferInfoCallback()
-		{
-			if (AkTransferInfo.pCallback)
-				AkTransferInfo.pCallback(&AkTransferInfo, AK_Success);
-
-			SetState(IOState_ReadyFor_Requests);
-		}
-
-	private:
 #if AK_SUPPORTS_EVENT_DRIVEN_LOADING
-		FAsyncFileCallBack AsyncFileCallBack = [this](bool bWasCancelled, IAsyncReadRequest* Req) { CallAkTransferInfoCallback(); };
+		IAsyncReadFileHandle* IORequestHandle = nullptr;
+		FAsyncFileCallBack AsyncFileCallBack;
 #endif
 	};
+
+	struct AkFileCustomParam
+	{
+		union
+		{
+#if AK_SUPPORTS_EVENT_DRIVEN_LOADING
+			IAsyncReadFileHandle* IORequestHandle; // Used for Reads in EDL
+#endif
+#if AK_FIOSYSTEM_AVAILABLE
+			FString* Filename; // Used for reads with FIOSystem
+#endif
+			IFileHandle* FileHandle; // Used for Writes
+		};
+
+		AkOpenMode	OpenMode;
+		bool IsInPackage = false;
+	};
+
+	// Returns true if file described by in_fileDesc is in a package.
+	inline bool IsInPackage(
+		const AkFileDesc & in_fileDesc		// File descriptor.
+		)
+	{
+		AkFileCustomParam* FileCustomParam = (AkFileCustomParam*)in_fileDesc.pCustomParam;
+		if (FileCustomParam && in_fileDesc.uCustomParamSize == sizeof(AkFileCustomParam))
+		{
+			return FileCustomParam->IsInPackage;
+		}
+
+		return false;
+	}
+
+	void SetFileInPackage(CAkDiskPackage * in_pPackage, bool IsInPackage, AkFileDesc &out_fileDesc)
+	{
+		AkFileDesc * FileDesc  = in_pPackage->GetFileDesc();
+		if (FileDesc && FileDesc->pCustomParam)
+		{
+			out_fileDesc.pCustomParam = FileDesc->pCustomParam;
+			out_fileDesc.uCustomParamSize = sizeof(AkFileCustomParam);
+			((AkFileCustomParam*)out_fileDesc.pCustomParam)->IsInPackage = true;
+		}
+	}
+
 
 	/** Get a free index in the pending transfer arrays
 	 *
@@ -275,6 +299,10 @@ protected:
 	 * @return The index of the transfer. -1 if not found. Not thread-safe.
 	 */
 	AkDeferredReadInfo* FindTransfer(void* pBuffer);
+
+#if AK_SUPPORTS_EVENT_DRIVEN_LOADING
+	void CloseAllPendingRequestsForFileHandle(IAsyncReadFileHandle* IORequestHandle);
+#endif
 
 	/** Array for pending transfers. */
 	AkDeferredReadInfo aPendingTransfers[AK_UNREAL_MAX_CONCURRENT_IO];
@@ -312,7 +340,8 @@ private:
 		AkFileDesc &    out_fileDesc        // Returned file descriptor.
 		);
 
-	AkDeviceID			m_deviceID;
 	bool				m_bAsyncOpen;	// If true, opens files asynchronously when it can.
 
+protected:
+	AkDeviceID			m_deviceID;
 };

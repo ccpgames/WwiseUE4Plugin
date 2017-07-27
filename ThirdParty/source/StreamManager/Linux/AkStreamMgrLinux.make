@@ -7,16 +7,16 @@ ifndef verbose
   SILENT = @
 endif
 
-ifndef CC
-  CC = gcc
-endif
+CC = gcc
+CXX = g++
+AR = ar
 
-ifndef CXX
-  CXX = g++
-endif
-
-ifndef AR
-  AR = ar
+ifndef RESCOMP
+  ifdef WINDRES
+    RESCOMP = $(WINDRES)
+  else
+    RESCOMP = windres
+  endif
 endif
 
 ifeq ($(config),debug)
@@ -27,13 +27,13 @@ ifeq ($(config),debug)
   TARGET     = $(TARGETDIR)/libAkStreamMgr.a
   DEFINES   += -DAKSOUNDENGINE_EXPORTS -D_DEBUG -DAUDIOKINETIC
   INCLUDES  += -I../../../include -I. -I../Common -I../POSIX
-  CPPFLAGS  += -MMD -MP $(DEFINES) $(INCLUDES)
-  CFLAGS    += $(CPPFLAGS) $(ARCH) -g -fPIC -fvisibility=hidden
-  CXXFLAGS  += $(CFLAGS) -Wno-invalid-offsetof -fno-rtti -fno-exceptions
-  LDFLAGS   += 
-  LIBS      += 
-  RESFLAGS  += $(DEFINES) $(INCLUDES) 
-  LDDEPS    += 
+  ALL_CPPFLAGS  += $(CPPFLAGS) -MMD -MP $(DEFINES) $(INCLUDES)
+  ALL_CFLAGS    += $(CFLAGS) $(ALL_CPPFLAGS) $(ARCH) -g -fPIC -fvisibility=hidden
+  ALL_CXXFLAGS  += $(CXXFLAGS) $(ALL_CFLAGS) -Wno-invalid-offsetof -fno-rtti -fno-exceptions
+  ALL_RESFLAGS  += $(RESFLAGS) $(DEFINES) $(INCLUDES)
+  ALL_LDFLAGS   += $(LDFLAGS)
+  LDDEPS    +=
+  LIBS      += $(LDDEPS)
   LINKCMD    = $(AR) -rcs $(TARGET) $(OBJECTS)
   define PREBUILDCMDS
   endef
@@ -51,13 +51,13 @@ ifeq ($(config),profile)
   TARGET     = $(TARGETDIR)/libAkStreamMgr.a
   DEFINES   += -DAKSOUNDENGINE_EXPORTS -DNDEBUG -DAUDIOKINETIC
   INCLUDES  += -I../../../include -I. -I../Common -I../POSIX
-  CPPFLAGS  += -MMD -MP $(DEFINES) $(INCLUDES)
-  CFLAGS    += $(CPPFLAGS) $(ARCH) -g -O3 -fPIC -fvisibility=hidden
-  CXXFLAGS  += $(CFLAGS) -Wno-invalid-offsetof -fno-rtti -fno-exceptions
-  LDFLAGS   += 
-  LIBS      += 
-  RESFLAGS  += $(DEFINES) $(INCLUDES) 
-  LDDEPS    += 
+  ALL_CPPFLAGS  += $(CPPFLAGS) -MMD -MP $(DEFINES) $(INCLUDES)
+  ALL_CFLAGS    += $(CFLAGS) $(ALL_CPPFLAGS) $(ARCH) -g -O3 -fPIC -fvisibility=hidden
+  ALL_CXXFLAGS  += $(CXXFLAGS) $(ALL_CFLAGS) -Wno-invalid-offsetof -fno-rtti -fno-exceptions
+  ALL_RESFLAGS  += $(RESFLAGS) $(DEFINES) $(INCLUDES)
+  ALL_LDFLAGS   += $(LDFLAGS)
+  LDDEPS    +=
+  LIBS      += $(LDDEPS)
   LINKCMD    = $(AR) -rcs $(TARGET) $(OBJECTS)
   define PREBUILDCMDS
   endef
@@ -75,13 +75,13 @@ ifeq ($(config),profile_enableasserts)
   TARGET     = $(TARGETDIR)/libAkStreamMgr.a
   DEFINES   += -DAKSOUNDENGINE_EXPORTS -DNDEBUG -DAK_ENABLE_ASSERTS -DAUDIOKINETIC
   INCLUDES  += -I../../../include -I. -I../Common -I../POSIX
-  CPPFLAGS  += -MMD -MP $(DEFINES) $(INCLUDES)
-  CFLAGS    += $(CPPFLAGS) $(ARCH) -g -O3 -fPIC -fvisibility=hidden
-  CXXFLAGS  += $(CFLAGS) -Wno-invalid-offsetof -fno-rtti -fno-exceptions
-  LDFLAGS   += 
-  LIBS      += 
-  RESFLAGS  += $(DEFINES) $(INCLUDES) 
-  LDDEPS    += 
+  ALL_CPPFLAGS  += $(CPPFLAGS) -MMD -MP $(DEFINES) $(INCLUDES)
+  ALL_CFLAGS    += $(CFLAGS) $(ALL_CPPFLAGS) $(ARCH) -g -O3 -fPIC -fvisibility=hidden
+  ALL_CXXFLAGS  += $(CXXFLAGS) $(ALL_CFLAGS) -Wno-invalid-offsetof -fno-rtti -fno-exceptions
+  ALL_RESFLAGS  += $(RESFLAGS) $(DEFINES) $(INCLUDES)
+  ALL_LDFLAGS   += $(LDFLAGS)
+  LDDEPS    +=
+  LIBS      += $(LDDEPS)
   LINKCMD    = $(AR) -rcs $(TARGET) $(OBJECTS)
   define PREBUILDCMDS
   endef
@@ -99,13 +99,13 @@ ifeq ($(config),release)
   TARGET     = $(TARGETDIR)/libAkStreamMgr.a
   DEFINES   += -DAKSOUNDENGINE_EXPORTS -DNDEBUG -DAK_OPTIMIZED -DAUDIOKINETIC
   INCLUDES  += -I../../../include -I. -I../Common -I../POSIX
-  CPPFLAGS  += -MMD -MP $(DEFINES) $(INCLUDES)
-  CFLAGS    += $(CPPFLAGS) $(ARCH) -g -O3 -fPIC -fvisibility=hidden
-  CXXFLAGS  += $(CFLAGS) -Wno-invalid-offsetof -fno-rtti -fno-exceptions
-  LDFLAGS   += 
-  LIBS      += 
-  RESFLAGS  += $(DEFINES) $(INCLUDES) 
-  LDDEPS    += 
+  ALL_CPPFLAGS  += $(CPPFLAGS) -MMD -MP $(DEFINES) $(INCLUDES)
+  ALL_CFLAGS    += $(CFLAGS) $(ALL_CPPFLAGS) $(ARCH) -g -O3 -fPIC -fvisibility=hidden
+  ALL_CXXFLAGS  += $(CXXFLAGS) $(ALL_CFLAGS) -Wno-invalid-offsetof -fno-rtti -fno-exceptions
+  ALL_RESFLAGS  += $(RESFLAGS) $(DEFINES) $(INCLUDES)
+  ALL_LDFLAGS   += $(LDFLAGS)
+  LDDEPS    +=
+  LIBS      += $(LDDEPS)
   LINKCMD    = $(AR) -rcs $(TARGET) $(OBJECTS)
   define PREBUILDCMDS
   endef
@@ -180,33 +180,42 @@ prelink:
 ifneq (,$(PCH))
 $(GCH): $(PCH)
 	@echo $(notdir $<)
-	-$(SILENT) cp $< $(OBJDIR)
-	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+	$(SILENT) $(CXX) -x c++-header $(ALL_CXXFLAGS) -MMD -MP $(DEFINES) $(INCLUDES) -o "$@" -MF "$(@:%.gch=%.d)" -c "$<"
 endif
 
 $(OBJDIR)/stdafx.o: stdafx.cpp
 	@echo $(notdir $<)
-	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF $(@:%.o=%.d) -c "$<"
+
 $(OBJDIR)/AkStreamMgr.o: ../Common/AkStreamMgr.cpp
 	@echo $(notdir $<)
-	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF $(@:%.o=%.d) -c "$<"
+
 $(OBJDIR)/AkTransferDeferred.o: ../Common/AkTransferDeferred.cpp
 	@echo $(notdir $<)
-	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF $(@:%.o=%.d) -c "$<"
+
 $(OBJDIR)/AkDeviceBlocking.o: ../Common/AkDeviceBlocking.cpp
 	@echo $(notdir $<)
-	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF $(@:%.o=%.d) -c "$<"
+
 $(OBJDIR)/AkDeviceBase.o: ../Common/AkDeviceBase.cpp
 	@echo $(notdir $<)
-	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF $(@:%.o=%.d) -c "$<"
+
 $(OBJDIR)/AkDeviceDeferredLinedUp.o: ../Common/AkDeviceDeferredLinedUp.cpp
 	@echo $(notdir $<)
-	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF $(@:%.o=%.d) -c "$<"
+
 $(OBJDIR)/AkIOMemMgr.o: ../Common/AkIOMemMgr.cpp
 	@echo $(notdir $<)
-	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF $(@:%.o=%.d) -c "$<"
+
 $(OBJDIR)/AkIOThread.o: ../POSIX/AkIOThread.cpp
 	@echo $(notdir $<)
-	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF $(@:%.o=%.d) -c "$<"
 
 -include $(OBJECTS:%.o=%.d)
+ifneq (,$(PCH))
+  -include $(OBJDIR)/$(notdir $(PCH)).d
+endif

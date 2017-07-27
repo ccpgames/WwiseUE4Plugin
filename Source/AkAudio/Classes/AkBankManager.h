@@ -10,10 +10,9 @@
 	AkAudioDevice system headers
 ------------------------------------------------------------------------------------*/
 
-#include "Engine.h"
 
 #include "AkInclude.h"
-#include "SoundDefinitions.h"
+#include "Engine/EngineBaseTypes.h"
 
 /*------------------------------------------------------------------------------------
 	Audiokinetic SoundBank Manager.

@@ -4,7 +4,7 @@
 
 #include "MovieSceneTrackEditor.h"
 #include "MovieSceneAkAudioEventTrack.h"
-
+#include "AssetData.h"
 
 /**
  * Tools for AkAudioEvent tracks

@@ -2,6 +2,14 @@
 
 #include "AkAudioDevice.h"
 #include "AkSettings.h"
+#if WITH_EDITOR
+#if UE_4_14_OR_LATER
+#include "Misc/MessageDialog.h"
+#endif
+#include "HAL/FileManager.h"
+#endif
+
+#include "UnrealType.h"
 
 //////////////////////////////////////////////////////////////////////////
 // UAkSettings
@@ -15,6 +23,7 @@ UAkSettings::UAkSettings(const FObjectInitializer& ObjectInitializer)
 
 	WwiseWindowsInstallationPath.Path = FString(WwiseDir);
     bRequestRefresh = false;
+	SuppressWwiseProjectPathWarnings = false;
 }
 
 #if WITH_EDITOR

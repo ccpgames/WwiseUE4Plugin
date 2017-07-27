@@ -226,14 +226,7 @@ void UInterpTrackAkAudioEvent::UpdateTrack(float NewPosition, UInterpTrackInst* 
 			FAkAudioDevice * AudioDevice = FAkAudioDevice::Get();
 			if (AudioDevice)
 			{
-				if (AkEvent)
-				{
-					AudioDevice->PostEvent(AkEvent, Actor);
-				}
-				else
-				{
-					AudioDevice->PostEvent(AkEvenTrackKey.EventName, Actor);
-				}
+				AudioDevice->PostEvent(GET_AK_EVENT_NAME(AkEvent, AkEvenTrackKey.EventName), Actor);
 			}
 		}
 	}
