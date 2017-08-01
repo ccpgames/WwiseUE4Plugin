@@ -19,7 +19,9 @@
 #include "Widgets/Input/SButton.h"
 #include "Framework/Application/SlateApplication.h"
 #include "GenericPlatform/GenericPlatformFile.h"
-#include "HAL/PlatformFileManager.h"
+// CCP MOD BEGIN Fix compile
+#include "HAL/PlatformFilemanager.h"
+// CCP MOD END Fix compile
 #include "Serialization/JsonReader.h"
 
 #if ENGINE_MAJOR_VERSION == 4 && ENGINE_MINOR_VERSION >= 14
