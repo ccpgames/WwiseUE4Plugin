@@ -111,10 +111,12 @@ void UAkComponent::Stop()
 
 void UAkComponent::SetRTPCValue( FString RTPC, float Value, int32 InterpolationTimeMs = 0)
 {
+	// CCP MOD BEGIN - Trying to catch bad values
 	if (!FGenericPlatformMath::IsFinite(Value))
 	{
 		UE_LOG(LogAkAudio, Error, TEXT("%s RTPC Found: %s"), FGenericPlatformMath::IsNaN(Value) ? TEXT("NaN") : TEXT("Inf"), *RTPC);
 	}
+	// CCP MOD END - Trying to catch bad values
 
 	if ( FAkAudioDevice::Get() )
 	{

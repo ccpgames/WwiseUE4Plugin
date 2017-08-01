@@ -1271,10 +1271,12 @@ AKRESULT FAkAudioDevice::SetRTPCValue(
 	AActor * in_pActor = NULL
 	)
 {
+	// CCP MOD BEGIN - Trying to catch bad values
 	if (!FGenericPlatformMath::IsFinite(in_value))
 	{
 		UE_LOG(LogAkAudio, Error, TEXT("%s RTPC Found: %s"), FGenericPlatformMath::IsNaN(in_value) ? TEXT("NaN") : TEXT("Inf"), in_pszRtpcName);
 	}
+	// CCP MOD END - Trying to catch bad values
 
 	AKRESULT eResult = AK_Success;
 	if ( m_bSoundEngineInitialized )
