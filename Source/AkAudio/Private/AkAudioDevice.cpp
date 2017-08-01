@@ -1271,6 +1271,11 @@ AKRESULT FAkAudioDevice::SetRTPCValue(
 	AActor * in_pActor = NULL
 	)
 {
+	if (!FGenericPlatformMath::IsFinite(in_value))
+	{
+		UE_LOG(LogAkAudio, Error, TEXT("%s RTPC Found: %s"), FGenericPlatformMath::IsNaN(in_value) ? TEXT("NaN") : TEXT("Inf"), in_pszRtpcName);
+	}
+
 	AKRESULT eResult = AK_Success;
 	if ( m_bSoundEngineInitialized )
 	{

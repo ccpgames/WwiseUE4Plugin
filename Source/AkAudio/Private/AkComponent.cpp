@@ -111,6 +111,11 @@ void UAkComponent::Stop()
 
 void UAkComponent::SetRTPCValue( FString RTPC, float Value, int32 InterpolationTimeMs = 0)
 {
+	if (!FGenericPlatformMath::IsFinite(Value))
+	{
+		UE_LOG(LogAkAudio, Error, TEXT("%s RTPC Found: %s"), FGenericPlatformMath::IsNaN(Value) ? TEXT("NaN") : TEXT("Inf"), *RTPC);
+	}
+
 	if ( FAkAudioDevice::Get() )
 	{
 		auto szRTPC = TCHAR_TO_AK(*RTPC);
